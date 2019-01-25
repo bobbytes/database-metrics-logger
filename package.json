@@ -19,6 +19,9 @@
     "metrics",
     "logger"
   ],
+  "engines": {
+    "node": ">=10.x"
+  },
   "contributors": [
     {
       "name": "Robert Kleger",

@@ -15,4 +15,4 @@ dist/
 vcap.json
 
 # editor config #
-./vscode/settings.json
+.vscode/settings.json
