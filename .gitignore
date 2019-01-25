@@ -9,6 +9,7 @@ yarn-error.log
 
 # Generated filed #
 dist/
+test/coverage
 .rpt2_cache
 
 # Cloud Foundry #

@@ -10,7 +10,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup -c",
-    "watch": "rollup -cw"
+    "watch": "rollup -cw",
+    "test": "jest --env=jsdom --coverage"
   },
   "keywords": [
     "typescript",
@@ -22,6 +23,27 @@
   "engines": {
     "node": ">=10.x"
   },
+  "jest": {
+    "transform": {
+      "^.+\\.(js|ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testPathIgnorePatterns": [
+      "<rootDir>/(node_modules|dist)"
+    ],
+    "coverageDirectory": "<rootDir>/test/coverage",
+    "collectCoverageFrom": [
+      "src/**/*.{t,j}s?(x)",
+      "!src/**/*.d.ts"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json",
+      "ts",
+      "tsx"
+    ]
+  },
   "contributors": [
     {
       "name": "Robert Kleger",
@@ -30,11 +52,14 @@
   ],
   "license": "ISC",
   "devDependencies": {
+    "@types/jest": "^23.3.13",
     "@types/mongodb": "^3.1.19",
     "@types/redis": "^2.8.10",
+    "jest": "^23.6.0",
     "rollup": "^1.1.2",
     "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-typescript2": "^0.19.2",
+    "ts-jest": "^23.10.5",
     "tslint": "^5.12.1",
     "typescript": "^3.2.4"
   },
