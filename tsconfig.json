@@ -6,6 +6,9 @@
     "noImplicitAny": false,
     "outDir": "./dist",
     "target": "es5",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "lib": [
       "es2015"
     ]

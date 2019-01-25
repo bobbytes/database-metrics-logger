@@ -1,5 +1,6 @@
 import * as cfenv from 'cfenv';
 import * as path from 'path';
+import { env } from '../helpers/env';
 
 export enum ServiceType {
   MongoDb = 'mongodb-2',
@@ -7,7 +8,7 @@ export enum ServiceType {
 }
 
 export class CloudFoundry {
-  private appEnvironment = cfenv.getAppEnv({ vcapFile: path.join(__dirname, '../vcap.json') });
+  private appEnvironment = cfenv.getAppEnv({ vcapFile: this.getVcapFilePath() });
 
   public getServicesCredentialsByServiceType(serviceType: ServiceType): cfenv.TCredentials[] {
     const services = this.getServicesByServiceType(serviceType);
@@ -37,5 +38,9 @@ export class CloudFoundry {
     }
 
     return servicesByServiceType;
+  }
+
+  private getVcapFilePath(): string {
+    return path.join(__dirname, `../../vcap${env.app.isTest ? '.test' : ''}.json`);
   }
 }

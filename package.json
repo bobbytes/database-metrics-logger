@@ -11,7 +11,7 @@
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -cw",
-    "test": "jest --env=jsdom --coverage"
+    "test": "NODE_ENV=test jest --env=jsdom --coverage"
   },
   "keywords": [
     "typescript",
