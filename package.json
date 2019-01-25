@@ -1,0 +1,36 @@
+{
+  "name": "cf-service-metrics-logger",
+  "version": "0.0.0",
+  "description": "Log Cloud Foundry service metrics",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -cw"
+  },
+  "keywords": [
+    "typescript",
+    "cloudfoundry",
+    "service",
+    "metrics",
+    "logger"
+  ],
+  "contributors": [
+    {
+      "name": "Robert Kleger",
+      "email": "robert.kleger@bobb.io"
+    }
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "rollup": "^1.1.2",
+    "rollup-plugin-node-globals": "^1.4.0",
+    "rollup-plugin-typescript2": "^0.19.2",
+    "tslint": "^5.12.1",
+    "typescript": "^3.2.4"
+  }
+}
