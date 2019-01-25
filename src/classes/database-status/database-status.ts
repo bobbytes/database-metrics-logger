@@ -1,0 +1,40 @@
+import { TCredentials } from 'cfenv';
+
+import { TDbOptions } from '../../interfaces/service-metrics-options.interface';
+import { Poller } from '../../helpers/poller';
+import { PubSub } from '../../helpers/pub-sub';
+
+export abstract class DatabaseStatus extends PubSub {
+  protected abstract credentials: TCredentials;
+  protected abstract options: TDbOptions;
+
+  private pollers: Poller[] = [];
+
+  public abstract disconnect(): void;
+
+  protected startPolling(): void {
+    this.pollers.forEach(poller => {
+      poller.poll();
+    });
+  }
+
+  protected setPoller(poller: Poller): void {
+    const foundPoller = this.getPollerById(poller.config.id);
+
+    if (!foundPoller) {
+      this.pollers.push(poller);
+    }
+  }
+
+  protected pollById(id: string): void {
+    const poller = this.getPollerById(id);
+
+    if (poller) {
+      poller.poll();
+    }
+  }
+
+  private getPollerById(id: string): Poller | undefined {
+    return this.pollers.find(p => p.config.id === id);
+  }
+}
