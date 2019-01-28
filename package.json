@@ -11,7 +11,11 @@
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -cw",
-    "test": "NODE_ENV=test jest --env=jsdom --coverage"
+    "test": "NODE_ENV=test jest --env=jsdom --coverage",
+    "lint": "tslint --project tsconfig.json --format stylish",
+    "prebuild": "npm run lint && rimraf dist && rimraf .tmp",
+    "postbuild": "npm run bundle && rimraf .tmp",
+    "bundle": "dts-bundle --name dist/index --main .tmp --outputAsModuleFolder"
   },
   "keywords": [
     "typescript",
@@ -56,6 +60,7 @@
     "@types/jest": "^23.3.13",
     "@types/mongodb": "^3.1.19",
     "@types/redis": "^2.8.10",
+    "dts-bundle": "^0.7.3",
     "jest": "^23.6.0",
     "rollup": "^1.1.2",
     "rollup-plugin-node-globals": "^1.4.0",

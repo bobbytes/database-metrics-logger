@@ -22,6 +22,7 @@ export default {
     nodeGlobals(),
     typescript({
       typescript: require('typescript'),
+      useTsconfigDeclarationDir: true
     }),
   ],
 }
