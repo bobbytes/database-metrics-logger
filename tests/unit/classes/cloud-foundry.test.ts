@@ -1,6 +1,5 @@
 import { CloudFoundry, ServiceType } from '../../../src/classes/cloud-foundry';
 import vcapTestJson from '../../../vcap.test.json';
-import { env } from '../../../src/helpers/env';
 
 describe('CloudFoundry', () => {
   let cloudFoundry: CloudFoundry;
