@@ -14,7 +14,7 @@ export abstract class PubSub {
 
   public unsubscribe(id: string, callback: TCallback): void {
     this.subscribers[id] = this.subscribers[id]
-      ? this.subscribers[id].filter(filteredCallback => filteredCallback !== callback)
+      ? this.subscribers[id].filter(filteredCallback => filteredCallback.toString() !== callback.toString())
       : undefined;
 
     this.subscribers[id] = this.subscribers[id] && this.subscribers[id].length
