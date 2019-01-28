@@ -8,7 +8,13 @@ export enum ServiceType {
 }
 
 export class CloudFoundry {
-  private appEnvironment = cfenv.getAppEnv({ vcapFile: this.getVcapFilePath() });
+  private appEnvironment: cfenv.IAppEnv;
+
+  constructor(vcap?: {}) {
+    this.appEnvironment = vcap
+      ? cfenv.getAppEnv({ vcap })
+      : cfenv.getAppEnv({ vcapFile: this.getVcapFilePath() });
+  }
 
   public getServicesCredentialsByServiceType(serviceType: ServiceType): cfenv.TCredentials[] {
     const services = this.getServicesByServiceType(serviceType);
@@ -41,6 +47,6 @@ export class CloudFoundry {
   }
 
   private getVcapFilePath(): string {
-    return path.join(__dirname, `../../vcap${env.app.isTest ? '.test' : ''}.json`);
+    return path.join(process.cwd(), `vcap${env.app.isTest ? '.test' : ''}.json`);
   }
 }
