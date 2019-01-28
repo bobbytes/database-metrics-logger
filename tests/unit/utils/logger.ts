@@ -1,31 +1,8 @@
-import * as winston from 'winston';
+import { ILogger } from '../../../src/interfaces/logger.interface';
 
-export class Logger {
-  private scope = 'test';
-
-  public debug(message: string, ...args: any[]): void {
-    this.log('debug', message, args);
-  }
-
-  public info(message: string, ...args: any[]): void {
-    this.log('info', message, args);
-  }
-
-  public warn(message: string, ...args: any[]): void {
-    this.log('warn', message, args);
-  }
-
-  public error(message: string, ...args: any[]): void {
-    this.log('error', message, args);
-  }
-
-  private log(level: string, message: string, args: any[]): void {
-    if (winston) {
-      winston[level](`${this.formatScope()} ${message}`, args);
-    }
-  }
-
-  private formatScope(): string {
-    return `[${this.scope}]`;
-  }
+export class Logger implements ILogger {
+  public debug = jest.fn((message: string, ...args: any[]) => undefined);
+  public info = jest.fn((message: string, ...args: any[]) => undefined);
+  public warn = jest.fn((message: string, ...args: any[]) => undefined);
+  public error = jest.fn((message: string, ...args: any[]) => undefined);
 }
