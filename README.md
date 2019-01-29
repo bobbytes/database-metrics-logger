@@ -4,13 +4,82 @@
 
 ## ❯ Table of Contents
 
-- [Getting Started](#-getting-started)
+- [Quick Start](#-quick-start)
+- [Development](#-development)
+- [Project Structure](#-project-structure)
 
 ![divider](./divider.png)
 
-## ❯ Getting Started
+## ❯ Quick Start
 
-### Step 1: Set up the Development Environment
+### Installation
+
+Install library by using `npm`
+
+```shell
+npm install cf-service-metrics-logger
+```
+
+or by using `yarn`
+
+```shell
+yarn add cf-service-metrics-logger
+```
+
+### How to use
+
+Create a new instance of CfServiceMetricsLogger and pass any kind of logger implementing following interface:
+
+- debug(message: `{} | [] | string | number`)
+- info(message: `{} | [] | string | number`)
+- warn(message: `{} | [] | string | number`)
+- error(message: `{} | [] | string | number`)
+
+```javascript
+/* import library by using CommonJS module loader */
+const CfServiceMetricsLogger = require('cf-service-metrics-logger');
+
+/* or import library by using ES6 module loader */
+import { CfServiceMetricsLogger } from 'cf-service-metrics-logger';
+
+/* create logger instance or use a logger library */
+class Logger {
+  debug(message) {
+    console.debug(message);
+  }
+
+  info(message) {
+    console.info(message);
+  }
+
+  warn(message) {
+    console.warn(message);
+  }
+
+  error(message) {
+    console.error(message);
+  }
+}
+
+const logger = new Logger();
+
+/* create new instance of CfServiceMetricsLogger and pass logger instance */
+const cfServiceMetricsLogger = new CfServiceMetricsLogger(logger);
+
+/* start service metrics logging */
+cfServiceMetricsLogger.start();
+
+/* stop service metrics logging */
+cfServiceMetricsLogger.stop();
+```
+
+![divider](./divider.png)
+
+## ❯ Development
+
+### Getting Started
+
+#### Step 1: Set up the Development Environment
 
 You need to set up your development environment before you can do anything.
 
@@ -25,11 +94,12 @@ Install yarn globally
 yarn install yarn -g
 ```
 
-### Step 2: Set up Environment Variables
+#### Step 2: Set up Environment Variables
 
-Copy the `.env.example` file and rename it to `.env`. In this file you have to configure your environment variables.
+Copy the `vcap.example.json` file and rename it to `vcap.json`. This file provides `VCAP_SERVICES` and/or `VCAP_APPLICATION` for local development.
+More information is provided [here](https://github.com/cloudfoundry-community/node-cfenv#running-in-cloud-foundry-vs-locally).
 
-### Step 3: Install dependencies
+#### Step 3: Install dependencies
 
 Install all dependencies with yarn.
 
@@ -37,32 +107,42 @@ Install all dependencies with yarn.
 yarn install
 ```
 
-![divider](./divider.png)
+### Scripts and Tasks
 
-## ❯ Scripts and Tasks
-
-### Install
+#### Install
 
 - Install all dependencies with `yarn install`
 
-### Linting
+#### Linting
 
 - Run code quality analysis using `yarn run lint`. This runs tslint.
 
-### Running in dev mode
+#### Tests
 
-- TODO:
+- Run unit test using `yarn run test`.
 
-### Building the project and run it
+#### Building the project
 
-- TODO: improve
-- Run `yarn run build` to generated all JavaScript files from the TypeScript sources.
-- To start the builded app located in `dist`.
+- Run `yarn run build` to generate commonJS and ES6 modules as well as declaration from the TypeScript source.
+- Builded sources are located in `dist` folder.
+
+### Debugger
+
+#### VS Code
+
+Just set a breakpoint in source or unit test and hit <kbd>F5</kbd> in your Visual Studio Code to execute and debug all unit tests.
 
 ![divider](./divider.png)
 
-## ❯ Debugger
-
-### VS Code
-
-TODO:
+## ❯ Project Structure
+| Name                              | Description |
+| --------------------------------- | ----------- |
+| **.vscode/**                      | VSCode tasks, launch configuration and some other settings |
+| **dist/**                         | Compiled and bundled source files will be placed here |
+| **src/**                          | Source files |
+| **src/types/** *.d.ts             | Custom type definitions and files that aren't on DefinitelyTyped |
+| **test/**                         | Tests |
+| **test/unit/** *.test.ts          | Unit tests |
+| vcap.example.json                 | Provides `VCAP_SERVICES` and/or `VCAP_APPLICATION` for local development |
+| vcap.test.json                    | Provides `VCAP_SERVICES` and/or `VCAP_APPLICATION` for unit tests |
+| rollup.config.js                  | Config for Rollup module bundler |

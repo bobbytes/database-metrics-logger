@@ -10,7 +10,6 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup -c",
-    "watch": "rollup -cw",
     "test": "NODE_ENV=test jest --env=jsdom --coverage",
     "lint": "tslint --project tsconfig.json --format stylish",
     "prebuild": "npm run lint && rimraf dist && rimraf .tmp",
