@@ -1,11 +1,17 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "declarationDir": "./dist",
+    "declarationDir": ".tmp",
     "module": "es6",
     "noImplicitAny": false,
-    "outDir": "./dist",
-    "target": "es5"
+    "outDir": ".tmp",
+    "target": "es5",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "lib": [
+      "es2015"
+    ]
   },
   "include": [
     "src/**/*"

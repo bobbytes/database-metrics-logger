@@ -9,10 +9,12 @@ yarn-error.log
 
 # Generated filed #
 dist/
-.rpt2_cache
+.tmp/
+test/coverage/
+.rpt2_cache/
 
 # Cloud Foundry #
 vcap.json
 
 # editor config #
-./vscode/settings.json
+.vscode/settings.json
