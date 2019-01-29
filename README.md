@@ -1,4 +1,4 @@
-# Taibika Service Metrics
+<h1 align="center">Cloud Foundry Service Metrics Logger</h1>
 
 ![divider](./divider.png)
 

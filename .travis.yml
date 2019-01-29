@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - lts/carbon
+  - lts/dubnium
+  - stable
+cache:
+  directories:
+    - node_modules
+after_success:
+  - cat test/coverage/lcov.info | node_modules\.bin\coveralls
