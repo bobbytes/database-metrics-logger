@@ -13,6 +13,7 @@ before_deploy:
 deploy:
   provider: npm
   email: robert.kleger@bobb.io
+  skip_cleanup: true
   on:
     tags: true
     branch: master
