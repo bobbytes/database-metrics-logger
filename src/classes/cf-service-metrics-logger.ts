@@ -42,7 +42,7 @@ export class CfServiceMetricsLogger {
   }
 
   public stop(): void {
-    this.dbStatusCollection.forEach(dbStatus => dbStatus.disconnect());
+    this.dbStatusCollection.forEach(dbStatus => dbStatus.stop());
   }
 
   private startMondoDbLogging(): void {

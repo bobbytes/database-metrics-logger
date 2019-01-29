@@ -21,6 +21,7 @@ export class Poller extends EventEmitter {
   };
 
   public config: IPollerConfig;
+  private timeout: NodeJS.Timeout;
 
   constructor(config: IPollerConfig = {}) {
     super();
@@ -30,10 +31,16 @@ export class Poller extends EventEmitter {
   }
 
   public poll(): void {
-    setTimeout(() => this.emit(Poller.eventIds.poll), this.config.interval);
+    this.timeout = setTimeout(() => this.emit(Poller.eventIds.poll), this.config.interval);
   }
 
   public onPoll(callBack: () => void): void {
     this.on(Poller.eventIds.poll, callBack);
+  }
+
+  public stop(): void {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
   }
 }

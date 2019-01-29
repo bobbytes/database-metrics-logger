@@ -39,9 +39,9 @@ export class MongoDbStatus extends DatabaseStatus {
     return this;
   }
 
-  public disconnect(): void {
+  public stop(): void {
     if (this.mongoClient) {
-      this.mongoClient.close();
+      this.stopAllPollers();
       this.unsubscribeAll();
     }
   }
@@ -59,6 +59,13 @@ export class MongoDbStatus extends DatabaseStatus {
     } catch (error) {
       this.disconnect();
       // this.logger.error(error);
+    }
+  }
+
+  private disconnect(): void {
+    if (this.mongoClient) {
+      this.mongoClient.close();
+      this.mongoClient = undefined;
     }
   }
 
@@ -89,8 +96,10 @@ export class MongoDbStatus extends DatabaseStatus {
       // this.logger.error(error);
     }
 
-    if (this.isConnected) {
+    if (this.isConnected() && this.getPollerById(Poller.pollerIds.mongoDb.serverStatus)) {
       this.pollById(Poller.pollerIds.mongoDb.serverStatus);
+    } else {
+      this.disconnect();
     }
   }
 
@@ -103,8 +112,10 @@ export class MongoDbStatus extends DatabaseStatus {
       // this.logger.error(error);
     }
 
-    if (this.isConnected) {
+    if (this.isConnected() && this.getPollerById(Poller.pollerIds.mongoDb.dbStats)) {
       this.pollById(Poller.pollerIds.mongoDb.dbStats);
+    } else {
+      this.disconnect();
     }
   }
 

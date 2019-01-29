@@ -42,9 +42,9 @@ export class RedisStatus extends DatabaseStatus {
     return this;
   }
 
-  public disconnect(): void {
+  public stop(): void {
     if (this.redisClient) {
-      this.redisClient.end(true);
+      this.stopAllPollers();
       this.unsubscribeAll();
     }
   }
@@ -65,6 +65,13 @@ export class RedisStatus extends DatabaseStatus {
     });
   }
 
+  private disconnect(): void {
+    if (this.redisClient) {
+      this.redisClient.end(true);
+      this.redisClient = undefined;
+    }
+  }
+
   private setInfoPoller(): void {
     const infoPoller = new Poller({
       id: Poller.pollerIds.redis.info,
@@ -76,7 +83,7 @@ export class RedisStatus extends DatabaseStatus {
 
   private onPollInfo(): void {
     this.redisClient.info((error, serverInfo) => {
-      if (!error && this.isConnected()) {
+      if (!error && this.isConnected() && this.getPollerById(Poller.pollerIds.redis.info)) {
         this.publish(RedisStatus.subscriptionIds.serverInfo, serverInfo);
         this.pollById(Poller.pollerIds.redis.info);
       } else {
