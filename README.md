@@ -1,5 +1,22 @@
 <h1 align="center">Cloud Foundry Service Metrics Logger</h1>
 
+<p align="center">
+  <a href="https://david-dm.org/DaNautilus/cf-service-metrics-logger">
+    <img src="https://david-dm.org/DaNautilus/cf-service-metrics-logger/status.svg?style=flat" alt="dependency" />
+  </a>
+  <a href="https://travis-ci.org/DaNautilus/cf-service-metrics-logger">
+    <img src="https://travis-ci.org/DaNautilus/cf-service-metrics-logger.svg?branch=master" alt="travis" />
+  </a>
+  <a href="https://ci.appveyor.com/project/DaNautilus/cf-service-metrics-logger/branch/master">
+    <img src="https://ci.appveyor.com/api/projects/status/hln22i8cy56xe65o?svg=true&passingText=windows%20passing&pendingText=windows%20pending&failingText=windows%20failing" alt="appveyor" />
+  </a>
+  <a href="https://coveralls.io/github/DaNautilus/cf-service-metrics-logger?branch=master">
+    <img src="https://coveralls.io/repos/github/DaNautilus/cf-service-metrics-logger/badge.svg?branch=master" alt="coveralls" />
+  </a>
+</p>
+
+<br />
+
 ![divider](./divider.png)
 
 ## ❯ Table of Contents

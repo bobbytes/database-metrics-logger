@@ -54,6 +54,7 @@
       "email": "robert.kleger@bobb.io"
     }
   ],
+  "repository": "git+ssh://git@github.com:DaNautilus/cf-service-metrics-logger.git",
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^23.3.13",
