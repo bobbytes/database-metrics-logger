@@ -8,10 +8,11 @@ cache:
   - node_modules
 after_success:
 - cat test/coverage/lcov.info | node_modules\.bin\coveralls
+before_deploy:
+- yarn run build
 deploy:
   provider: npm
   email: robert.kleger@bobb.io
-  skip_cleanup: true
   on:
     tags: true
     branch: master
