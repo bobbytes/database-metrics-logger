@@ -14,8 +14,7 @@
     "lint": "tslint --project tsconfig.json --format stylish",
     "prebuild": "npm run lint && rimraf dist && rimraf .tmp",
     "postbuild": "npm run bundle && rimraf .tmp",
-    "bundle": "dts-bundle --name dist/index --main .tmp --outputAsModuleFolder",
-    "prepublishOnly": "yarn install && yarn run build"
+    "bundle": "dts-bundle --name dist/index --main .tmp --outputAsModuleFolder"
   },
   "keywords": [
     "typescript",
