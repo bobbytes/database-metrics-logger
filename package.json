@@ -1,6 +1,6 @@
 {
   "name": "cf-service-metrics-logger",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Log Cloud Foundry service metrics",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -10,7 +10,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup -c",
-    "test": "NODE_ENV=test jest --env=jsdom --coverage",
+    "test": "set NODE_ENV=test&& jest --env=jsdom --coverage",
     "lint": "tslint --project tsconfig.json --format stylish",
     "prebuild": "npm run lint && rimraf dist && rimraf .tmp",
     "postbuild": "npm run bundle && rimraf .tmp",
@@ -24,7 +24,7 @@
     "logger"
   ],
   "engines": {
-    "node": ">=10.x"
+    "node": ">=8.x"
   },
   "jest": {
     "transform": {

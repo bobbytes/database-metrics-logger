@@ -7,6 +7,7 @@ describe.skip('CloudFoundry', () => {
 
   // jest.useFakeTimers();
 
+  /*
   beforeAll(async done => {
     database_uri = await mongoUnit.start();
     const database = database_uri ? database_uri.substr(database_uri.lastIndexOf('/') + 1) : '';
@@ -50,8 +51,9 @@ describe.skip('CloudFoundry', () => {
     await mongoUnit.stop();
     done();
   });
+  */
 
-  test('', () => {
+  test.skip('', () => {
     expect(mongoDbStatus).toBeInstanceOf(MongoDbStatus);
 
     const serverStatusCallback = serverStatus => {
