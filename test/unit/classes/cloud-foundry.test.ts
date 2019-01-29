@@ -35,7 +35,7 @@ describe('CloudFoundry', () => {
   });
 
   test('getServicesCredentialsByServiceType must return an empty array if no vcap configuration is found', () => {
-    const cloudFoundryNoServices = new CloudFoundry({});
+    const cloudFoundryNoServices = new CloudFoundry({ vcap: {} });
 
     const mongoDbServiceCredentials = cloudFoundryNoServices.getServicesCredentialsByServiceType(ServiceType.MongoDb);
     const redisServiceCredentials = cloudFoundryNoServices.getServicesCredentialsByServiceType(ServiceType.Redis);

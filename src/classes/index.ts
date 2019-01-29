@@ -1,1 +1,1 @@
-export * from './cf-service-metrics';
+export * from './cf-service-metrics-logger';

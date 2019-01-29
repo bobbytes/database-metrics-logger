@@ -17,10 +17,10 @@ const defaultOptions = {
   },
 };
 
-export class CfServiceMetrics {
+export class CfServiceMetricsLogger {
   private logger: ILogger;
   private options: IServiceMetricsOptions;
-  private cloudFoundry = new CloudFoundry();
+  private cloudFoundry: CloudFoundry;
   private dbStatusCollection: (MongoDbStatus | RedisStatus)[] = [];
 
   constructor(
@@ -29,6 +29,11 @@ export class CfServiceMetrics {
   ) {
     this.logger = logger;
     this.options = mergeDeep({}, defaultOptions, options);
+
+    this.cloudFoundry = new CloudFoundry({
+      vcap: options.vcap,
+      vcapFile: options.vcapFile,
+    });
   }
 
   public start(): void {

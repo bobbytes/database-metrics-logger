@@ -1,6 +1,7 @@
 import * as cfenv from 'cfenv';
 import * as path from 'path';
 import { env } from '../helpers/env';
+import { ICloudFoundryOptions } from '../interfaces/cloud-foundry-options.interface';
 
 export enum ServiceType {
   MongoDb = 'mongodb-2',
@@ -10,10 +11,12 @@ export enum ServiceType {
 export class CloudFoundry {
   private appEnvironment: cfenv.IAppEnv;
 
-  constructor(vcap?: {}) {
-    this.appEnvironment = vcap
-      ? cfenv.getAppEnv({ vcap })
-      : cfenv.getAppEnv({ vcapFile: this.getVcapFilePath() });
+  constructor(options?: ICloudFoundryOptions) {
+    const vcapFile = options && options.vcapFile ? options.vcapFile : this.getVcapFilePath();
+
+    this.appEnvironment = options && options.vcap
+      ? cfenv.getAppEnv({ vcap: options.vcap })
+      : cfenv.getAppEnv({ vcapFile });
   }
 
   public getServicesCredentialsByServiceType(serviceType: ServiceType): cfenv.TCredentials[] {
