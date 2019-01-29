@@ -1,6 +1,6 @@
 {
   "name": "cf-service-metrics-logger",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Log Cloud Foundry service metrics",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -14,7 +14,8 @@
     "lint": "tslint --project tsconfig.json --format stylish",
     "prebuild": "npm run lint && rimraf dist && rimraf .tmp",
     "postbuild": "npm run bundle && rimraf .tmp",
-    "bundle": "dts-bundle --name dist/index --main .tmp --outputAsModuleFolder"
+    "bundle": "dts-bundle --name dist/index --main .tmp --outputAsModuleFolder",
+    "prepublish": "npm run build"
   },
   "keywords": [
     "typescript",
