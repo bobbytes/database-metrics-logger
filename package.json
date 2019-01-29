@@ -10,7 +10,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup -c",
-    "test": "NODE_ENV=test jest --env=jsdom --coverage --detectOpenHandles",
+    "test": "NODE_ENV=test jest --env=jsdom --coverage",
     "lint": "tslint --project tsconfig.json --format stylish",
     "prebuild": "npm run lint && rimraf dist && rimraf .tmp",
     "postbuild": "npm run bundle && rimraf .tmp",
