@@ -14,14 +14,14 @@ declare module 'cfenv' {
   }
 
   export interface IMongoDbCredentials {
-    host: string;
-    ports: string[];
-    username: string;
-    password: string;
-    database: string;
     database_uri: string;
-    uri: string;
-    replica_set: string;
+    host?: string;
+    ports?: string[];
+    username?: string;
+    password?: string;
+    database?: string;
+    uri?: string;
+    replica_set?: string;
   }
 
   export type TCredentials = IMongoDbCredentials | IRedisCredentials;
