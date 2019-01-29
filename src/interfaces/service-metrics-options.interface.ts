@@ -10,6 +10,8 @@ export interface IRedisOptions {
 export interface IServiceMetricsOptions {
   mongoDB?: IMongoDbOptions;
   redis?: IRedisOptions;
+  vcap?: {};
+  vcapFile?: string;
 }
 
 export type TDbOptions = IMongoDbOptions | IRedisOptions;

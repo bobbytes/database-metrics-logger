@@ -1,6 +1,8 @@
+import * as path from 'path';
+
 // this is a workaround due to typescript compiler which copies package.json to output directory
 // tslint:disable-next-line:no-var-requires
-const pkg = require('../../package.json');
+const pkg = require(path.join(process.cwd(), 'package.json'));
 
 const isTest = (): boolean => {
   return process.env.NODE_ENV === 'test';

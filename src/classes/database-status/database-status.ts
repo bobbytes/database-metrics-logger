@@ -10,7 +10,7 @@ export abstract class DatabaseStatus extends PubSub {
 
   private pollers: Poller[] = [];
 
-  public abstract disconnect(): void;
+  public abstract stop(): void;
 
   protected startPolling(): void {
     this.pollers.forEach(poller => {
@@ -34,7 +34,15 @@ export abstract class DatabaseStatus extends PubSub {
     }
   }
 
-  private getPollerById(id: string): Poller | undefined {
+  protected stopAllPollers(): void {
+    this.pollers.forEach(poller => {
+      poller.stop();
+    });
+
+    this.pollers = [];
+  }
+
+  protected getPollerById(id: string): Poller | undefined {
     return this.pollers.find(p => p.config.id === id);
   }
 }

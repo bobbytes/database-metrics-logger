@@ -80,8 +80,21 @@ class Logger {
 
 const logger = new Logger();
 
-/* create new instance of CfServiceMetricsLogger and pass logger instance */
-const cfServiceMetricsLogger = new CfServiceMetricsLogger(logger);
+/* you can add some options to CfServiceMetricsLogger */
+const options = {
+  mongoDB: {
+    serverStatusInterval: 10000, //optional
+    bStatsInterval: 20000, //optional
+  },
+  redis: {
+    infoInterval: 100000 //optional
+  },
+  vcap: {}; //optional
+  vcapFile: ''; //optional
+};
+
+/* create new instance of CfServiceMetricsLogger and pass logger instance and optional options */
+const cfServiceMetricsLogger = new CfServiceMetricsLogger(logger, options);
 
 /* start service metrics logging */
 cfServiceMetricsLogger.start();
