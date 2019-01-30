@@ -1,6 +1,6 @@
 {
   "name": "cf-service-metrics-logger",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Log Cloud Foundry service metrics",
   "main": "dist/index.js",
   "module": "dist/index.es.js",

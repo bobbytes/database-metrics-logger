@@ -8,7 +8,7 @@
 - MongoDB support
 - Redis support
 
-## [0.1.1] - 2019-01-30
+## [0.1.2] - 2019-01-30
 
 ### Added
 
