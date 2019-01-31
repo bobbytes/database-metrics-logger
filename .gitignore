@@ -12,6 +12,7 @@ dist/
 .tmp/
 test/coverage/
 .rpt2_cache/
+sonar-project.properties
 
 # Cloud Foundry #
 vcap.json
