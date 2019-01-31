@@ -6,6 +6,9 @@ node_js:
 cache:
   directories:
   - node_modules
+after_success:
+- yarn run sonarconfig
+- sonar-scanner
 before_deploy:
 - yarn run build
 deploy:
@@ -21,7 +24,3 @@ addons:
     organization: danautilus-github
     token:
       secure: $SONAR_TOKEN
-script:
-- yarn run sonarconfig
-- yarn run test
-- sonar-scanner
