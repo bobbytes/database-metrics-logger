@@ -7,9 +7,9 @@ cache:
   directories:
   - node_modules
 after_success:
-- bash <(curl -s https://codecov.io/bash)
-before_deploy:
 - yarn run build
+- yarn run sonarconfig
+- sonar-scanner
 deploy:
   provider: npm
   email: robert.kleger@bobb.io
@@ -23,6 +23,3 @@ addons:
     organization: danautilus-github
     token:
       secure: $SONAR_TOKEN
-script:
-- yarn run sonarconfig
-- sonar-scanner

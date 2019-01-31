@@ -12,7 +12,8 @@ if (pkg && pkg.sonar) {
     'sonar.projectKey': pkg.sonar.projectKey || '',
     'sonar.projectName': pkg.name,
     'sonar.sources': pkg.sonar.sources || '',
-    'sonar.projectVersion': pkg.version
+    'sonar.projectVersion': pkg.version,
+    'sonar.typescript.lcov.reportPaths': pkg.sonar.reportPaths || '',
   };
 
   fs.writeFileSync(configFilePath, ini.stringify(config))

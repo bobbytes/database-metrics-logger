@@ -10,11 +10,11 @@
   <a href="https://ci.appveyor.com/project/DaNautilus/cf-service-metrics-logger/branch/master">
     <img src="https://ci.appveyor.com/api/projects/status/hln22i8cy56xe65o?svg=true&passingText=windows%20passing&pendingText=windows%20pending&failingText=windows%20failing" alt="appveyor" />
   </a>
-  <a href="https://codecov.io/gh/DaNautilus/cf-service-metrics-logger">
-    <img src="https://codecov.io/gh/DaNautilus/cf-service-metrics-logger/branch/master/graph/badge.svg" alt="codecov" />
+  <a href="https://sonarcloud.io/dashboard?id=DaNautilus_cf-service-metrics-logger">
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=DaNautilus_cf-service-metrics-logger&metric=coverage" alt="coverage" />
   </a>
   <a href="https://sonarcloud.io/dashboard/index/DaNautilus_cf-service-metrics-logger">
-    <img src="https://sonarcloud.io/api/project_badges/quality_gate?project=DaNautilus_cf-service-metrics-logger" alt="quality gate" />
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=DaNautilus_cf-service-metrics-logger&metric=alert_status" alt="quality gate" />
   </a>
 </p>
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.4] - 2019-01-31
+
+### Added
+
+- Replace coveralls with sonarqube quality gate
+
 ## [0.1.3] - 2019-01-31
 
 ### Added
