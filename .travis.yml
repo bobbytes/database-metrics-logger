@@ -25,3 +25,4 @@ addons:
       secure: $SONAR_TOKEN
 script:
 - yarn run sonarconfig
+- sonar-scanner

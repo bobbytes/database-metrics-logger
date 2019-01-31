@@ -11,7 +11,10 @@
     <img src="https://ci.appveyor.com/api/projects/status/hln22i8cy56xe65o?svg=true&passingText=windows%20passing&pendingText=windows%20pending&failingText=windows%20failing" alt="appveyor" />
   </a>
   <a href="https://codecov.io/gh/DaNautilus/cf-service-metrics-logger">
-  <img src="https://codecov.io/gh/DaNautilus/cf-service-metrics-logger/branch/master/graph/badge.svg" alt="codecov" />
+    <img src="https://codecov.io/gh/DaNautilus/cf-service-metrics-logger/branch/master/graph/badge.svg" alt="codecov" />
+  </a>
+  <a href="https://sonarcloud.io/dashboard/index/DaNautilus_cf-service-metrics-logger">
+    <img src="https://sonarcloud.io/api/badges/gate?key=DaNautilus_cf-service-metrics-logger" alt="quality gate" />
   </a>
 </p>
 
