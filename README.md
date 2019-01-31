@@ -14,7 +14,7 @@
     <img src="https://codecov.io/gh/DaNautilus/cf-service-metrics-logger/branch/master/graph/badge.svg" alt="codecov" />
   </a>
   <a href="https://sonarcloud.io/dashboard/index/DaNautilus_cf-service-metrics-logger">
-    <img src="https://sonarcloud.io/api/project_badges/quality_gate?project=DaNautilus_cf-service-metrics-logger" alt="quality gate" />
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=DaNautilus_cf-service-metrics-logger&metric=alert_status" alt="quality gate" />
   </a>
 </p>
 

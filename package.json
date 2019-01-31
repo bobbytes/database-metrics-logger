@@ -51,7 +51,8 @@
   },
   "sonar": {
     "projectKey": "DaNautilus_cf-service-metrics-logger",
-    "sources": "src"
+    "sources": "src",
+    "reportPaths": "test/coverage/lcov.info"
   },
   "contributors": [
     {
