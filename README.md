@@ -22,11 +22,27 @@
 
 ![divider](./divider.png)
 
+## ❯ Why
+
+You want to log service metrics from your application on Cloud Foundry? - Yes? - Here you are 🙌 !!
+
+![divider](./divider.png)
+
 ## ❯ Table of Contents
 
+- [Supported Services](#-supported-services)
 - [Quick Start](#-quick-start)
 - [Development](#-development)
 - [Project Structure](#-project-structure)
+
+![divider](./divider.png)
+
+## ❯ Supported Services
+
+| Service     | Version |
+| ----------- | ------- |
+| **MongoDB** | >=3.6.6 |
+| **Redis**   | >=2.3.9 |
 
 ![divider](./divider.png)
 
@@ -48,12 +64,28 @@ yarn add cf-service-metrics-logger
 
 ### How to use
 
+#### Logger Interface
+
 Create a new instance of CfServiceMetricsLogger and pass any kind of logger implementing following interface:
 
-- debug(message: `{} | [] | string | number`)
-- info(message: `{} | [] | string | number`)
-- warn(message: `{} | [] | string | number`)
-- error(message: `{} | [] | string | number`)
+| Method     |
+| ----------- |
+| `debug(message: {} | [] | string | number)` |
+| `info(message: {} | [] | string | number)`  |
+| `warn(message: {} | [] | string | number)`  |
+| `error(message: {} | [] | string | number)` |
+
+#### CfServiceMetricsLogger Options
+
+| Option                                    | Description                                                    | Default Value |
+| ----------------------------------------- | -------------------------------------------------------------- | ------------: |
+| `mongoDb.serverStatusInterval` (optional) | MongoDb database status polling interval in ms                 | `10000`       |
+| `mongoDb.dbStatsInterval` (optional)      | MongoDB storage statistics polling interval in ms              | `10000`       |
+| `redis.infoInterval` (optional)           | Redis statistics polling interval                              | `10000`       |
+| `vcap` (optional)                         | Provide local `VCAP_SERVICES` and/or `VCAP_APPLICATION` values | `{}`          |
+| `vcapFile` (optional)                     | Provide local `VCAP_SERVICES` and/or `VCAP_APPLICATION` file   | `''`          |
+
+#### Example
 
 ```javascript
 /* import library by using CommonJS module loader */
@@ -86,14 +118,12 @@ const logger = new Logger();
 /* you can add some options to CfServiceMetricsLogger */
 const options = {
   mongoDB: {
-    serverStatusInterval: 10000, //optional
-    bStatsInterval: 20000, //optional
+    serverStatusInterval: 10000,
+    dbStatsInterval: 20000,
   },
   redis: {
-    infoInterval: 100000 //optional
-  },
-  vcap: {}; //optional
-  vcapFile: ''; //optional
+    infoInterval: 100000
+  }
 };
 
 /* create new instance of CfServiceMetricsLogger and pass logger instance and optional options */
