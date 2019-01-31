@@ -14,7 +14,8 @@
     "lint": "tslint --project tsconfig.json --format stylish",
     "prebuild": "npm run lint && rimraf dist && rimraf .tmp",
     "postbuild": "npm run bundle && rimraf .tmp",
-    "bundle": "dts-bundle --name dist/index --main .tmp --outputAsModuleFolder"
+    "bundle": "dts-bundle --name dist/index --main .tmp --outputAsModuleFolder",
+    "sonarconfig": "rimraf sonar-project.properties && node ./scripts/sonar-config.js"
   },
   "keywords": [
     "typescript",
@@ -48,6 +49,10 @@
       "tsx"
     ]
   },
+  "sonar": {
+    "projectKey": "DaNautilus_cf-service-metrics-logger",
+    "sources": "src"
+  },
   "contributors": [
     {
       "name": "Robert Kleger",
@@ -60,7 +65,9 @@
     "@types/jest": "^23.3.13",
     "@types/mongodb": "^3.1.19",
     "@types/redis": "^2.8.10",
+    "chalk": "^2.4.2",
     "dts-bundle": "^0.7.3",
+    "ini": "^1.3.5",
     "jest": "^23.6.0",
     "mongo-unit": "^1.3.4",
     "rollup": "^1.1.2",
