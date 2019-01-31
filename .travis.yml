@@ -7,10 +7,9 @@ cache:
   directories:
   - node_modules
 after_success:
+- yarn run build
 - yarn run sonarconfig
 - sonar-scanner
-before_deploy:
-- yarn run build
 deploy:
   provider: npm
   email: robert.kleger@bobb.io
