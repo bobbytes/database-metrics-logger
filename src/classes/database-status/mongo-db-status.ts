@@ -1,11 +1,9 @@
 import { IMongoDbCredentials } from 'cfenv';
 import * as MongoDb from 'mongodb';
 
-import {
-  IMongoDbOptions, IServiceMetricsOptions
-} from '../../interfaces/service-metrics-options.interface';
-import { DatabaseStatus } from './database-status';
 import { Poller } from '../../helpers/poller';
+import { IMongoDbOptions } from '../../interfaces/service-metrics-options.interface';
+import { DatabaseStatus } from './database-status';
 
 export class MongoDbStatus extends DatabaseStatus {
   public static subscriptionIds = {
@@ -16,8 +14,7 @@ export class MongoDbStatus extends DatabaseStatus {
   protected credentials: IMongoDbCredentials;
   protected options: IMongoDbOptions;
 
-  private mongoClient: MongoDb.MongoClient;
-  private db: MongoDb.Db;
+  private mongoClientPromise?: Promise<MongoDb.MongoClient>;
 
   constructor(credentials: IMongoDbCredentials, options: IMongoDbOptions) {
     super();
@@ -26,100 +23,98 @@ export class MongoDbStatus extends DatabaseStatus {
   }
 
   public getServerStatus(): MongoDbStatus {
-    this.setServerStatusPoller();
-    this.connect().then(() => this.pollById(Poller.pollerIds.mongoDb.serverStatus));
+    this.connect().then(() => {
+      const serverStatusPoller = new Poller({
+        id: Poller.pollerIds.mongoDb.serverStatus,
+        interval: this.options.serverStatusInterval,
+      });
+
+      serverStatusPoller.onPoll(this.onPollServerStatus.bind(this));
+      this.setPoller(serverStatusPoller);
+      this.pollById(Poller.pollerIds.mongoDb.serverStatus);
+    });
 
     return this;
   }
 
   public getDbStats(): MongoDbStatus {
-    this.setDbStatsPoller();
-    this.connect().then(() => this.pollById(Poller.pollerIds.mongoDb.dbStats));
+    this.connect().then(() => {
+      const dbStatsPoller = new Poller({
+        id: Poller.pollerIds.mongoDb.dbStats,
+        interval: this.options.dbStatsInterval,
+      });
+      dbStatsPoller.onPoll(this.onPollDbStats.bind(this));
+      this.setPoller(dbStatsPoller);
+
+      this.pollById(Poller.pollerIds.mongoDb.dbStats);
+    });
 
     return this;
   }
 
-  public stop(): void {
-    if (this.mongoClient) {
-      this.stopAllPollers();
-      this.unsubscribeAll();
-    }
+  public async stop(): Promise<void> {
+    this.stopAllPollers();
+    this.unsubscribeAll();
+    this.disconnect();
   }
 
-  private async connect(): Promise<void> {
+  private connect(): Promise<MongoDb.MongoClient> {
     const uri = this.credentials.database_uri;
 
-    if (this.isConnected()) {
-      return Promise.resolve();
+    if (!this.mongoClientPromise) {
+      this.mongoClientPromise = MongoDb.MongoClient.connect(uri, { useNewUrlParser: true });
     }
 
+    return this.mongoClientPromise;
+  }
+
+  private async disconnect(): Promise<void> {
+    if (this.isConnected()) {
+      const mongoClient = await this.mongoClientPromise;
+      mongoClient.close();
+      this.mongoClientPromise = undefined;
+    }
+  }
+
+  private async isConnected(): Promise<boolean> {
+    const mongoClient = await this.mongoClientPromise;
+    return mongoClient ? mongoClient.isConnected() : false;
+  }
+
+  private async getDatabase(): Promise<MongoDb.Db> {
     try {
-      this.mongoClient = await MongoDb.MongoClient.connect(uri, { useNewUrlParser: true });
-      this.db = this.mongoClient.db(this.credentials.database);
+      const mongoClient = await this.mongoClientPromise;
+      return mongoClient.db(this.credentials.database);
     } catch (error) {
-      this.disconnect();
       // this.logger.error(error);
     }
-  }
-
-  private disconnect(): void {
-    if (this.mongoClient) {
-      this.mongoClient.close();
-      this.mongoClient = undefined;
-    }
-  }
-
-  private setServerStatusPoller(): void {
-    const serverStatusPoller = new Poller({
-      id: Poller.pollerIds.mongoDb.serverStatus,
-      interval: this.options.serverStatusInterval,
-    });
-    serverStatusPoller.onPoll(this.onPollServerStatus.bind(this));
-    this.setPoller(serverStatusPoller);
-  }
-
-  private setDbStatsPoller(): void {
-    const dbStatsPoller = new Poller({
-      id: Poller.pollerIds.mongoDb.dbStats,
-      interval: this.options.dbStatsInterval,
-    });
-    dbStatsPoller.onPoll(this.onPollDbStats.bind(this));
-    this.setPoller(dbStatsPoller);
   }
 
   private async onPollServerStatus(): Promise<void> {
-    try {
-      const serverStatus = await this.db.command({ serverStatus: 1 });
-      this.publish(MongoDbStatus.subscriptionIds.serverStatus, serverStatus);
-    } catch (error) {
-      this.disconnect();
-      // this.logger.error(error);
-    }
+    const isConnected = await this.isConnected();
 
-    if (this.isConnected() && this.getPollerById(Poller.pollerIds.mongoDb.serverStatus)) {
-      this.pollById(Poller.pollerIds.mongoDb.serverStatus);
-    } else {
-      this.disconnect();
+    try {
+      if (isConnected) {
+        const database = await this.getDatabase();
+        const serverStatus = await database.command({ serverStatus: 1 });
+        this.publish(MongoDbStatus.subscriptionIds.serverStatus, serverStatus);
+      }
+    } catch (error) {
+      // this.logger.error(error);
     }
   }
 
   private async onPollDbStats(): Promise<void> {
+    const isConnected = await this.isConnected();
+
     try {
-      const dbStats = await this.db.command({ dbStats: 1, scale: 1024 });
-      this.publish(MongoDbStatus.subscriptionIds.dbStats, dbStats);
+      if (isConnected) {
+        const database = await this.getDatabase();
+        const dbStats = await database.command({ dbStats: 1, scale: 1024 });
+        this.publish(MongoDbStatus.subscriptionIds.dbStats, dbStats);
+      }
     } catch (error) {
-      this.disconnect();
       // this.logger.error(error);
     }
-
-    if (this.isConnected() && this.getPollerById(Poller.pollerIds.mongoDb.dbStats)) {
-      this.pollById(Poller.pollerIds.mongoDb.dbStats);
-    } else {
-      this.disconnect();
-    }
-  }
-
-  private isConnected(): boolean {
-    return this.mongoClient ? this.mongoClient.isConnected() : false;
   }
 }

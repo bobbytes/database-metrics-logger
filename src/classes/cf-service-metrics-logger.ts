@@ -1,11 +1,11 @@
 import { IMongoDbCredentials, IRedisCredentials } from 'cfenv';
 
+import { mergeDeep } from '../helpers/merge-deep';
 import { ILogger } from '../interfaces/logger.interface';
 import { IServiceMetricsOptions } from '../interfaces/service-metrics-options.interface';
 import { CloudFoundry, ServiceType } from './cloud-foundry';
 import { MongoDbStatus } from './database-status/mongo-db-status';
 import { RedisStatus } from './database-status/redis-status';
-import { mergeDeep } from '../helpers/merge-deep';
 
 const defaultOptions = {
   mongoDB: {
