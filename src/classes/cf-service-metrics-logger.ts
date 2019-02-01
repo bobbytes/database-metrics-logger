@@ -20,7 +20,7 @@ const defaultOptions = {
 
 export enum CfServiceMetricsEvent {
   Metrics = 'metrics',
-  Log = 'log',
+  Log = 'logs',
 }
 
 export class CfServiceMetricsLogger extends PubSub {
