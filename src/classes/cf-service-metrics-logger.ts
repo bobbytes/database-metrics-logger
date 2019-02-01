@@ -20,7 +20,7 @@ const defaultOptions = {
 
 export enum CfServiceMetricsEvent {
   Metrics = 'metrics',
-  Log = 'logs',
+  Logs = 'logs',
 }
 
 export class CfServiceMetricsLogger extends PubSub {
@@ -41,8 +41,8 @@ export class CfServiceMetricsLogger extends PubSub {
   }
 
   public start(): void {
-    logger.subscribe(undefined, value => this.publish(CfServiceMetricsEvent.Log, value));
-    this.startMondoDbLogging();
+    logger.subscribe(undefined, value => this.publish(CfServiceMetricsEvent.Logs, value));
+    this.startMongoDbLogging();
     this.startRedisLogging();
   }
 
@@ -52,7 +52,7 @@ export class CfServiceMetricsLogger extends PubSub {
     logger.unsubscribeAll();
   }
 
-  private startMondoDbLogging(): void {
+  private startMongoDbLogging(): void {
     const mongoDbCredentials = this.cloudFoundry.getServicesCredentialsByServiceType(ServiceType.MongoDb);
 
     mongoDbCredentials.forEach(credential => {

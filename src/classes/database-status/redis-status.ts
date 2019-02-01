@@ -1,6 +1,7 @@
 import { IRedisCredentials } from 'cfenv';
 import * as Redis from 'redis';
 
+import { logger } from '../../helpers/logger';
 import { Poller } from '../../helpers/poller';
 import { IRedisOptions } from '../../interfaces/service-metrics-options.interface';
 import { DatabaseStatus } from './database-status';
@@ -30,16 +31,18 @@ export class RedisStatus extends DatabaseStatus {
   }
 
   public getServerInfo(): RedisStatus {
-    this.connect().then(() => {
-      const infoPoller = new Poller({
-        id: Poller.pollerIds.redis.info,
-        interval: this.options.infoInterval,
-      });
+    this.connect()
+      .then(() => {
+        const infoPoller = new Poller({
+          id: Poller.pollerIds.redis.info,
+          interval: this.options.infoInterval,
+        });
 
-      infoPoller.onPoll(this.onPollInfo.bind(this));
-      this.setPoller(infoPoller);
-      this.pollById(Poller.pollerIds.redis.info);
-    });
+        infoPoller.onPoll(this.onPollInfo.bind(this));
+        this.setPoller(infoPoller);
+        this.pollById(Poller.pollerIds.redis.info);
+      })
+      .catch(error => logger.error(error));
 
     return this;
   }
@@ -66,11 +69,11 @@ export class RedisStatus extends DatabaseStatus {
           resolve();
         };
 
-        const onError = (): void => {
+        const onError = (error): void => {
           this.redisClient.off(RedisEvent.Error, onError.bind(this));
           this.redisClient.end(true);
           this.redisClient = undefined;
-          reject();
+          reject(error);
         };
 
         this.redisClient.on(RedisEvent.Connect, onConnect.bind(this));
