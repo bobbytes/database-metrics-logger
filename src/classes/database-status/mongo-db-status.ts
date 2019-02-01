@@ -5,12 +5,12 @@ import { Poller } from '../../helpers/poller';
 import { IMongoDbOptions } from '../../interfaces/service-metrics-options.interface';
 import { DatabaseStatus } from './database-status';
 
-export class MongoDbStatus extends DatabaseStatus {
-  public static subscriptionIds = {
-    serverStatus: 'mongoDb:serverStatus',
-    dbStats: 'mongoDB:dbStats',
-  };
+export enum MongoDbStatusEvent {
+  ServerStatus = 'mongoDb:serverStatus',
+  DbStats = 'mongoDB:dbStats',
+}
 
+export class MongoDbStatus extends DatabaseStatus {
   protected credentials: IMongoDbCredentials;
   protected options: IMongoDbOptions;
 
@@ -97,7 +97,7 @@ export class MongoDbStatus extends DatabaseStatus {
       if (isConnected) {
         const database = await this.getDatabase();
         const serverStatus = await database.command({ serverStatus: 1 });
-        this.publish(MongoDbStatus.subscriptionIds.serverStatus, serverStatus);
+        this.publish(MongoDbStatusEvent.ServerStatus, serverStatus);
       }
     } catch (error) {
       // this.logger.error(error);
@@ -111,7 +111,7 @@ export class MongoDbStatus extends DatabaseStatus {
       if (isConnected) {
         const database = await this.getDatabase();
         const dbStats = await database.command({ dbStats: 1, scale: 1024 });
-        this.publish(MongoDbStatus.subscriptionIds.dbStats, dbStats);
+        this.publish(MongoDbStatusEvent.DbStats, dbStats);
       }
     } catch (error) {
       // this.logger.error(error);

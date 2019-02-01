@@ -1,20 +1,20 @@
 import { IRedisCredentials } from 'cfenv';
 import * as Redis from 'redis';
 
+import { Poller } from '../../helpers/poller';
 import { IRedisOptions } from '../../interfaces/service-metrics-options.interface';
 import { DatabaseStatus } from './database-status';
-import { Poller } from '../../helpers/poller';
 
-const redisEvents = {
-  connect: 'connect',
-  error: 'error',
-};
+enum RedisEvent {
+  Connect = 'connect',
+  Error = 'error',
+}
+
+export enum RedisStatusEvent {
+  ServerInfo = 'redis:serverInfo',
+}
 
 export class RedisStatus extends DatabaseStatus {
-  public static subscriptionIds = {
-    serverInfo: 'redis:serverInfo',
-  };
-
   protected credentials: IRedisCredentials;
   protected options: IRedisOptions;
 
@@ -62,19 +62,19 @@ export class RedisStatus extends DatabaseStatus {
         this.redisClient = Redis.createClient(credentials);
 
         const onConnect = (): void => {
-          this.redisClient.off(redisEvents.connect, onConnect.bind(this));
+          this.redisClient.off(RedisEvent.Connect, onConnect.bind(this));
           resolve();
         };
 
         const onError = (): void => {
-          this.redisClient.off(redisEvents.error, onError.bind(this));
+          this.redisClient.off(RedisEvent.Error, onError.bind(this));
           this.redisClient.end(true);
           this.redisClient = undefined;
           reject();
         };
 
-        this.redisClient.on(redisEvents.connect, onConnect.bind(this));
-        this.redisClient.on(redisEvents.error, onError.bind(this));
+        this.redisClient.on(RedisEvent.Connect, onConnect.bind(this));
+        this.redisClient.on(RedisEvent.Error, onError.bind(this));
       });
     }
   }
@@ -90,7 +90,7 @@ export class RedisStatus extends DatabaseStatus {
     if (this.isConnected()) {
       this.redisClient.info((error, serverInfo) => {
         if (!error) {
-          this.publish(RedisStatus.subscriptionIds.serverInfo, serverInfo);
+          this.publish(RedisStatusEvent.ServerInfo, serverInfo);
           this.pollById(Poller.pollerIds.redis.info);
         }
       });
