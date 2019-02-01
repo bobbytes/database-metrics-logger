@@ -1,5 +1,6 @@
 import { IMongoDbCredentials, IRedisCredentials } from 'cfenv';
 
+import { logger } from '../helpers/logger';
 import { mergeDeep } from '../helpers/merge-deep';
 import { PubSub } from '../helpers/pub-sub';
 import { IServiceMetricsOptions } from '../interfaces/service-metrics-options.interface';
@@ -40,6 +41,7 @@ export class CfServiceMetricsLogger extends PubSub {
   }
 
   public start(): void {
+    logger.subscribe(undefined, value => this.publish(CfServiceMetricsEvent.Log, value));
     this.startMondoDbLogging();
     this.startRedisLogging();
   }
@@ -47,6 +49,7 @@ export class CfServiceMetricsLogger extends PubSub {
   public stop(): void {
     this.unsubscribeAll();
     this.dbStatusCollection.forEach(dbStatus => dbStatus.stop());
+    logger.unsubscribeAll();
   }
 
   private startMondoDbLogging(): void {

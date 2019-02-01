@@ -1,8 +1,8 @@
 import { TCredentials } from 'cfenv';
 
-import { TDbOptions } from '../../interfaces/service-metrics-options.interface';
 import { Poller } from '../../helpers/poller';
 import { PubSub } from '../../helpers/pub-sub';
+import { TDbOptions } from '../../interfaces/service-metrics-options.interface';
 
 export abstract class DatabaseStatus extends PubSub {
   protected abstract credentials: TCredentials;

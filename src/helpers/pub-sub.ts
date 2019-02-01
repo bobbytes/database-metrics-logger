@@ -7,12 +7,12 @@ interface ISubscriber {
 export abstract class PubSub {
   private subscribers: ISubscriber = {};
 
-  public subscribe(id: string, callback: TCallback): void {
+  public subscribe(id: string = '', callback: TCallback): void {
     this.subscribers[id] = this.subscribers[id] || [];
     this.subscribers[id] = [...this.subscribers[id], callback];
   }
 
-  public unsubscribe(id: string, callback: TCallback): void {
+  public unsubscribe(id: string = '', callback: TCallback): void {
     this.subscribers[id] = this.subscribers[id]
       ? this.subscribers[id].filter(filteredCallback => filteredCallback.toString() !== callback.toString())
       : undefined;
@@ -22,17 +22,17 @@ export abstract class PubSub {
       : undefined;
   }
 
-  protected publish(id: string, value: any): void {
-    if (this.subscribers[id]) {
-      this.subscribers[id].forEach(subscriber => subscriber(value));
-    }
-  }
-
-  protected unsubscribeAll(): void {
+  public unsubscribeAll(): void {
     for (const id in this.subscribers) {
       if (this.subscribers.hasOwnProperty(id)) {
         this.subscribers[id] = [];
       }
+    }
+  }
+
+  protected publish(id: string = '', value: any): void {
+    if (this.subscribers[id]) {
+      this.subscribers[id].forEach(subscriber => subscriber(value));
     }
   }
 }

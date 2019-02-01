@@ -1,6 +1,7 @@
 import { IMongoDbCredentials } from 'cfenv';
 import * as MongoDb from 'mongodb';
 
+import { logger } from '../../helpers/logger';
 import { Poller } from '../../helpers/poller';
 import { IMongoDbOptions } from '../../interfaces/service-metrics-options.interface';
 import { DatabaseStatus } from './database-status';
@@ -86,7 +87,7 @@ export class MongoDbStatus extends DatabaseStatus {
       const mongoClient = await this.mongoClientPromise;
       return mongoClient.db(this.credentials.database);
     } catch (error) {
-      // this.logger.error(error);
+      logger.error(error);
     }
   }
 
@@ -100,7 +101,7 @@ export class MongoDbStatus extends DatabaseStatus {
         this.publish(MongoDbStatusEvent.ServerStatus, serverStatus);
       }
     } catch (error) {
-      // this.logger.error(error);
+      logger.error(error);
     }
   }
 
@@ -114,7 +115,7 @@ export class MongoDbStatus extends DatabaseStatus {
         this.publish(MongoDbStatusEvent.DbStats, dbStats);
       }
     } catch (error) {
-      // this.logger.error(error);
+      logger.error(error);
     }
   }
 }

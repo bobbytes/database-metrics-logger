@@ -1,6 +1,8 @@
 import * as cfenv from 'cfenv';
 import * as path from 'path';
+
 import { env } from '../helpers/env';
+import { logger } from '../helpers/logger';
 import { ICloudFoundryOptions } from '../interfaces/cloud-foundry-options.interface';
 
 export enum ServiceType {
@@ -31,7 +33,7 @@ export class CloudFoundry {
     const serviceValues = Object.keys(services).map(key => services[key]);
 
     if (!serviceValues.length) {
-      // this.logger.error('no bound services found');
+      logger.error('no bound services found');
     }
 
     return serviceValues;
@@ -43,7 +45,7 @@ export class CloudFoundry {
     const servicesByServiceType = services.filter(service => service.label === serviceType);
 
     if (services.length && !servicesByServiceType.length) {
-      // this.logger.error(`no bound services for service type ${serviceType} found`);
+      logger.error(`no bound services for service type ${serviceType} found`);
     }
 
     return servicesByServiceType;
