@@ -1,6 +1,8 @@
 import mongoUnit from 'mongo-unit';
 
-import { MongoDbStatus } from '../../../../src/classes/database-status/mongo-db-status';
+import {
+    MongoDbStatus, MongoDbStatusEvent
+} from '../../../../src/classes/database-status/mongo-db-status';
 
 describe.skip('CloudFoundry', () => {
   let mongoDbStatus: MongoDbStatus;
@@ -58,6 +60,6 @@ describe.skip('CloudFoundry', () => {
       done();
     };
 
-    mongoDbStatus.getServerStatus().subscribe(MongoDbStatus.subscriptionIds.serverStatus, serverStatusCallback.bind(this));
+    mongoDbStatus.getServerStatus().subscribe(MongoDbStatusEvent.ServerStatus, serverStatusCallback.bind(this));
   });
 });
