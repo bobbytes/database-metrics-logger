@@ -1,7 +1,6 @@
-/*
 import { PubSub } from '../../../src/helpers/pub-sub';
 
-describe.skip('PubSub', () => {
+describe('PubSub', () => {
   class PubSubTest extends PubSub {
     public static messageIds = {
       message1: 'pubSubTest:message1',
@@ -106,12 +105,5 @@ describe.skip('PubSub', () => {
     pubSubTest.sendMessage(testMessage);
 
     expect(messageReceived).toEqual('');
-  });
-});
-*/
-
-describe('bubu', () => {
-  test('test', () => {
-    expect(1).toEqual(1);
   });
 });

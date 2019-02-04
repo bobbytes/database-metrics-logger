@@ -1,7 +1,6 @@
-/*
 import { logger, LoggerLevel } from '../../../src/helpers/logger';
 
-describe.skip('logger', () => {
+describe('logger', () => {
   afterEach(() => {
     logger.unsubscribeAll();
   });
@@ -52,12 +51,5 @@ describe.skip('logger', () => {
 
     logger.subscribe(undefined, loggerCallback);
     logger.error(messageToSend);
-  });
-});
-*/
-
-describe('bubu', () => {
-  test('test', () => {
-    expect(1).toEqual(1);
   });
 });
