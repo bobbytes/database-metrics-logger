@@ -1,6 +1,6 @@
 import { PubSub } from '../../../src/helpers/pub-sub';
 
-describe('PubSub', () => {
+describe.skip('PubSub', () => {
   class PubSubTest extends PubSub {
     public static messageIds = {
       message1: 'pubSubTest:message1',
