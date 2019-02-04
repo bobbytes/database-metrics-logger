@@ -1,7 +1,7 @@
 import { CloudFoundry, ServiceType } from '../../../src/classes/cloud-foundry';
 import vcapTestJson from '../../../vcap.test.json';
 
-describe('CloudFoundry', () => {
+describe.skip('CloudFoundry', () => {
   let cloudFoundry: CloudFoundry;
 
   beforeEach(() => {

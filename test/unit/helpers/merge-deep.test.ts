@@ -1,6 +1,6 @@
 import { mergeDeep } from '../../../src/helpers/merge-deep';
 
-describe('mergeDeep', () => {
+describe.skip('mergeDeep', () => {
   test('must return an empty object if both objects are empty', () => {
     const defaultOptions = {};
     const options = {};
