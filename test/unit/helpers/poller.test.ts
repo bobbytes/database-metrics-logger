@@ -31,4 +31,3 @@ describe('Poller', () => {
     expect(pollerCallback).toBeCalled();
   });
 });
-

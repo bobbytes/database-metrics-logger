@@ -1,16 +1,17 @@
-/*
 import mongoUnit from 'mongo-unit';
 
 import {
     MongoDbStatus, MongoDbStatusEvent
 } from '../../../../src/classes/database-status/mongo-db-status';
 
-describe.skip('CloudFoundry', () => {
+describe.skip('MongoDbStatus', () => {
+
   let mongoDbStatus: MongoDbStatus;
   let database_uri = '';
 
   beforeAll(async done => {
-    database_uri = await mongoUnit.start();
+    // database_uri = await mongoUnit.start();
+    database_uri = '';
     const database = database_uri ? database_uri.substr(database_uri.lastIndexOf('/') + 1) : '';
 
     const mongoDbCredentials = {
@@ -28,6 +29,7 @@ describe.skip('CloudFoundry', () => {
     done();
   });
 
+  /*
   beforeEach(async done => {
     const mongoData = {
       cars: [
@@ -52,21 +54,18 @@ describe.skip('CloudFoundry', () => {
     await mongoUnit.stop();
     done();
   });
+  */
 
   test('must return MongoDb server status', async done => {
     expect(mongoDbStatus).toBeInstanceOf(MongoDbStatus);
 
+    /*
     const serverStatusCallback = serverStatus => {
       expect(serverStatus).toBeDefined();
       done();
     };
 
     mongoDbStatus.getServerStatus().subscribe(MongoDbStatusEvent.ServerStatus, serverStatusCallback.bind(this));
-  });
-});
-*/
-describe('bubu', () => {
-  test('test', () => {
-    expect(1).toEqual(1);
+    */
   });
 });
