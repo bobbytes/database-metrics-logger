@@ -1,13 +1,13 @@
-import { MongoDbStatus } from '../../../../src/classes/database-status/mongo-db-status';
 import mongoUnit from 'mongo-unit';
+
+import {
+    MongoDbStatus, MongoDbStatusEvent
+} from '../../../../src/classes/database-status/mongo-db-status';
 
 describe.skip('CloudFoundry', () => {
   let mongoDbStatus: MongoDbStatus;
   let database_uri = '';
 
-  // jest.useFakeTimers();
-
-  /*
   beforeAll(async done => {
     database_uri = await mongoUnit.start();
     const database = database_uri ? database_uri.substr(database_uri.lastIndexOf('/') + 1) : '';
@@ -18,8 +18,8 @@ describe.skip('CloudFoundry', () => {
     };
 
     const mongoDBOptions = {
-      serverStatusInterval: 1,
-      dbStatsInterval: 1,
+      serverStatusInterval: 10000,
+      dbStatsInterval: 10000,
     };
 
     mongoDbStatus = new MongoDbStatus(mongoDbCredentials, mongoDBOptions);
@@ -51,16 +51,15 @@ describe.skip('CloudFoundry', () => {
     await mongoUnit.stop();
     done();
   });
-  */
 
-  test.skip('', () => {
+  test('must return MongoDb server status', async done => {
     expect(mongoDbStatus).toBeInstanceOf(MongoDbStatus);
 
     const serverStatusCallback = serverStatus => {
       expect(serverStatus).toBeDefined();
+      done();
     };
 
-    mongoDbStatus.getServerStatus().subscribe(MongoDbStatus.subscriptionIds.serverStatus, serverStatusCallback);
-    // jest.runAllTimers();
+    mongoDbStatus.getServerStatus().subscribe(MongoDbStatusEvent.ServerStatus, serverStatusCallback.bind(this));
   });
 });

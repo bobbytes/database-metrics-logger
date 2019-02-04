@@ -1,11 +1,12 @@
 import { IMongoDbCredentials, IRedisCredentials } from 'cfenv';
 
-import { ILogger } from '../interfaces/logger.interface';
+import { logger } from '../helpers/logger';
+import { mergeDeep } from '../helpers/merge-deep';
+import { PubSub } from '../helpers/pub-sub';
 import { IServiceMetricsOptions } from '../interfaces/service-metrics-options.interface';
 import { CloudFoundry, ServiceType } from './cloud-foundry';
-import { MongoDbStatus } from './database-status/mongo-db-status';
-import { RedisStatus } from './database-status/redis-status';
-import { mergeDeep } from '../helpers/merge-deep';
+import { MongoDbStatus, MongoDbStatusEvent } from './database-status/mongo-db-status';
+import { RedisStatus, RedisStatusEvent } from './database-status/redis-status';
 
 const defaultOptions = {
   mongoDB: {
@@ -17,17 +18,20 @@ const defaultOptions = {
   },
 };
 
-export class CfServiceMetricsLogger {
-  private logger: ILogger;
+export enum CfServiceMetricsEvent {
+  Metrics = 'metrics',
+  Logs = 'logs',
+}
+
+export class CfServiceMetricsLogger extends PubSub {
   private options: IServiceMetricsOptions;
   private cloudFoundry: CloudFoundry;
   private dbStatusCollection: (MongoDbStatus | RedisStatus)[] = [];
 
   constructor(
-    logger: ILogger,
     options?: IServiceMetricsOptions
   ) {
-    this.logger = logger;
+    super();
     this.options = mergeDeep({}, defaultOptions, options);
 
     this.cloudFoundry = new CloudFoundry({
@@ -37,22 +41,28 @@ export class CfServiceMetricsLogger {
   }
 
   public start(): void {
-    this.startMondoDbLogging();
+    logger.subscribe(undefined, value => this.publish(CfServiceMetricsEvent.Logs, value));
+    this.startMongoDbLogging();
     this.startRedisLogging();
   }
 
   public stop(): void {
+    this.unsubscribeAll();
     this.dbStatusCollection.forEach(dbStatus => dbStatus.stop());
+    logger.unsubscribeAll();
   }
 
-  private startMondoDbLogging(): void {
+  private startMongoDbLogging(): void {
     const mongoDbCredentials = this.cloudFoundry.getServicesCredentialsByServiceType(ServiceType.MongoDb);
 
     mongoDbCredentials.forEach(credential => {
       const mongoDb = new MongoDbStatus(credential as IMongoDbCredentials, this.options.mongoDB);
 
-      mongoDb.getServerStatus().subscribe(MongoDbStatus.subscriptionIds.serverStatus, serverStatus => this.logger.info(serverStatus));
-      mongoDb.getDbStats().subscribe(MongoDbStatus.subscriptionIds.dbStats, dbStats => this.logger.info(dbStats));
+      mongoDb.getServerStatus().subscribe(MongoDbStatusEvent.ServerStatus, serverStatus =>
+        this.publish(CfServiceMetricsEvent.Metrics, serverStatus));
+
+      mongoDb.getDbStats().subscribe(MongoDbStatusEvent.DbStats, dbStats =>
+        this.publish(CfServiceMetricsEvent.Metrics, dbStats));
 
       this.dbStatusCollection.push(mongoDb);
     });
@@ -64,7 +74,9 @@ export class CfServiceMetricsLogger {
     redisCredentials.forEach(credential => {
       const redis = new RedisStatus(credential as IRedisCredentials, this.options.redis);
 
-      redis.getServerInfo().subscribe(RedisStatus.subscriptionIds.serverInfo, info => this.logger.info(info));
+      redis.getServerInfo().subscribe(RedisStatusEvent.ServerInfo, serverInfo =>
+        this.publish(CfServiceMetricsEvent.Metrics, serverInfo));
+
       this.dbStatusCollection.push(redis);
     });
   }

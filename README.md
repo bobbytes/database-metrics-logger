@@ -32,6 +32,7 @@ You want to log service metrics from your application on Cloud Foundry? - Yes? -
 
 - [Supported Services](#-supported-services)
 - [Quick Start](#-quick-start)
+- [API](#-api)
 - [Development](#-development)
 - [Project Structure](#-project-structure)
 
@@ -64,58 +65,25 @@ yarn add cf-service-metrics-logger
 
 ### How to use
 
-#### Logger Interface
+#### Step 1: Import CfServiceMetricsLogger
 
-Create a new instance of CfServiceMetricsLogger and pass any kind of logger implementing following interface:
-
-| Method     |
-| ----------- |
-| `debug(message: {} | [] | string | number)` |
-| `info(message: {} | [] | string | number)`  |
-| `warn(message: {} | [] | string | number)`  |
-| `error(message: {} | [] | string | number)` |
-
-#### CfServiceMetricsLogger Options
-
-| Option                                    | Description                                                    | Default Value |
-| ----------------------------------------- | -------------------------------------------------------------- | ------------: |
-| `mongoDb.serverStatusInterval` (optional) | MongoDb database status polling interval in ms                 | `10000`       |
-| `mongoDb.dbStatsInterval` (optional)      | MongoDB storage statistics polling interval in ms              | `10000`       |
-| `redis.infoInterval` (optional)           | Redis statistics polling interval                              | `10000`       |
-| `vcap` (optional)                         | Provide local `VCAP_SERVICES` and/or `VCAP_APPLICATION` values | `{}`          |
-| `vcapFile` (optional)                     | Provide local `VCAP_SERVICES` and/or `VCAP_APPLICATION` file   | `''`          |
-
-#### Example
+Using `CommonJS` module loader:
 
 ```javascript
-/* import library by using CommonJS module loader */
 const CfServiceMetricsLogger = require('cf-service-metrics-logger');
+```
 
-/* or import library by using ES6 module loader */
+Using `ES6` module loader:
+
+```javascript
 import { CfServiceMetricsLogger } from 'cf-service-metrics-logger';
+```
 
-/* create logger instance or use a logger library */
-class Logger {
-  debug(message) {
-    console.debug(message);
-  }
+#### Step 2: Create new instance of CfServiceMetricsLogger
 
-  info(message) {
-    console.info(message);
-  }
+Create new instance of `CfServiceMetricsLogger` and provide [options](#-options):
 
-  warn(message) {
-    console.warn(message);
-  }
-
-  error(message) {
-    console.error(message);
-  }
-}
-
-const logger = new Logger();
-
-/* you can add some options to CfServiceMetricsLogger */
+```javascript
 const options = {
   mongoDB: {
     serverStatusInterval: 10000,
@@ -126,15 +94,71 @@ const options = {
   }
 };
 
-/* create new instance of CfServiceMetricsLogger and pass logger instance and optional options */
-const cfServiceMetricsLogger = new CfServiceMetricsLogger(logger, options);
+const cfServiceMetricsLogger = new CfServiceMetricsLogger(options);
+```
 
-/* start service metrics logging */
+#### Step 3: Subscribe to receive service metrics and general logs
+
+Subscribe `metrics` to receive service metrics data:
+
+```javascript
+cfServiceMetricsLogger.subscribe('metrics', data => {
+  // do some fancy stuff with your metrics
+});
+```
+
+Subscribe `logs` to receive general application logs:
+
+```javascript
+cfServiceMetricsLogger.subscribe('logs', {message, level} => {
+  console[level](message));
+});
+```
+
+#### Step 3: Start and stop service metrics logging
+
+Start service metrics logging:
+
+```javascript
 cfServiceMetricsLogger.start();
+```
 
-/* stop service metrics logging */
+Stop service metrics logging:
+
+```javascript
 cfServiceMetricsLogger.stop();
 ```
+
+![divider](./divider.png)
+
+## ❯ API
+
+### Options
+
+| Option                                    | Description                                                    | Default Value |
+| ----------------------------------------- | -------------------------------------------------------------- | ------------: |
+| `mongoDb.serverStatusInterval` (optional) | MongoDb database status polling interval in ms                 | `10000`       |
+| `mongoDb.dbStatsInterval` (optional)      | MongoDB storage statistics polling interval in ms              | `10000`       |
+| `redis.infoInterval` (optional)           | Redis statistics polling interval                              | `10000`       |
+| `vcap` (optional)                         | Provide local `VCAP_SERVICES` and/or `VCAP_APPLICATION` values | `{}`          |
+| `vcapFile` (optional)                     | Provide local `VCAP_SERVICES` and/or `VCAP_APPLICATION` file   | `''`          |
+
+### Methods
+
+| Method                           | Description            |
+| -------------------------------- | ---------------------- |
+| `start()`                        | Start service metrics  |
+| `stop()`                         | Stop service metrics   |
+| `subscribe(eventId, callback)`   | Subscribe an event     |
+| `unsubscribe(eventId, callback)` | Unsubscribe an event   |
+| `unsubscribeAll()`               | Unsubscribe all events |
+
+### Subscription event id's
+
+| Id        | Description                                                            |
+| --------- | ---------------------------------------------------------------------- |
+| `metrics` | Service metrics                                                        |
+| `logs`    | General application logs for levels `debug`, `info`, `warn` and `error` |
 
 ![divider](./divider.png)
 
@@ -198,6 +222,7 @@ Just set a breakpoint in source or unit test and hit <kbd>F5</kbd> in your Visua
 ![divider](./divider.png)
 
 ## ❯ Project Structure
+
 | Name                              | Description |
 | --------------------------------- | ----------- |
 | **.vscode/**                      | VSCode tasks, launch configuration and some other settings |

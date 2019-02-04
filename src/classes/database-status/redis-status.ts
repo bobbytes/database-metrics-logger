@@ -1,26 +1,25 @@
 import { IRedisCredentials } from 'cfenv';
 import * as Redis from 'redis';
 
-import {
-  IRedisOptions, IServiceMetricsOptions
-} from '../../interfaces/service-metrics-options.interface';
-import { DatabaseStatus } from './database-status';
+import { logger } from '../../helpers/logger';
 import { Poller } from '../../helpers/poller';
+import { IRedisOptions } from '../../interfaces/service-metrics-options.interface';
+import { DatabaseStatus } from './database-status';
 
-const redisEvents = {
-  connect: 'connect',
-  error: 'error',
-};
+enum RedisEvent {
+  Connect = 'connect',
+  Error = 'error',
+}
+
+export enum RedisStatusEvent {
+  ServerInfo = 'redis:serverInfo',
+}
 
 export class RedisStatus extends DatabaseStatus {
-  public static subscriptionIds = {
-    serverInfo: 'redis:serverInfo',
-  };
-
   protected credentials: IRedisCredentials;
   protected options: IRedisOptions;
 
-  private redisClient: Redis.RedisClient;
+  private redisClient?: Redis.RedisClient;
 
   constructor(
     credentials: IRedisCredentials,
@@ -32,24 +31,30 @@ export class RedisStatus extends DatabaseStatus {
   }
 
   public getServerInfo(): RedisStatus {
-    this.connect();
+    this.connect()
+      .then(() => {
+        const infoPoller = new Poller({
+          id: Poller.pollerIds.redis.info,
+          interval: this.options.infoInterval,
+        });
 
-    this.redisClient.on(redisEvents.connect, () => {
-      this.setInfoPoller();
-      this.pollById(Poller.pollerIds.redis.info);
-    });
+        infoPoller.onPoll(this.onPollInfo.bind(this));
+        this.setPoller(infoPoller);
+        this.pollById(Poller.pollerIds.redis.info);
+      })
+      .catch(error => logger.error(error));
 
     return this;
   }
 
-  public stop(): void {
-    if (this.redisClient) {
-      this.stopAllPollers();
-      this.unsubscribeAll();
+  public disconnect(): void {
+    if (this.isConnected()) {
+      this.redisClient.end(true);
+      this.redisClient = undefined;
     }
   }
 
-  private connect(): void {
+  private connect(): Promise<void> {
     const credentials = {
       host: this.credentials.host,
       port: this.credentials.port,
@@ -57,42 +62,39 @@ export class RedisStatus extends DatabaseStatus {
     };
 
     if (!this.isConnected()) {
-      this.redisClient = Redis.createClient(credentials);
+      return new Promise((resolve, reject) => {
+        this.redisClient = Redis.createClient(credentials);
+
+        const onConnect = (): void => {
+          this.redisClient.off(RedisEvent.Connect, onConnect.bind(this));
+          resolve();
+        };
+
+        const onError = (error): void => {
+          this.redisClient.off(RedisEvent.Error, onError.bind(this));
+          this.redisClient.end(true);
+          this.redisClient = undefined;
+          reject(error);
+        };
+
+        this.redisClient.on(RedisEvent.Connect, onConnect.bind(this));
+        this.redisClient.on(RedisEvent.Error, onError.bind(this));
+      });
     }
-
-    this.redisClient.on(redisEvents.error, error => {
-      this.disconnect();
-    });
-  }
-
-  private disconnect(): void {
-    if (this.redisClient) {
-      this.redisClient.end(true);
-      this.redisClient = undefined;
-    }
-  }
-
-  private setInfoPoller(): void {
-    const infoPoller = new Poller({
-      id: Poller.pollerIds.redis.info,
-      interval: this.options.infoInterval,
-    });
-    infoPoller.onPoll(this.onPollInfo.bind(this));
-    this.setPoller(infoPoller);
   }
 
   private onPollInfo(): void {
-    this.redisClient.info((error, serverInfo) => {
-      if (!error && this.isConnected() && this.getPollerById(Poller.pollerIds.redis.info)) {
-        this.publish(RedisStatus.subscriptionIds.serverInfo, serverInfo);
-        this.pollById(Poller.pollerIds.redis.info);
-      } else {
-        this.disconnect();
-      }
-    });
+    if (this.isConnected()) {
+      this.redisClient.info((error, serverInfo) => {
+        if (!error) {
+          this.publish(RedisStatusEvent.ServerInfo, serverInfo);
+          this.pollById(Poller.pollerIds.redis.info);
+        }
+      });
+    }
   }
 
   private isConnected(): boolean {
-    return this.redisClient ? this.redisClient.connected : false;
+    return !!this.redisClient && !!this.redisClient.connected;
   }
 }
