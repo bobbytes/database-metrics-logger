@@ -47,10 +47,11 @@ export class RedisStatus extends DatabaseStatus {
     return this;
   }
 
-  public stop(): void {
-    this.stopAllPollers();
-    this.unsubscribeAll();
-    this.disconnect();
+  public disconnect(): void {
+    if (this.isConnected()) {
+      this.redisClient.end(true);
+      this.redisClient = undefined;
+    }
   }
 
   private connect(): Promise<void> {
@@ -79,13 +80,6 @@ export class RedisStatus extends DatabaseStatus {
         this.redisClient.on(RedisEvent.Connect, onConnect.bind(this));
         this.redisClient.on(RedisEvent.Error, onError.bind(this));
       });
-    }
-  }
-
-  private disconnect(): void {
-    if (this.isConnected()) {
-      this.redisClient.end(true);
-      this.redisClient = undefined;
     }
   }
 

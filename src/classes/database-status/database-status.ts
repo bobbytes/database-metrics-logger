@@ -10,7 +10,13 @@ export abstract class DatabaseStatus extends PubSub {
 
   private pollers: Poller[] = [];
 
-  public abstract stop(): void;
+  public abstract disconnect(): void;
+
+  public async stop(): Promise<void> {
+    this.stopAllPollers();
+    this.unsubscribeAll();
+    this.disconnect();
+  }
 
   protected startPolling(): void {
     this.pollers.forEach(poller => {
@@ -34,15 +40,15 @@ export abstract class DatabaseStatus extends PubSub {
     }
   }
 
-  protected stopAllPollers(): void {
+  protected getPollerById(id: string): Poller | undefined {
+    return this.pollers.find(p => p.config.id === id);
+  }
+
+  private stopAllPollers(): void {
     this.pollers.forEach(poller => {
       poller.stop();
     });
 
     this.pollers = [];
-  }
-
-  protected getPollerById(id: string): Poller | undefined {
-    return this.pollers.find(p => p.config.id === id);
   }
 }

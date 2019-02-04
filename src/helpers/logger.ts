@@ -26,3 +26,10 @@ class Logger extends PubSub {
 }
 
 export const logger = new Logger();
+
+/**
+ * handle promise rejection
+ */
+process.on('unhandledRejection', error => {
+  logger.error(error);
+});
