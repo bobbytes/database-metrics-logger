@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.1] - 2019-02-04
+
+### Fixed
+
+- Skip MongoDb unit test for now
+
 ## [0.2.0] - 2019-02-04
 
 ### General
