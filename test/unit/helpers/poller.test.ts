@@ -1,7 +1,6 @@
-/*
 import { Poller } from '../../../src/helpers/poller';
 
-describe.skip('Poller', () => {
+describe('Poller', () => {
   let poller: Poller;
 
   jest.useFakeTimers();
@@ -32,10 +31,4 @@ describe.skip('Poller', () => {
     expect(pollerCallback).toBeCalled();
   });
 });
-*/
 
-describe('bubu', () => {
-  test('test', () => {
-    expect(1).toEqual(1);
-  });
-});
