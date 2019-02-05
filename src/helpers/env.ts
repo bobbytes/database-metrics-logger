@@ -4,9 +4,13 @@ import * as path from 'path';
 // tslint:disable-next-line:no-var-requires
 const pkg = require(path.join(process.cwd(), 'package.json'));
 
-const isTest = (): boolean => {
-  return process.env.NODE_ENV === 'test';
-};
+export function getOsEnv(key: string): string {
+  if (typeof process.env[key] === 'undefined') {
+    throw new Error(`Environment variable ${key} is not set.`);
+  }
+
+  return process.env[key] as string;
+}
 
 /**
  * Environment variables
@@ -16,6 +20,6 @@ export const env = {
     name: pkg.name,
     version: pkg.version,
     majorVersion: pkg.version.split('.')[0],
-    isTest: isTest(),
+    nodeEnv: getOsEnv('NODE_ENV'),
   },
 };

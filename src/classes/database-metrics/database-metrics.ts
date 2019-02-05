@@ -4,7 +4,7 @@ import { Poller } from '../../helpers/poller';
 import { PubSub } from '../../helpers/pub-sub';
 import { TDbOptions } from '../../interfaces/service-metrics-options.interface';
 
-export abstract class DatabaseStatus extends PubSub {
+export abstract class DatabaseMetrics extends PubSub {
   protected abstract credentials: TCredentials;
   protected abstract options: TDbOptions;
 

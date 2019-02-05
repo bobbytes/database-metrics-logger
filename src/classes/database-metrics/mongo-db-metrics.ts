@@ -4,14 +4,14 @@ import * as MongoDb from 'mongodb';
 import { logger } from '../../helpers/logger';
 import { Poller } from '../../helpers/poller';
 import { IMongoDbOptions } from '../../interfaces/service-metrics-options.interface';
-import { DatabaseStatus } from './database-status';
+import { DatabaseMetrics } from './database-metrics';
 
-export enum MongoDbStatusEvent {
+export enum MongoDbMetricsEvent {
   ServerStatus = 'mongoDb:serverStatus',
   DbStats = 'mongoDB:dbStats',
 }
 
-export class MongoDbStatus extends DatabaseStatus {
+export class MongoDbMetrics extends DatabaseMetrics {
   protected credentials: IMongoDbCredentials;
   protected options: IMongoDbOptions;
 
@@ -23,7 +23,7 @@ export class MongoDbStatus extends DatabaseStatus {
     this.credentials = credentials;
   }
 
-  public getServerStatus(): MongoDbStatus {
+  public getServerStatus(): MongoDbMetrics {
     const serverStatusPoller = new Poller({
       id: Poller.pollerIds.mongoDb.serverStatus,
       interval: this.options.serverStatusInterval,
@@ -35,7 +35,7 @@ export class MongoDbStatus extends DatabaseStatus {
     return this;
   }
 
-  public getDbStats(): MongoDbStatus {
+  public getDbStats(): MongoDbMetrics {
     const dbStatsPoller = new Poller({
       id: Poller.pollerIds.mongoDb.dbStats,
       interval: this.options.dbStatsInterval,
@@ -88,7 +88,7 @@ export class MongoDbStatus extends DatabaseStatus {
 
     if (database) {
       const serverStatus = await database.command({ serverStatus: 1 });
-      this.publish(MongoDbStatusEvent.ServerStatus, serverStatus);
+      this.publish(MongoDbMetricsEvent.ServerStatus, serverStatus);
     }
   }
 
@@ -97,7 +97,7 @@ export class MongoDbStatus extends DatabaseStatus {
 
     if (database) {
       const dbStats = await database.command({ dbStats: 1, scale: 1024 });
-      this.publish(MongoDbStatusEvent.DbStats, dbStats);
+      this.publish(MongoDbMetricsEvent.DbStats, dbStats);
     }
   }
 }

@@ -4,18 +4,18 @@ import * as Redis from 'redis';
 import { logger } from '../../helpers/logger';
 import { Poller } from '../../helpers/poller';
 import { IRedisOptions } from '../../interfaces/service-metrics-options.interface';
-import { DatabaseStatus } from './database-status';
+import { DatabaseMetrics } from './database-metrics';
 
 enum RedisEvent {
   Connect = 'connect',
   Error = 'error',
 }
 
-export enum RedisStatusEvent {
+export enum RedisMetricsEvent {
   ServerInfo = 'redis:serverInfo',
 }
 
-export class RedisStatus extends DatabaseStatus {
+export class RedisMetrics extends DatabaseMetrics {
   protected credentials: IRedisCredentials;
   protected options: IRedisOptions;
 
@@ -30,7 +30,7 @@ export class RedisStatus extends DatabaseStatus {
     this.options = options;
   }
 
-  public getServerInfo(): RedisStatus {
+  public getServerInfo(): RedisMetrics {
     this.connect()
       .then(() => {
         const infoPoller = new Poller({
@@ -87,7 +87,7 @@ export class RedisStatus extends DatabaseStatus {
     if (this.isConnected()) {
       this.redisClient.info((error, serverInfo) => {
         if (!error) {
-          this.publish(RedisStatusEvent.ServerInfo, serverInfo);
+          this.publish(RedisMetricsEvent.ServerInfo, serverInfo);
           this.pollById(Poller.pollerIds.redis.info);
         }
       });

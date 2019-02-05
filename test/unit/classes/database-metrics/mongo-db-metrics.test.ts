@@ -1,12 +1,12 @@
 import mongoUnit from 'mongo-unit';
 
 import {
-    MongoDbStatus, MongoDbStatusEvent
-} from '../../../../src/classes/database-status/mongo-db-status';
+    MongoDbMetrics, MongoDbMetricsEvent
+} from '../../../../src/classes/database-metrics/mongo-db-metrics';
 
-describe.skip('MongoDbStatus', () => {
+describe('MongoDbStatus', () => {
 
-  let mongoDbStatus: MongoDbStatus;
+  let mongoDbStatus: MongoDbMetrics;
   let database_uri = '';
 
   beforeAll(async done => {
@@ -24,7 +24,7 @@ describe.skip('MongoDbStatus', () => {
       dbStatsInterval: 10000,
     };
 
-    mongoDbStatus = new MongoDbStatus(mongoDbCredentials, mongoDBOptions);
+    mongoDbStatus = new MongoDbMetrics(mongoDbCredentials, mongoDBOptions);
 
     done();
   });
@@ -57,7 +57,7 @@ describe.skip('MongoDbStatus', () => {
   */
 
   test('must return MongoDb server status', async done => {
-    expect(mongoDbStatus).toBeInstanceOf(MongoDbStatus);
+    expect(mongoDbStatus).toBeInstanceOf(MongoDbMetrics);
 
     /*
     const serverStatusCallback = serverStatus => {
@@ -67,5 +67,7 @@ describe.skip('MongoDbStatus', () => {
 
     mongoDbStatus.getServerStatus().subscribe(MongoDbStatusEvent.ServerStatus, serverStatusCallback.bind(this));
     */
+
+    done();
   });
 });
