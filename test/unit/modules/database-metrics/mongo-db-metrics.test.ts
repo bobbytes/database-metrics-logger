@@ -3,29 +3,28 @@ import mongoUnit from 'mongo-unit';
 import { DatabaseType } from '../../../../src/database-metrics-logger';
 import { MongoDbMetrics } from '../../../../src/modules/database-metrics/mongo-db-metrics';
 
-describe('MongoDbStatus', () => {
+describe('MongoDbMetrics', () => {
 
   let mongoDbStatus: MongoDbMetrics;
-  let uri = '';
 
   beforeAll(async done => {
-    // database_uri = await mongoUnit.start();
-    uri = '';
+    const uri = await mongoUnit.start();
     const database = uri ? uri.substr(uri.lastIndexOf('/') + 1) : '';
 
     const credentials = {
       databaseType: DatabaseType.MongoDb,
       uri,
       database,
-    };
-
-    const mongoDBOptions = {
-      serverStatusInterval: 10000,
-      dbStatsInterval: 10000,
+      interval: 10000,
     };
 
     mongoDbStatus = new MongoDbMetrics(credentials);
 
+    done();
+  });
+
+  afterAll(async done => {
+    await mongoUnit.stop();
     done();
   });
 
