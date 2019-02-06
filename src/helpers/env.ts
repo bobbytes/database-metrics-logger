@@ -9,7 +9,7 @@ export function getOsEnv(key: string): string {
     throw new Error(`Environment variable ${key} is not set.`);
   }
 
-  return process.env[key] as string;
+  return process.env[key];
 }
 
 /**
