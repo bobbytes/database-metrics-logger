@@ -1,21 +1,21 @@
 import mongoUnit from 'mongo-unit';
 
-import {
-    MongoDbMetrics, MongoDbMetricsEvent
-} from '../../../../src/classes/database-metrics/mongo-db-metrics';
+import { DatabaseType } from '../../../../src/database-metrics-logger';
+import { MongoDbMetrics } from '../../../../src/modules/database-metrics/mongo-db-metrics';
 
 describe('MongoDbStatus', () => {
 
   let mongoDbStatus: MongoDbMetrics;
-  let database_uri = '';
+  let uri = '';
 
   beforeAll(async done => {
     // database_uri = await mongoUnit.start();
-    database_uri = '';
-    const database = database_uri ? database_uri.substr(database_uri.lastIndexOf('/') + 1) : '';
+    uri = '';
+    const database = uri ? uri.substr(uri.lastIndexOf('/') + 1) : '';
 
-    const mongoDbCredentials = {
-      database_uri,
+    const credentials = {
+      databaseType: DatabaseType.MongoDb,
+      uri,
       database,
     };
 
@@ -24,7 +24,7 @@ describe('MongoDbStatus', () => {
       dbStatsInterval: 10000,
     };
 
-    mongoDbStatus = new MongoDbMetrics(mongoDbCredentials, mongoDBOptions);
+    mongoDbStatus = new MongoDbMetrics(credentials);
 
     done();
   });

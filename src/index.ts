@@ -1,1 +1,2 @@
-export * from './classes/index';
+export * from './database-metrics-logger';
+export * from './modules';

@@ -2,26 +2,17 @@ import { TCredentials } from 'cfenv';
 
 import { Poller } from '../../helpers/poller';
 import { PubSub } from '../../helpers/pub-sub';
-import { TDbOptions } from '../../interfaces/service-metrics-options.interface';
 
 export abstract class DatabaseMetrics extends PubSub {
-  protected abstract credentials: TCredentials;
-  protected abstract options: TDbOptions;
-
   private pollers: Poller[] = [];
 
+  public abstract getMetrics(): DatabaseMetrics;
   public abstract disconnect(): void;
 
   public async stop(): Promise<void> {
     this.stopAllPollers();
     this.unsubscribeAll();
     this.disconnect();
-  }
-
-  protected startPolling(): void {
-    this.pollers.forEach(poller => {
-      poller.poll();
-    });
   }
 
   protected setPoller(poller: Poller): void {
@@ -51,4 +42,15 @@ export abstract class DatabaseMetrics extends PubSub {
 
     this.pollers = [];
   }
+
+  /*
+  protected abstract credentials: TCredentials;
+  protected abstract options: TDbOptions;
+
+  protected startPolling(): void {
+    this.pollers.forEach(poller => {
+      poller.poll();
+    });
+  }
+  */
 }

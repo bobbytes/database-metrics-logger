@@ -3,14 +3,18 @@ import * as path from 'path';
 
 import { env } from '../../helpers/env';
 import { logger } from '../../helpers/logger';
-import { ICloudFoundryOptions } from '../../interfaces/cloud-foundry-options.interface';
 
-export enum ServiceType {
+export enum CloudFoundryServiceType {
   MongoDb = 'mongodb-2',
   Redis = 'redis-2',
 }
 
-export class CloudFoundry {
+export interface ICloudFoundryOptions {
+  vcap?: {};
+  vcapFile?: string;
+}
+
+export class CloudFoundryConnector {
   private appEnvironment: cfenv.IAppEnv;
 
   constructor(options?: ICloudFoundryOptions) {
@@ -21,7 +25,7 @@ export class CloudFoundry {
       : cfenv.getAppEnv({ vcapFile });
   }
 
-  public getServicesCredentialsByServiceType(serviceType: ServiceType): cfenv.TCredentials[] {
+  public getServicesCredentialsByServiceType(serviceType: CloudFoundryServiceType): cfenv.TCredentials[] {
     const services = this.getServicesByServiceType(serviceType);
     const serviceNames = services.map(service => service.name);
 
@@ -39,7 +43,7 @@ export class CloudFoundry {
     return serviceValues;
   }
 
-  private getServicesByServiceType(serviceType: ServiceType): cfenv.IService[] {
+  private getServicesByServiceType(serviceType: CloudFoundryServiceType): cfenv.IService[] {
     const services = this.getServices();
 
     const servicesByServiceType = services.filter(service => service.label === serviceType);
