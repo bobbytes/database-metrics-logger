@@ -1,54 +1,23 @@
 import { CloudFoundryConnector } from '../../../../src/modules/connectors/cloud-foundry-connector';
-import { vcap } from '../../data/vcap';
+import {
+    expectedCredentials
+} from '../../data/cloud-foundry-connector/expected-database-credentials';
+import { vcap } from '../../data/cloud-foundry-connector/vcap';
 
 describe('CloudFoundryConnector', () => {
-  let cloudFoundryConnector: CloudFoundryConnector;
+  test('getCredentials must return an mapped array of database credentials', () => {
+    const cloudFoundryConnector = new CloudFoundryConnector({ vcap });
 
-  beforeEach(() => {
-    cloudFoundryConnector = new CloudFoundryConnector({ vcap });
+    const credentials = cloudFoundryConnector.getCredentials();
+
+    expect(credentials).toEqual(expectedCredentials);
   });
 
-  test('bubu', () => {
-    expect(cloudFoundryConnector).toBeInstanceOf(CloudFoundryConnector);
+  test('getCredentials must return an empty array if there are no services bound to cloud foundry application', () => {
+    const cloudFoundryConnector = new CloudFoundryConnector();
 
-    cloudFoundryConnector.getCredentials();
+    const credentials = cloudFoundryConnector.getCredentials();
+
+    expect(credentials).toEqual([]);
   });
-
-  /*
-  test('getServicesCredentialsByServiceType must return an array all of service credentials by service type mongodb-2', () => {
-    expect(cloudFoundryConnector).toBeInstanceOf(CloudFoundryConnector);
-
-    const serviceCredentials = cloudFoundryConnector.getServicesCredentialsByServiceType(CloudFoundryServiceType.MongoDb);
-    const expectedServiceCredentials = vcapTestJson.services[CloudFoundryServiceType.MongoDb].map(service => service.credentials);
-
-    expect(serviceCredentials).toEqual(expectedServiceCredentials);
-  });
-
-  test('getServicesCredentialsByServiceType must return an array all of service credentials by service type redis-2', () => {
-    expect(cloudFoundryConnector).toBeInstanceOf(CloudFoundryConnector);
-
-    const serviceCredentials = cloudFoundryConnector.getServicesCredentialsByServiceType(CloudFoundryServiceType.Redis);
-    const expectedServiceCredentials = vcapTestJson.services[CloudFoundryServiceType.Redis].map(service => service.credentials);
-
-    expect(serviceCredentials).toEqual(expectedServiceCredentials);
-  });
-
-  test('getServicesCredentialsByServiceType must return an empty array if no credentials are found', () => {
-    expect(cloudFoundryConnector).toBeInstanceOf(CloudFoundryConnector);
-
-    const serviceCredentials = cloudFoundryConnector.getServicesCredentialsByServiceType('test-service' as CloudFoundryServiceType);
-
-    expect(serviceCredentials).toEqual([]);
-  });
-
-  test('getServicesCredentialsByServiceType must return an empty array if no vcap configuration is found', () => {
-    const cloudFoundryNoServices = new CloudFoundryConnector({ vcap: {} });
-
-    const mongoDbServiceCredentials = cloudFoundryNoServices.getServicesCredentialsByServiceType(CloudFoundryServiceType.MongoDb);
-    const redisServiceCredentials = cloudFoundryNoServices.getServicesCredentialsByServiceType(CloudFoundryServiceType.Redis);
-
-    expect(mongoDbServiceCredentials).toEqual([]);
-    expect(redisServiceCredentials).toEqual([]);
-  });
-  */
 });
