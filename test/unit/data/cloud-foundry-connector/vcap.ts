@@ -50,5 +50,26 @@ export const vcap = {
         volume_mounts: [],
       },
     ],
+    'unsupported-service': [
+      {
+        label: 'unsupported-service',
+        provider: undefined,
+        plan: 'small',
+        name: 'my-fancy-unsupported-service',
+        tags: [
+          'unsupported-service',
+        ],
+        instance_name: 'my-fancy-unsupported-service',
+        binding_name: undefined,
+        credentials: {
+          host: 'unsupported-service-host',
+          port: 77777,
+          user: 'unsupported-user',
+          password: 'unsupported-password',
+        },
+        syslog_drain_url: undefined,
+        volume_mounts: [],
+      },
+    ],
   },
 };
