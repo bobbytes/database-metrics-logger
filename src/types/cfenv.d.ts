@@ -44,5 +44,5 @@ declare module 'cfenv' {
     getServiceCreds(serviceName: RegExp | string): TCredentials;
   }
 
-  export function getAppEnv(option: IAppEnvOptions): IAppEnv;
+  export function getAppEnv(option?: IAppEnvOptions): IAppEnv;
 }
