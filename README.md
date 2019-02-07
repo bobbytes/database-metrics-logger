@@ -33,6 +33,7 @@ You want to log service metrics from your application on Cloud Foundry? - Yes? -
 - [Supported Services](#-supported-services)
 - [Quick Start](#-quick-start)
 - [API](#-api)
+- [Cloud Connectors](#-cloud-connectors)
 - [Development](#-development)
 - [Project Structure](#-project-structure)
 
@@ -168,6 +169,55 @@ databaseMetricsLogger.stop();
 | --------- | ---------------------------------------------------------------------- |
 | `metrics` | Service metrics                                                        |
 | `logs`    | General application logs for levels `debug`, `info`, `warn` and `error` |
+
+![divider](./divider.png)
+
+## ❯ Cloud Connectors
+
+You can use a cloud connector to log metrics from your cloud instance databases.
+
+### Cloud Foundry
+
+#### Options
+
+| Option                                    | Description                                                    | Default Value |
+| ----------------------------------------- | -------------------------------------------------------------- | ------------: |
+| `vcap` (optional)                         | Provide local `VCAP_SERVICES` and/or `VCAP_APPLICATION` values | `{}`          |
+| `vcapFile` (optional)                     | Provide local `VCAP_SERVICES` and/or `VCAP_APPLICATION` file   | `''`          |
+
+#### Methods
+
+| Method             | Description                           |
+| ------------------ | ------------------------------------- |
+| `getCredentials()` | Get Cloud Foundry service credentials |
+
+#### Example
+
+```javascript
+// import using `CommonJS` module loader:
+const { CloudFoundryConnector, DatabaseMetricsLogger } = require('cf-service-metrics-logger');
+
+// or import using `ES6` module loader:
+import { CloudFoundryConnector, DatabaseMetricsLogger } from 'cf-service-metrics-logger';
+
+const options = {
+  vcapFile: 'your-vcap-file-path/vcap.json' 
+};
+
+const cloudFoundryConnector = new CloudFoundryConnector(options);
+const credentials = cloudFoundryConnector.getCredentials();
+const databaseMetricsLogger = new DatabaseMetricsLogger(credentials);
+
+databaseMetricsLogger.subscribe('metrics', data => {
+  // do some fancy stuff with your metrics
+});
+
+databaseMetricsLogger.start();
+
+setTimeout(() => {
+  databaseMetricsLogger.stop();
+}, 30000);
+```
 
 ![divider](./divider.png)
 
