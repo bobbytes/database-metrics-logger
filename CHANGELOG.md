@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.0] - 2019-02-07
+
+### General
+
+- Make this library more general by separate cloud foundry functionality to a separate connector
+
 ## [0.2.1] - 2019-02-04
 
 ### Fixed
