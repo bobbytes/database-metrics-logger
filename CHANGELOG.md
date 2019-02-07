@@ -1,10 +1,16 @@
 # Changelog
 
+## [0.3.0] - 2019-02-07
+
+### General
+
+- Make this library more general by separate cloud foundry functionality to a separate connector
+
 ## [0.2.1] - 2019-02-04
 
 ### Fixed
 
-- Skip MongoDb unit test for now
+- Skip mongodb unit test for now
 
 ## [0.2.0] - 2019-02-04
 
@@ -14,7 +20,7 @@
 
 ### Fixed
 
-- Proper MongoDb error handling.
+- Proper mongodb error handling.
 
 ## [0.1.5] - 2019-01-31
 

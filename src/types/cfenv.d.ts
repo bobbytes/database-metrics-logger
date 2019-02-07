@@ -13,7 +13,7 @@ declare module 'cfenv' {
     password: string;
   }
 
-  export interface IMongoDbCredentials {
+  export interface IMongodbCredentials {
     database_uri: string;
     host?: string;
     ports?: string[];
@@ -24,7 +24,7 @@ declare module 'cfenv' {
     replica_set?: string;
   }
 
-  export type TCredentials = IMongoDbCredentials | IRedisCredentials;
+  export type TCredentials = IMongodbCredentials | IRedisCredentials;
 
   export interface IService<> {
     label: string;
@@ -44,5 +44,5 @@ declare module 'cfenv' {
     getServiceCreds(serviceName: RegExp | string): TCredentials;
   }
 
-  export function getAppEnv(option: IAppEnvOptions): IAppEnv;
+  export function getAppEnv(option?: IAppEnvOptions): IAppEnv;
 }

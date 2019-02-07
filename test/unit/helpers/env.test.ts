@@ -1,7 +1,7 @@
 import pkg from '../../../package.json';
 import { env } from '../../../src/helpers/env';
 
-describe.skip('env', () => {
+describe('env', () => {
   test('package name must be set', () => {
     expect(env.app.name).toEqual(pkg.name);
   });
@@ -14,7 +14,7 @@ describe.skip('env', () => {
     expect(env.app.majorVersion).toEqual(pkg.version.split('.')[0]);
   });
 
-  test('isTest must be truthy', () => {
-    expect(env.app.isTest).toBeTruthy();
+  test('nodeEnv must be equal test', () => {
+    expect(env.app.nodeEnv).toEqual('test');
   });
 });

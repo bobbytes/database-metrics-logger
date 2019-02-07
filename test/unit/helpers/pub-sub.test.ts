@@ -7,8 +7,8 @@ describe('PubSub', () => {
       message2: 'pubSubTest:message2',
     };
 
-    public sendMessage(message: string): void {
-      this.publish(PubSubTest.messageIds.message1, message);
+    public sendMessage(messageId: string | undefined, message: string): void {
+      this.publish(messageId, message);
     }
 
     public clearAllSubscriptions(): void {
@@ -23,6 +23,10 @@ describe('PubSub', () => {
     pubSubTest = new PubSubTest();
   });
 
+  afterAll(() => {
+    pubSubTest.unsubscribeAll();
+  });
+
   test('subscription callback must return sent value', () => {
     expect(pubSubTest).toBeInstanceOf(PubSubTest);
     expect(pubSubTest).toBeInstanceOf(PubSub);
@@ -30,7 +34,7 @@ describe('PubSub', () => {
     let messageReceived = '';
 
     pubSubTest.subscribe(PubSubTest.messageIds.message1, value => messageReceived = value);
-    pubSubTest.sendMessage(testMessage);
+    pubSubTest.sendMessage(PubSubTest.messageIds.message1, testMessage);
 
     expect(messageReceived).toEqual(testMessage);
   });
@@ -43,13 +47,13 @@ describe('PubSub', () => {
     const subscriptionCallback = value => messageReceived = value;
 
     pubSubTest.subscribe(PubSubTest.messageIds.message1, subscriptionCallback.bind(this));
-    pubSubTest.sendMessage(testMessage);
+    pubSubTest.sendMessage(PubSubTest.messageIds.message1, testMessage);
 
     expect(messageReceived).toEqual(testMessage);
 
     messageReceived = '';
     pubSubTest.unsubscribe(PubSubTest.messageIds.message1, subscriptionCallback.bind(this));
-    pubSubTest.sendMessage(testMessage);
+    pubSubTest.sendMessage(PubSubTest.messageIds.message1, testMessage);
 
     expect(messageReceived).toEqual('');
   });
@@ -67,7 +71,7 @@ describe('PubSub', () => {
     pubSubTest.subscribe(PubSubTest.messageIds.message1, subscriptionCallback2);
 
     pubSubTest.unsubscribe(PubSubTest.messageIds.message1, subscriptionCallback1);
-    pubSubTest.sendMessage(testMessage);
+    pubSubTest.sendMessage(PubSubTest.messageIds.message1, testMessage);
 
     expect(messageReceived1).toEqual('');
     expect(messageReceived2).toEqual(testMessage);
@@ -83,7 +87,7 @@ describe('PubSub', () => {
     messageReceived = '';
     pubSubTest.subscribe(PubSubTest.messageIds.message1, subscriptionCallback.bind(this));
     pubSubTest.unsubscribe(PubSubTest.messageIds.message2, subscriptionCallback.bind(this));
-    pubSubTest.sendMessage(testMessage);
+    pubSubTest.sendMessage(PubSubTest.messageIds.message1, testMessage);
 
     expect(messageReceived).toEqual(testMessage);
   });
@@ -96,13 +100,40 @@ describe('PubSub', () => {
     const subscriptionCallback = value => messageReceived = value;
 
     pubSubTest.subscribe(PubSubTest.messageIds.message1, subscriptionCallback.bind(this));
-    pubSubTest.sendMessage(testMessage);
+    pubSubTest.sendMessage(PubSubTest.messageIds.message1, testMessage);
 
     expect(messageReceived).toEqual(testMessage);
 
     messageReceived = '';
     pubSubTest.clearAllSubscriptions();
-    pubSubTest.sendMessage(testMessage);
+    pubSubTest.sendMessage(PubSubTest.messageIds.message1, testMessage);
+
+    expect(messageReceived).toEqual('');
+  });
+
+  test('subscription callback must return sent value for an undefined subscription id', () => {
+    expect(pubSubTest).toBeInstanceOf(PubSubTest);
+    expect(pubSubTest).toBeInstanceOf(PubSub);
+
+    let messageReceived = '';
+    const subscriptionCallback = value => messageReceived = value;
+
+    pubSubTest.subscribe(undefined, subscriptionCallback.bind(this));
+    pubSubTest.sendMessage(undefined, testMessage);
+
+    expect(messageReceived).toEqual(testMessage);
+  });
+
+  test('subscription callback must not return sent value for an undefined subscription id after unsubscribe is called', () => {
+    expect(pubSubTest).toBeInstanceOf(PubSubTest);
+    expect(pubSubTest).toBeInstanceOf(PubSub);
+
+    let messageReceived = '';
+    const subscriptionCallback = value => messageReceived = value;
+
+    pubSubTest.subscribe(undefined, subscriptionCallback.bind(this));
+    pubSubTest.unsubscribe(undefined, subscriptionCallback.bind(this));
+    pubSubTest.sendMessage(undefined, testMessage);
 
     expect(messageReceived).toEqual('');
   });
