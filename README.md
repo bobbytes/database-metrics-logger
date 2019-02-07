@@ -1,20 +1,20 @@
-<h1 align="center">Cloud Foundry Service Metrics Logger</h1>
+<h1 align="center">Database Metrics Logger</h1>
 
 <p align="center">
-  <a href="https://david-dm.org/DaNautilus/cf-service-metrics-logger">
-    <img src="https://david-dm.org/DaNautilus/cf-service-metrics-logger/status.svg?style=flat" alt="dependency" />
+  <a href="https://david-dm.org/DaNautilus/database-metrics-logger">
+    <img src="https://david-dm.org/DaNautilus/database-metrics-logger/status.svg?style=flat" alt="dependency" />
   </a>
-  <a href="https://travis-ci.org/DaNautilus/cf-service-metrics-logger">
-    <img src="https://travis-ci.org/DaNautilus/cf-service-metrics-logger.svg?branch=master" alt="travis" />
+  <a href="https://travis-ci.org/DaNautilus/database-metrics-logger">
+    <img src="https://travis-ci.org/DaNautilus/database-metrics-logger.svg?branch=master" alt="travis" />
   </a>
-  <a href="https://ci.appveyor.com/project/DaNautilus/cf-service-metrics-logger/branch/master">
+  <a href="https://ci.appveyor.com/project/DaNautilus/database-metrics-logger/branch/master">
     <img src="https://ci.appveyor.com/api/projects/status/hln22i8cy56xe65o?svg=true&passingText=windows%20passing&pendingText=windows%20pending&failingText=windows%20failing" alt="appveyor" />
   </a>
-  <a href="https://sonarcloud.io/dashboard?id=DaNautilus_cf-service-metrics-logger">
-    <img src="https://sonarcloud.io/api/project_badges/measure?project=DaNautilus_cf-service-metrics-logger&metric=coverage" alt="coverage" />
+  <a href="https://sonarcloud.io/dashboard?id=DaNautilus_database-metrics-logger">
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=DaNautilus_database-metrics-logger&metric=coverage" alt="coverage" />
   </a>
-  <a href="https://sonarcloud.io/dashboard/index/DaNautilus_cf-service-metrics-logger">
-    <img src="https://sonarcloud.io/api/project_badges/measure?project=DaNautilus_cf-service-metrics-logger&metric=alert_status" alt="quality gate" />
+  <a href="https://sonarcloud.io/dashboard/index/DaNautilus_database-metrics-logger">
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=DaNautilus_database-metrics-logger&metric=alert_status" alt="quality gate" />
   </a>
 </p>
 
@@ -54,34 +54,34 @@ You want to log service metrics from your application on Cloud Foundry? - Yes? -
 Install library by using `npm`
 
 ```shell
-npm install cf-service-metrics-logger
+npm install database-metrics-logger
 ```
 
 or by using `yarn`
 
 ```shell
-yarn add cf-service-metrics-logger
+yarn add database-metrics-logger
 ```
 
 ### How to use
 
-#### Step 1: Import CfServiceMetricsLogger
+#### Step 1: Import DatabaseMetricsLogger
 
 Using `CommonJS` module loader:
 
 ```javascript
-const CfServiceMetricsLogger = require('cf-service-metrics-logger');
+const DatabaseMetricsLogger = require('database-metrics-logger');
 ```
 
 Using `ES6` module loader:
 
 ```javascript
-import { CfServiceMetricsLogger } from 'cf-service-metrics-logger';
+import { DatabaseMetricsLogger } from 'database-metrics-logger';
 ```
 
 #### Step 2: Create new instance of CfServiceMetricsLogger
 
-Create new instance of `CfServiceMetricsLogger` and provide [options](#-options):
+Create new instance of `DatabaseMetricsLogger` and provide [options](#-options):
 
 ```javascript
 const options = {
@@ -94,7 +94,7 @@ const options = {
   }
 };
 
-const cfServiceMetricsLogger = new CfServiceMetricsLogger(options);
+const databaseMetricsLogger = new DatabaseMetricsLogger(options);
 ```
 
 #### Step 3: Subscribe to receive service metrics and general logs
@@ -102,7 +102,7 @@ const cfServiceMetricsLogger = new CfServiceMetricsLogger(options);
 Subscribe `metrics` to receive service metrics data:
 
 ```javascript
-cfServiceMetricsLogger.subscribe('metrics', data => {
+databaseMetricsLogger.subscribe('metrics', data => {
   // do some fancy stuff with your metrics
 });
 ```
@@ -110,23 +110,23 @@ cfServiceMetricsLogger.subscribe('metrics', data => {
 Subscribe `logs` to receive general application logs:
 
 ```javascript
-cfServiceMetricsLogger.subscribe('logs', {message, level} => {
+databaseMetricsLogger.subscribe('logs', {message, level} => {
   console[level](message));
 });
 ```
 
 #### Step 3: Start and stop service metrics logging
 
-Start service metrics logging:
+Start database metrics logging:
 
 ```javascript
-cfServiceMetricsLogger.start();
+databaseMetricsLogger.start();
 ```
 
 Stop service metrics logging:
 
 ```javascript
-cfServiceMetricsLogger.stop();
+databaseMetricsLogger.stop();
 ```
 
 ![divider](./divider.png)
