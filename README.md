@@ -8,7 +8,7 @@
     <img src="https://travis-ci.org/DaNautilus/database-metrics-logger.svg?branch=master" alt="travis" />
   </a>
   <a href="https://ci.appveyor.com/project/DaNautilus/database-metrics-logger/branch/master">
-    <img src="https://ci.appveyor.com/api/projects/status/hln22i8cy56xe65o?svg=true&passingText=windows%20passing&pendingText=windows%20pending&failingText=windows%20failing" alt="appveyor" />
+    <img src="https://ci.appveyor.com/api/projects/status/qdxspgrhf3an4sdl?svg=true&passingText=windows%20passing&pendingText=windows%20pending&failingText=windows%20failing" alt="appveyor" />
   </a>
   <a href="https://sonarcloud.io/dashboard?id=DaNautilus_database-metrics-logger">
     <img src="https://sonarcloud.io/api/project_badges/measure?project=DaNautilus_database-metrics-logger&metric=coverage" alt="coverage" />
@@ -84,17 +84,24 @@ import { DatabaseMetricsLogger } from 'database-metrics-logger';
 Create new instance of `DatabaseMetricsLogger` and provide [options](#-options):
 
 ```javascript
-const options = {
-  mongoDB: {
-    serverStatusInterval: 10000,
-    dbStatsInterval: 20000,
+const credentials = [
+  {
+    databaseType: 'mongodb',
+    host: 'your-mongodb-host',
+    username: 'user',
+    password: 'this-is-secret',
+    port: 27017
+    database: mongodbCredentials.database,
   },
-  redis: {
-    infoInterval: 100000
+  {
+    databaseType: 'redis',
+    host: 'your-redis-host',
+    port: 6379,
+    password: 'this-is-secret',
   }
-};
+];
 
-const databaseMetricsLogger = new DatabaseMetricsLogger(options);
+const databaseMetricsLogger = new DatabaseMetricsLogger(credentials);
 ```
 
 #### Step 3: Subscribe to receive service metrics and general logs
@@ -133,15 +140,17 @@ databaseMetricsLogger.stop();
 
 ## ❯ API
 
-### Options
+### Credentials Options
 
-| Option                                    | Description                                                    | Default Value |
-| ----------------------------------------- | -------------------------------------------------------------- | ------------: |
-| `mongoDb.serverStatusInterval` (optional) | MongoDb database status polling interval in ms                 | `10000`       |
-| `mongoDb.dbStatsInterval` (optional)      | MongoDB storage statistics polling interval in ms              | `10000`       |
-| `redis.infoInterval` (optional)           | Redis statistics polling interval                              | `10000`       |
-| `vcap` (optional)                         | Provide local `VCAP_SERVICES` and/or `VCAP_APPLICATION` values | `{}`          |
-| `vcapFile` (optional)                     | Provide local `VCAP_SERVICES` and/or `VCAP_APPLICATION` file   | `''`          |
+| Option                | Description                                                      | Default Value |
+| --------------------- | ---------------------------------------------------------------- | ------------: |
+| `databaseType`        | Type of database. Currently only `mongodb` `redis` are available |               |
+| `host`                | Host of database                                                 |               |
+| `port` (optional)     | Port of database                                                 |               |
+| `uri` (optional)      | Instead of port and host, you can provide an URI                 |               |
+| `username` (optional) | Username                                                         |               |
+| `password` (optional) | Password                                                         |               |
+| `interval` (optional) | Database metrics polling interval in ms                          | `10000`       | 
 
 ### Methods
 
@@ -181,12 +190,7 @@ Install yarn globally
 yarn install yarn -g
 ```
 
-#### Step 2: Set up Environment Variables
-
-Copy the `vcap.example.json` file and rename it to `vcap.json`. This file provides `VCAP_SERVICES` and/or `VCAP_APPLICATION` for local development.
-More information is provided [here](https://github.com/cloudfoundry-community/node-cfenv#running-in-cloud-foundry-vs-locally).
-
-#### Step 3: Install dependencies
+#### Step 2: Install dependencies
 
 Install all dependencies with yarn.
 
@@ -231,6 +235,4 @@ Just set a breakpoint in source or unit test and hit <kbd>F5</kbd> in your Visua
 | **src/types/** *.d.ts             | Custom type definitions and files that aren't on DefinitelyTyped |
 | **test/**                         | Tests |
 | **test/unit/** *.test.ts          | Unit tests |
-| vcap.example.json                 | Provides `VCAP_SERVICES` and/or `VCAP_APPLICATION` for local development |
-| vcap.test.json                    | Provides `VCAP_SERVICES` and/or `VCAP_APPLICATION` for unit tests |
 | rollup.config.js                  | Config for Rollup module bundler |

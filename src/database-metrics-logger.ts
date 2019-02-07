@@ -1,7 +1,7 @@
 import { logger } from './helpers/logger';
 import { mergeDeep } from './helpers/merge-deep';
 import { PubSub } from './helpers/pub-sub';
-import { MongoDbMetrics } from './modules/database-metrics/mongo-db-metrics';
+import { MongodbMetrics } from './modules/database-metrics/mongodb-metrics';
 import { RedisMetrics } from './modules/database-metrics/redis-metrics';
 
 const defaultOptions = {
@@ -14,7 +14,7 @@ export enum DatabaseMetricsEvent {
 }
 
 export enum DatabaseType {
-  MongoDb = 'mongoDb',
+  Mongodb = 'mongodb',
   Redis = 'redis',
 }
 
@@ -31,7 +31,7 @@ export interface IDatabaseCredentials {
 
 export class DatabaseMetricsLogger extends PubSub {
   private databaseCredentials: IDatabaseCredentials[];
-  private dbMetricsCollection: (MongoDbMetrics | RedisMetrics)[] = [];
+  private dbMetricsCollection: (MongodbMetrics | RedisMetrics)[] = [];
 
   constructor(
     databaseCredentials: IDatabaseCredentials[] = []
@@ -48,8 +48,8 @@ export class DatabaseMetricsLogger extends PubSub {
       let databaseMetrics: any;
 
       switch (credentials.databaseType) {
-        case DatabaseType.MongoDb:
-          databaseMetrics = new MongoDbMetrics(credentials);
+        case DatabaseType.Mongodb:
+          databaseMetrics = new MongodbMetrics(credentials);
           break;
         case DatabaseType.Redis:
           databaseMetrics = new RedisMetrics(credentials);

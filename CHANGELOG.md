@@ -4,7 +4,7 @@
 
 ### Fixed
 
-- Skip MongoDb unit test for now
+- Skip mongodb unit test for now
 
 ## [0.2.0] - 2019-02-04
 
@@ -14,7 +14,7 @@
 
 ### Fixed
 
-- Proper MongoDb error handling.
+- Proper mongodb error handling.
 
 ## [0.1.5] - 2019-01-31
 

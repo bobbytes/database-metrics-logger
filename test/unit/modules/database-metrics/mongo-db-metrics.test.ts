@@ -1,32 +1,32 @@
 import { DatabaseType } from '../../../../src/database-metrics-logger';
-import { MongoDbMetrics } from '../../../../src/modules/database-metrics/mongo-db-metrics';
+import { MongodbMetrics } from '../../../../src/modules/database-metrics/mongodb-metrics';
 
-describe.skip('MongoDbMetrics', () => {
-  let mongoDbMetrics: MongoDbMetrics;
+describe.skip('MongodbMetrics', () => {
+  let mongodbMetrics: MongodbMetrics;
 
   beforeAll(() => {
     const credentials = {
-      databaseType: DatabaseType.MongoDb,
+      databaseType: DatabaseType.Mongodb,
       uri: (global as any).__MONGO_URI__,
       database: (global as any).__MONGO_DB_NAME__,
       interval: 1,
     };
 
-    mongoDbMetrics = new MongoDbMetrics(credentials);
+    mongodbMetrics = new MongodbMetrics(credentials);
   });
 
   afterAll(() => {
-    mongoDbMetrics.stop();
+    mongodbMetrics.stop();
   });
 
-  test.skip('must return MongoDb server status', async done => {
-    expect(mongoDbMetrics).toBeInstanceOf(MongoDbMetrics);
+  test.skip('must return Mongodb server status', async done => {
+    expect(mongodbMetrics).toBeInstanceOf(MongodbMetrics);
 
     const databaseMetricsCallback = metrics => {
       expect(metrics).toBeDefined();
       done();
     };
 
-    await mongoDbMetrics.getMetrics().subscribe(undefined, databaseMetricsCallback.bind(this));
+    await mongodbMetrics.getMetrics().subscribe(undefined, databaseMetricsCallback.bind(this));
   });
 });

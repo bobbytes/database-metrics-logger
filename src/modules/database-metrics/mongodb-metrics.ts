@@ -5,7 +5,7 @@ import { logger } from '../../helpers/logger';
 import { Poller } from '../../helpers/poller';
 import { DatabaseMetrics } from './database-metrics';
 
-export class MongoDbMetrics extends DatabaseMetrics {
+export class MongodbMetrics extends DatabaseMetrics {
   private mongoClientPromise?: Promise<MongoClient | void>;
 
   constructor(
@@ -14,7 +14,7 @@ export class MongoDbMetrics extends DatabaseMetrics {
     super();
   }
 
-  public getMetrics(): MongoDbMetrics {
+  public getMetrics(): MongodbMetrics {
     this.getServerStatus();
     this.getDbStats();
 
@@ -44,7 +44,7 @@ export class MongoDbMetrics extends DatabaseMetrics {
 
   private getServerStatus(): void {
     const serverStatusPoller = new Poller({
-      id: Poller.pollerIds.mongoDb.serverStatus,
+      id: Poller.pollerIds.mongodb.serverStatus,
       interval: this.credentials.interval,
     });
 
@@ -54,7 +54,7 @@ export class MongoDbMetrics extends DatabaseMetrics {
 
   private getDbStats(): void {
     const dbStatsPoller = new Poller({
-      id: Poller.pollerIds.mongoDb.dbStats,
+      id: Poller.pollerIds.mongodb.dbStats,
       interval: this.credentials.interval,
     });
 
@@ -90,7 +90,7 @@ export class MongoDbMetrics extends DatabaseMetrics {
       .then(mongoClient => {
         if (mongoClient && mongoClient.isConnected()) {
           this.setPoller(poller);
-          this.pollById(Poller.pollerIds.mongoDb.serverStatus);
+          this.pollById(Poller.pollerIds.mongodb.serverStatus);
         }
       });
   }

@@ -3,7 +3,7 @@ import * as cfenv from 'cfenv';
 import { DatabaseType, IDatabaseCredentials } from '../../../database-metrics-logger';
 import { logger } from '../../../helpers/logger';
 import { CloudFoundryServiceType } from './enums';
-import { mapMongoDbCredentials } from './mappers/mongo-db-credentials.mapper';
+import { mapMongodbCredentials } from './mappers/mongodb-credentials.mapper';
 import { mapRedisCredentials } from './mappers/redis-credentials.mapper';
 import { serviceTypeDatabaseTypeMapper } from './mappers/service-types.mapper';
 
@@ -44,8 +44,8 @@ export class CloudFoundryConnector {
     const databaseType = serviceTypeDatabaseTypeMapper.get(serviceType);
 
     switch (databaseType) {
-      case DatabaseType.MongoDb:
-        return mapMongoDbCredentials(cloudFoundryCredentials as cfenv.IMongoDbCredentials);
+      case DatabaseType.Mongodb:
+        return mapMongodbCredentials(cloudFoundryCredentials as cfenv.IMongodbCredentials);
       case DatabaseType.Redis:
         return mapRedisCredentials(cloudFoundryCredentials as cfenv.IRedisCredentials);
       default:

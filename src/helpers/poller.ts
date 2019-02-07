@@ -7,9 +7,9 @@ interface IPollerConfig {
 
 export class Poller extends EventEmitter {
   public static pollerIds = {
-    mongoDb: {
-      serverStatus: 'mongoDb:serverStatus',
-      dbStats: 'mongoDb:dbStats',
+    mongodb: {
+      serverStatus: 'mongodb:serverStatus',
+      dbStats: 'mongodb:dbStats',
     },
     redis: {
       info: 'redis:info',
