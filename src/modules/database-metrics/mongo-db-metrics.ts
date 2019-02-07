@@ -1,4 +1,4 @@
-import * as MongoDb from 'mongodb';
+import { Db, MongoClient } from 'mongodb';
 
 import { IDatabaseCredentials } from '../../database-metrics-logger';
 import { logger } from '../../helpers/logger';
@@ -6,7 +6,7 @@ import { Poller } from '../../helpers/poller';
 import { DatabaseMetrics } from './database-metrics';
 
 export class MongoDbMetrics extends DatabaseMetrics {
-  private mongoClientPromise?: Promise<MongoDb.MongoClient | void>;
+  private mongoClientPromise?: Promise<MongoClient | void>;
 
   constructor(
     private credentials: IDatabaseCredentials
@@ -31,11 +31,11 @@ export class MongoDbMetrics extends DatabaseMetrics {
     this.mongoClientPromise = undefined;
   }
 
-  private async getMongoClient(): Promise<MongoDb.MongoClient | void> {
+  private async getMongoClient(): Promise<MongoClient | void> {
     const uri = this.credentials.uri;
 
     if (!this.mongoClientPromise) {
-      this.mongoClientPromise = MongoDb.MongoClient.connect(uri, { useNewUrlParser: true })
+      this.mongoClientPromise = MongoClient.connect(uri, { useNewUrlParser: true })
         .catch(error => logger.error(error));
     }
 
@@ -62,7 +62,7 @@ export class MongoDbMetrics extends DatabaseMetrics {
     this.pollMetrics(dbStatsPoller);
   }
 
-  private async getDatabase(): Promise<MongoDb.Db | void> {
+  private async getDatabase(): Promise<Db | void> {
     const mongoClient = await this.getMongoClient();
     return mongoClient && mongoClient.isConnected() ? mongoClient.db(this.credentials.database) : undefined;
   }

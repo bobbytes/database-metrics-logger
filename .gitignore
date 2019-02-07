@@ -11,6 +11,7 @@ yarn-error.log
 dist/
 .tmp/
 test/coverage/
+test/config/globalConfig.json
 .rpt2_cache/
 sonar-project.properties
 

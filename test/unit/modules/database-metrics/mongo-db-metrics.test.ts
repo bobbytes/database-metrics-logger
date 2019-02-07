@@ -1,72 +1,32 @@
-import mongoUnit from 'mongo-unit';
-
 import { DatabaseType } from '../../../../src/database-metrics-logger';
 import { MongoDbMetrics } from '../../../../src/modules/database-metrics/mongo-db-metrics';
 
-describe('MongoDbMetrics', () => {
+describe.skip('MongoDbMetrics', () => {
+  let mongoDbMetrics: MongoDbMetrics;
 
-  let mongoDbStatus: MongoDbMetrics;
-
-  beforeAll(async done => {
-    const uri = await mongoUnit.start();
-    const database = uri ? uri.substr(uri.lastIndexOf('/') + 1) : '';
-
+  beforeAll(() => {
     const credentials = {
       databaseType: DatabaseType.MongoDb,
-      uri,
-      database,
-      interval: 10000,
+      uri: (global as any).__MONGO_URI__,
+      database: (global as any).__MONGO_DB_NAME__,
+      interval: 1,
     };
 
-    mongoDbStatus = new MongoDbMetrics(credentials);
-
-    done();
+    mongoDbMetrics = new MongoDbMetrics(credentials);
   });
 
-  afterAll(async done => {
-    await mongoUnit.stop();
-    done();
+  afterAll(() => {
+    mongoDbMetrics.stop();
   });
 
-  /*
-  beforeEach(async done => {
-    const mongoData = {
-      cars: [
-        {
-          manufacturer: 'tesla',
-          model: 'model x',
-          color: 'black',
-        },
-      ],
-    };
+  test.skip('must return MongoDb server status', async done => {
+    expect(mongoDbMetrics).toBeInstanceOf(MongoDbMetrics);
 
-    await mongoUnit.initDb(database_uri, mongoData);
-    done();
-  });
-
-  afterEach(async done => {
-    await mongoUnit.drop();
-    done();
-  });
-
-  afterAll(async done => {
-    await mongoUnit.stop();
-    done();
-  });
-  */
-
-  test('must return MongoDb server status', async done => {
-    expect(mongoDbStatus).toBeInstanceOf(MongoDbMetrics);
-
-    /*
-    const serverStatusCallback = serverStatus => {
-      expect(serverStatus).toBeDefined();
+    const databaseMetricsCallback = metrics => {
+      expect(metrics).toBeDefined();
       done();
     };
 
-    mongoDbStatus.getServerStatus().subscribe(MongoDbStatusEvent.ServerStatus, serverStatusCallback.bind(this));
-    */
-
-    done();
+    await mongoDbMetrics.getMetrics().subscribe(undefined, databaseMetricsCallback.bind(this));
   });
 });
