@@ -54,7 +54,7 @@
     "testEnvironment": "./test/config/mongo-environment.js"
   },
   "sonar": {
-    "projectKey": "DaNautilus_cf-service-metrics-logger",
+    "projectKey": "DaNautilus_database-metrics-logger",
     "sources": "src",
     "reportPaths": "test/coverage/lcov.info"
   },
