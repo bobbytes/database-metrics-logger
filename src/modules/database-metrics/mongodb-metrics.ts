@@ -72,7 +72,7 @@ export class MongodbMetrics extends DatabaseMetrics {
 
     if (database) {
       const serverStatus = await database.command({ serverStatus: 1 });
-      this.publish(undefined, serverStatus);
+      this.publish(undefined, this.credentials, serverStatus);
     }
   }
 
@@ -81,7 +81,7 @@ export class MongodbMetrics extends DatabaseMetrics {
 
     if (database) {
       const dbStats = await database.command({ dbStats: 1, scale: 1024 });
-      this.publish(undefined, dbStats);
+      this.publish(undefined, this.credentials, dbStats);
     }
   }
 
