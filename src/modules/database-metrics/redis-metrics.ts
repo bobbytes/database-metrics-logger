@@ -1,5 +1,4 @@
 import * as Redis from 'redis';
-import redisInfo from 'redis-info';
 
 import { IDatabaseCredentials } from '../../database-metrics-logger';
 import { logger } from '../../helpers/logger';
