@@ -143,15 +143,16 @@ databaseMetricsLogger.stop();
 
 ### Credentials Options
 
-| Option                | Description                                                      | Default Value |
-| --------------------- | ---------------------------------------------------------------- | ------------: |
-| `databaseType`        | Type of database. Currently only `mongodb` `redis` are available |               |
-| `host`                | Host of database                                                 |               |
-| `port` (optional)     | Port of database                                                 |               |
-| `uri` (optional)      | Instead of port and host, you can provide an URI                 |               |
-| `username` (optional) | Username                                                         |               |
-| `password` (optional) | Password                                                         |               |
-| `interval` (optional) | Database metrics polling interval in ms                          | `10000`       | 
+| Option                | Description                                                             | Default Value |
+| --------------------- | ----------------------------------------------------------------------- | ------------: |
+| `databaseType`        | Type of database. Currently only `mongodb` `redis` are available        |               |
+| `name`                | Name of credential to identify your specific database in a mass of logs | your `host`   |
+| `host`                | Host of database                                                        |               |
+| `port` (optional)     | Port of database                                                        |               |
+| `uri` (optional)      | Instead of port and host, you can provide an URI                        |               |
+| `username` (optional) | Username                                                                |               |
+| `password` (optional) | Password                                                                |               |
+| `interval` (optional) | Database metrics polling interval in ms                                 | `10000`       | 
 
 ### Methods
 
