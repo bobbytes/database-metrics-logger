@@ -20,6 +20,7 @@ export enum DatabaseType {
 
 export interface IDatabaseCredentials {
   databaseType: DatabaseType;
+  name?: string;
   host?: string;
   port?: number;
   uri?: string;
@@ -37,8 +38,7 @@ export class DatabaseMetricsLogger extends PubSub {
     databaseCredentials: IDatabaseCredentials[] = []
   ) {
     super();
-    this.databaseCredentials = databaseCredentials
-      .map(serviceCredential => mergeDeep({}, defaultOptions, serviceCredential) as IDatabaseCredentials);
+    this.databaseCredentials = databaseCredentials.map(this.mapDefaultValues);
   }
 
   public start(): void {
@@ -70,5 +70,10 @@ export class DatabaseMetricsLogger extends PubSub {
     this.dbMetricsCollection.forEach(dbMetrics => dbMetrics.stop());
     this.dbMetricsCollection = [];
     logger.unsubscribeAll();
+  }
+
+  private mapDefaultValues(serviceCredential: IDatabaseCredentials): IDatabaseCredentials {
+    serviceCredential.name = serviceCredential.name || serviceCredential.host;
+    return mergeDeep({}, defaultOptions, serviceCredential) as IDatabaseCredentials;
   }
 }

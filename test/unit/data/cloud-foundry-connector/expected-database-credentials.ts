@@ -15,6 +15,7 @@ const redisCredentials = redisService.credentials;
 export const expectedCredentials = [
   {
     databaseType: serviceTypeDatabaseTypeMapper.get(mongodbService.label as CloudFoundryServiceType),
+    name: mongodbService.name,
     host: mongodbCredentials.host,
     uri: mongodbCredentials.database_uri,
     username: mongodbCredentials.username,
@@ -23,6 +24,7 @@ export const expectedCredentials = [
   },
   {
     databaseType: serviceTypeDatabaseTypeMapper.get(redisService.label as CloudFoundryServiceType),
+    name: redisService.name,
     host: redisCredentials.host,
     port: redisCredentials.port,
     password: redisCredentials.password,

@@ -26,7 +26,7 @@ export class CloudFoundryConnector {
 
     return cloudFoundryServices
       .filter(service => !!serviceTypeDatabaseTypeMapper.get(service.label as CloudFoundryServiceType))
-      .map(service => this.mapCloudFoundryCredentials(service.label as CloudFoundryServiceType, service.credentials));
+      .map(service => this.mapCloudFoundryCredentials(service));
   }
 
   private getCloudFoundryServices(): cfenv.IService[] {
@@ -40,14 +40,14 @@ export class CloudFoundryConnector {
     return serviceValues;
   }
 
-  private mapCloudFoundryCredentials(serviceType: CloudFoundryServiceType, cloudFoundryCredentials: cfenv.TCredentials): IDatabaseCredentials | undefined {
-    const databaseType = serviceTypeDatabaseTypeMapper.get(serviceType);
+  private mapCloudFoundryCredentials(cloudFoundryService: cfenv.IService): IDatabaseCredentials | undefined {
+    const databaseType = serviceTypeDatabaseTypeMapper.get(cloudFoundryService.label as CloudFoundryServiceType);
 
     switch (databaseType) {
       case DatabaseType.Mongodb:
-        return mapMongodbCredentials(cloudFoundryCredentials as cfenv.IMongodbCredentials);
+        return mapMongodbCredentials(cloudFoundryService);
       case DatabaseType.Redis:
-        return mapRedisCredentials(cloudFoundryCredentials as cfenv.IRedisCredentials);
+        return mapRedisCredentials(cloudFoundryService);
       default:
         return;
     }
