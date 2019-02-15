@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.1] - 2019-02-15
+
+### Added
+
+- Database type is added to the returned metrics.
+- A name to identify the returned database metrics added.
+- CloudFoundry connector adds database name to credentials.
+
 ## [0.3.0] - 2019-02-07
 
 ### General
