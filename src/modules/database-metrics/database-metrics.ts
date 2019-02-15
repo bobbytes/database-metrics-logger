@@ -1,4 +1,4 @@
-import { TCredentials } from 'cfenv';
+import { IService, TCredentials } from 'cfenv';
 
 import { Poller } from '../../helpers/poller';
 import { PubSub } from '../../helpers/pub-sub';
@@ -33,6 +33,16 @@ export abstract class DatabaseMetrics extends PubSub {
 
   protected getPollerById(id: string): Poller | undefined {
     return this.pollers.find(p => p.config.id === id);
+  }
+
+  protected publish(id: string = '', ...value: any): void {
+    const valueToPublish = {
+      databaseType: value[0].databaseType,
+      name: value[0].name,
+      metrics: value[1],
+    };
+
+    super.publish(undefined, valueToPublish);
   }
 
   private stopAllPollers(): void {

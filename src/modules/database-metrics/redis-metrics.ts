@@ -81,10 +81,28 @@ export class RedisMetrics extends DatabaseMetrics {
     if (this.isConnected()) {
       this.redisClient.info((error, serverInfo) => {
         if (!error) {
-          this.publish(undefined, serverInfo);
+          this.publish(undefined, this.credentials, this.parseServerInfo(serverInfo as unknown as string));
           this.pollById(Poller.pollerIds.redis.info);
         }
       });
     }
+  }
+
+  private parseServerInfo(serverInfo: string): {} {
+    const parsedServerInfo = {};
+    const serverInfoLines = serverInfo.split('\r\n');
+
+    serverInfoLines.forEach(line => {
+      if (line && line.split) {
+        const keyValue = line.split(':');
+
+        if (keyValue.length > 1) {
+          const key = keyValue.shift();
+          parsedServerInfo[key] = keyValue.join(':');
+        }
+      }
+    });
+
+    return parsedServerInfo;
   }
 }
