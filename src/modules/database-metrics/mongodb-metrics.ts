@@ -1,9 +1,9 @@
 import { Db, MongoClient } from 'mongodb';
 
-import { IDatabaseCredentials } from '../../../database-metrics-logger';
-import { logger } from '../../../helpers/logger';
-import { Poller } from '../../../helpers/poller';
-import { DatabaseMetrics } from '../database-metrics';
+import { IDatabaseCredentials } from '../../database-metrics-logger';
+import { logger } from '../../helpers/logger';
+import { Poller } from '../../helpers/poller';
+import { DatabaseMetrics } from './database-metrics';
 
 export class MongodbMetrics extends DatabaseMetrics {
   private mongoClientPromise?: Promise<MongoClient | void>;
