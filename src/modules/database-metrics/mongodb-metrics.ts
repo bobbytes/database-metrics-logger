@@ -61,13 +61,26 @@ export class MongodbMetrics extends DatabaseMetrics {
       const promises = [
         database.command({ serverStatus: 1 }),
         database.command({ dbStats: 1, scale: 1024 }),
+        this.getReplicationSetMetrics(),
       ];
 
-      const [serverStatus, dbStats] = await Promise.all(promises);
-      const metrics = this.mapMetrics({ ...serverStatus, dbStats });
+      const [serverStatus, dbStats, replicationSetStatus] = await Promise.all(promises);
+
+      const metrics = this.mapMetrics({ ...serverStatus, dbStats, replicationSetStatus });
 
       this.publish(undefined, this.credentials, metrics);
       this.pollById(Poller.pollerIds.mongodb);
+    }
+  }
+
+  private async getReplicationSetMetrics(): Promise<void> {
+    const database = this.mongoClient.db(this.credentials.database);
+    const adminDatabase = database.admin();
+
+    try {
+      return await adminDatabase.command({ replSetGetStatus: 1 });
+    } catch (error) {
+      logger.info(error);
     }
   }
 
