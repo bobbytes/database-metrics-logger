@@ -1,5 +1,3 @@
-import { IService, TCredentials } from 'cfenv';
-
 import { Poller } from '../../helpers/poller';
 import { PubSub } from '../../helpers/pub-sub';
 
@@ -52,15 +50,4 @@ export abstract class DatabaseMetrics extends PubSub {
 
     this.pollers = [];
   }
-
-  /*
-  protected abstract credentials: TCredentials;
-  protected abstract options: TDbOptions;
-
-  protected startPolling(): void {
-    this.pollers.forEach(poller => {
-      poller.poll();
-    });
-  }
-  */
 }
