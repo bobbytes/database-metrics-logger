@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.4.0] - 2019-02-19
+
+### General
+
+- Different MongoDB metrics are merged into a single response.
+- MongoDB metrics response is reduced to most relevant metrics due to size limitations of some log services.
+
+### Added
+- MongoDB replication set metrics added.
+
+### Fixed
+
+- MongoDB polling issue.
+
 ## [0.3.1] - 2019-02-15
 
 ### Added
