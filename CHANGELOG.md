@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.2] - 2019-02-19
+
+### General
+
+- Convert Redis metrics values to numbers
+
 ## [0.4.1] - 2019-02-19
 
 ### General
