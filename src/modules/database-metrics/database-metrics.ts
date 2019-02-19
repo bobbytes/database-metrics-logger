@@ -52,15 +52,4 @@ export abstract class DatabaseMetrics extends PubSub {
 
     this.pollers = [];
   }
-
-  /*
-  protected abstract credentials: TCredentials;
-  protected abstract options: TDbOptions;
-
-  protected startPolling(): void {
-    this.pollers.forEach(poller => {
-      poller.poll();
-    });
-  }
-  */
 }

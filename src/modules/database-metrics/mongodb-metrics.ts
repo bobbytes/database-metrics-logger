@@ -1,9 +1,9 @@
 import { Db, MongoClient } from 'mongodb';
 
-import { IDatabaseCredentials } from '../../database-metrics-logger';
-import { logger } from '../../helpers/logger';
-import { Poller } from '../../helpers/poller';
-import { DatabaseMetrics } from './database-metrics';
+import { IDatabaseCredentials } from '../../../database-metrics-logger';
+import { logger } from '../../../helpers/logger';
+import { Poller } from '../../../helpers/poller';
+import { DatabaseMetrics } from '../database-metrics';
 
 export class MongodbMetrics extends DatabaseMetrics {
   private mongoClientPromise?: Promise<MongoClient | void>;
@@ -49,7 +49,7 @@ export class MongodbMetrics extends DatabaseMetrics {
     });
 
     serverStatusPoller.onPoll(this.onPollServerStatus.bind(this));
-    this.pollMetrics(serverStatusPoller);
+    this.initPollMetrics(serverStatusPoller);
   }
 
   private getDbStats(): void {
@@ -59,7 +59,7 @@ export class MongodbMetrics extends DatabaseMetrics {
     });
 
     dbStatsPoller.onPoll(this.onPollDbStats.bind(this));
-    this.pollMetrics(dbStatsPoller);
+    this.initPollMetrics(dbStatsPoller);
   }
 
   private async getDatabase(): Promise<Db | void> {
@@ -73,6 +73,7 @@ export class MongodbMetrics extends DatabaseMetrics {
     if (database) {
       const serverStatus = await database.command({ serverStatus: 1 });
       this.publish(undefined, this.credentials, serverStatus);
+      this.pollById(Poller.pollerIds.mongodb.serverStatus);
     }
   }
 
@@ -82,10 +83,11 @@ export class MongodbMetrics extends DatabaseMetrics {
     if (database) {
       const dbStats = await database.command({ dbStats: 1, scale: 1024 });
       this.publish(undefined, this.credentials, dbStats);
+      this.pollById(Poller.pollerIds.mongodb.dbStats);
     }
   }
 
-  private pollMetrics(poller: Poller): void {
+  private initPollMetrics(poller: Poller): void {
     this.getMongoClient()
       .then(mongoClient => {
         if (mongoClient && mongoClient.isConnected()) {
