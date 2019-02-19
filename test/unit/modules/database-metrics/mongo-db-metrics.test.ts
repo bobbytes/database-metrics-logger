@@ -1,7 +1,5 @@
 import { DatabaseType } from '../../../../src/database-metrics-logger';
-import {
-    MongodbMetrics
-} from '../../../../src/modules/database-metrics/mongodb-metrics/mongodb-metrics';
+import { MongodbMetrics } from '../../../../src/modules/database-metrics/mongodb-metrics';
 
 describe.skip('MongodbMetrics', () => {
   let mongodbMetrics: MongodbMetrics;

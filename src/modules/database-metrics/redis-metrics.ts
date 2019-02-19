@@ -22,14 +22,14 @@ export class RedisMetrics extends DatabaseMetrics {
   public getMetrics(): RedisMetrics {
     this.connect()
       .then(() => {
-        const infoPoller = new Poller({
-          id: Poller.pollerIds.redis.info,
+        const metricsPoller = new Poller({
+          id: Poller.pollerIds.redis,
           interval: this.credentials.interval,
         });
 
-        infoPoller.onPoll(this.onPollInfo.bind(this));
-        this.setPoller(infoPoller);
-        this.pollById(Poller.pollerIds.redis.info);
+        metricsPoller.onPoll(this.onPollMetrics.bind(this));
+        this.setPoller(metricsPoller);
+        this.pollById(Poller.pollerIds.redis);
       })
       .catch(error => logger.error(error));
 
@@ -37,7 +37,7 @@ export class RedisMetrics extends DatabaseMetrics {
   }
 
   public disconnect(): void {
-    if (this.isConnected()) {
+    if (this.redisClient) {
       this.redisClient.end(true);
       this.redisClient = undefined;
     }
@@ -62,8 +62,7 @@ export class RedisMetrics extends DatabaseMetrics {
 
         const onError = (error): void => {
           this.redisClient.off(RedisEvent.Error, onError.bind(this));
-          this.redisClient.end(true);
-          this.redisClient = undefined;
+          this.disconnect();
           reject(error);
         };
 
@@ -77,12 +76,12 @@ export class RedisMetrics extends DatabaseMetrics {
     return !!this.redisClient && !!this.redisClient.connected;
   }
 
-  private onPollInfo(): void {
+  private onPollMetrics(): void {
     if (this.isConnected()) {
       this.redisClient.info((error, serverInfo) => {
         if (!error) {
           this.publish(undefined, this.credentials, this.parseServerInfo(serverInfo as unknown as string));
-          this.pollById(Poller.pollerIds.redis.info);
+          this.pollById(Poller.pollerIds.redis);
         }
       });
     }

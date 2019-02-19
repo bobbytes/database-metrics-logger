@@ -1,5 +1,3 @@
-import { IService, TCredentials } from 'cfenv';
-
 import { Poller } from '../../helpers/poller';
 import { PubSub } from '../../helpers/pub-sub';
 
