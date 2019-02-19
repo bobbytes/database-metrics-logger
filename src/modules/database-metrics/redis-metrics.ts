@@ -1,6 +1,7 @@
 import * as Redis from 'redis';
 
 import { IDatabaseCredentials } from '../../database-metrics-logger';
+import { convertStringToNumber } from '../../helpers/converters';
 import { logger } from '../../helpers/logger';
 import { Poller } from '../../helpers/poller';
 import { DatabaseMetrics } from './database-metrics';
@@ -97,7 +98,7 @@ export class RedisMetrics extends DatabaseMetrics {
 
         if (keyValue.length > 1) {
           const key = keyValue.shift();
-          parsedServerInfo[key] = keyValue.join(':');
+          parsedServerInfo[key] = convertStringToNumber(keyValue.join(':'));
         }
       }
     });
