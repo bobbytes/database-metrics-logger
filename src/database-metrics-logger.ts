@@ -1,7 +1,7 @@
 import { logger } from './helpers/logger';
 import { mergeDeep } from './helpers/merge-deep';
 import { PubSub } from './helpers/pub-sub';
-import { MongodbMetrics } from './modules/database-metrics/mongodb-metrics';
+import { MongodbMetrics } from './modules/database-metrics/mongodb-metrics/mongodb-metrics';
 import { RedisMetrics } from './modules/database-metrics/redis-metrics';
 
 const defaultOptions = {

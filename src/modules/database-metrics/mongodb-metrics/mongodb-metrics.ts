@@ -1,9 +1,10 @@
 import { Db, MongoClient } from 'mongodb';
 
-import { IDatabaseCredentials } from '../../database-metrics-logger';
-import { logger } from '../../helpers/logger';
-import { Poller } from '../../helpers/poller';
-import { DatabaseMetrics } from './database-metrics';
+import { IDatabaseCredentials } from '../../../database-metrics-logger';
+import { logger } from '../../../helpers/logger';
+import { Poller } from '../../../helpers/poller';
+import { DatabaseMetrics } from '../database-metrics';
+import { mapServerStatus } from './mappers';
 
 export class MongodbMetrics extends DatabaseMetrics {
   private mongoClientPromise?: Promise<MongoClient | void>;
@@ -72,7 +73,7 @@ export class MongodbMetrics extends DatabaseMetrics {
 
     if (database) {
       const serverStatus = await database.command({ serverStatus: 1 });
-      this.publish(undefined, this.credentials, serverStatus);
+      this.publish(undefined, this.credentials, mapServerStatus(serverStatus));
       this.pollById(Poller.pollerIds.mongodb.serverStatus);
     }
   }
