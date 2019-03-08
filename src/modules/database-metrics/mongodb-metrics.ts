@@ -85,7 +85,7 @@ export class MongodbMetrics extends DatabaseMetrics {
   }
 
   private mapMetrics(metrics: any): any {
-    const { connections, extra_info, globalLock, opcounters, dbStats } = metrics;
-    return { connections, extra_info, globalLock, opcounters, dbStats };
+    const { connections, extra_info, globalLock, opcounters, dbStats, replicationSetStatus } = metrics;
+    return { connections, extra_info, globalLock, opcounters, dbStats, replicationSetStatus };
   }
 }
