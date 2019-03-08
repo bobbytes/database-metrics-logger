@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.3] - 2019-03-08
+
+### Fixed
+
+- Add missing MongoDB replication set status to logs
+
 ## [0.4.2] - 2019-02-19
 
 ### General
