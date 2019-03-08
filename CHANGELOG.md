@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.4] - 2019-03-08
+
+### General
+
+- Jest dependencies updated
+
 ## [0.4.3] - 2019-03-08
 
 ### Fixed
