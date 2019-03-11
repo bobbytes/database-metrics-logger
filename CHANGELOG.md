@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.5] - 2019-03-11
+
+### Fixed
+
+- Add missing MongoDB memory status to logs
+
 ## [0.4.4] - 2019-03-08
 
 ### General
