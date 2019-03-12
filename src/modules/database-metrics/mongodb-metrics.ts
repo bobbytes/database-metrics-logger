@@ -1,6 +1,7 @@
 import { Db, MongoClient } from 'mongodb';
 
 import { IDatabaseCredentials } from '../../database-metrics-logger';
+import { toPercentage } from '../../helpers/converters';
 import { logger } from '../../helpers/logger';
 import { Poller } from '../../helpers/poller';
 import { DatabaseMetrics } from './database-metrics';
@@ -84,8 +85,18 @@ export class MongodbMetrics extends DatabaseMetrics {
     }
   }
 
-  private mapMetrics(metrics: any): any {
+  private mapMetrics(metrics: any): {} {
+    const calculatedFields = this.getCalculatedFields(metrics);
     const { connections, extra_info, globalLock, opcounters, mem, dbStats, replicationSetStatus } = metrics;
-    return { connections, extra_info, globalLock, opcounters, mem, dbStats, replicationSetStatus };
+    return { connections, extra_info, globalLock, opcounters, mem, dbStats, replicationSetStatus, calculatedFields };
+  }
+
+  private getCalculatedFields(metrics: any): any {
+    const freeMemorySize = metrics.mem.virtual - metrics.mem.resident;
+    const usedMemoryPercentage = toPercentage(metrics.mem.resident, metrics.mem.virtual);
+    const freeStorageSize = metrics.dbStats.fsTotalSize - metrics.dbStats.fsUsedSize;
+    const usedStoragePercentage = toPercentage(metrics.dbStats.fsUsedSize, metrics.dbStats.fsTotalSize);
+
+    return { freeMemorySize, usedMemoryPercentage, freeStorageSize, usedStoragePercentage };
   }
 }
