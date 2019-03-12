@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.6] - 2019-03-12
+
+### Added
+
+- Calculate free memory and storage size for MongoDB and add it to logs.
+- Calculate used percentage of memory and storage for MongoDB and add it to logs.
+
 ## [0.4.5] - 2019-03-11
 
 ### Fixed
@@ -32,6 +39,7 @@
 - MongoDB metrics response is reduced to most relevant metrics due to size limitations of some log services.
 
 ### Added
+
 - MongoDB replication set metrics added.
 
 ### Fixed
