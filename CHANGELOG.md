@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.7] - 2019-03-28
+
+### General
+
+- Upgrade @types/redis, mongodb, mongodb-memory-server, tslint, cfenv, jest and rollup dependencies.
+
 ## [0.4.6] - 2019-03-12
 
 ### Added
@@ -11,25 +17,25 @@
 
 ### Fixed
 
-- Add missing MongoDB memory status to logs
+- Add missing MongoDB memory status to logs.
 
 ## [0.4.4] - 2019-03-08
 
 ### General
 
-- Jest dependencies updated
+- Jest dependencies updated.
 
 ## [0.4.3] - 2019-03-08
 
 ### Fixed
 
-- Add missing MongoDB replication set status to logs
+- Add missing MongoDB replication set status to logs.
 
 ## [0.4.2] - 2019-02-19
 
 ### General
 
-- Convert Redis metrics values to numbers
+- Convert Redis metrics values to numbers.
 
 ## [0.4.1] - 2019-02-19
 
@@ -58,13 +64,13 @@
 
 ### General
 
-- Make this library more general by separate cloud foundry functionality to a separate connector
+- Make this library more general by separate cloud foundry functionality to a separate connector.
 
 ## [0.2.1] - 2019-02-04
 
 ### Fixed
 
-- Skip mongodb unit test for now
+- Skip mongodb unit test for now.
 
 ## [0.2.0] - 2019-02-04
 
@@ -80,31 +86,31 @@
 
 ### Added
 
-- Update Readme
-- Update of jest
+- Update Readme.
+- Update of jest.
 
 ## [0.1.4] - 2019-01-31
 
 ### Added
 
-- Replace coveralls with sonarqube quality gate
+- Replace coveralls with sonarqube quality gate.
 
 ## [0.1.3] - 2019-01-31
 
 ### Added
 
-- Sonarqube quality gate
+- Sonarqube quality gate.
 
 ## [0.1.2] - 2019-01-30
 
 ### Added
 
-- Replace coveralls with codecov
+- Replace coveralls with codecov.
 
 ## [0.1.0] - 2019-01-29
 
 ### Added
 
-- Cloud Foundry Service Metrics Logger
-- MongoDB support
-- Redis support
+- Cloud Foundry Service Metrics Logger.
+- MongoDB support.
+- Redis support.
