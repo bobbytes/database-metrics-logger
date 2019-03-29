@@ -19,7 +19,6 @@ export interface IMetric {
   tags?: string[];
 }
 
-
 interface IDatadogOptions {
   apiKey: string;
   appKey?: string;
