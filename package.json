@@ -76,9 +76,9 @@
     "rollup": "^1.7.4",
     "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-typescript2": "^0.20.1",
-    "ts-jest": "^24.0.0",
+    "ts-jest": "^24.0.1",
     "tslint": "^5.14.0",
-    "typescript": "^3.3.1"
+    "typescript": "^3.4.1"
   },
   "dependencies": {
     "cfenv": "^1.2.2",
