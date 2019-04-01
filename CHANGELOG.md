@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.8] - 2019-04-01
+
+### General
+
+- Upgrade ts-jest and typescript dependencies.
+
 ## [0.4.7] - 2019-03-28
 
 ### General
