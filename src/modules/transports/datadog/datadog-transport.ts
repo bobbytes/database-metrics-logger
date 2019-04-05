@@ -1,8 +1,10 @@
 import { DatabaseType } from '../../../database-metrics-logger';
+import { getFromObjectPath } from '../../../helpers/get-from-object-path';
 import { Rest } from '../../../helpers/rest';
-import { redisFields } from './metrics-fields/redis-fields';
+import { mongoDbMetrics } from './metrics/mongodb-metrics';
+import { redisMetrics } from './metrics/redis-metrics';
 
-export type TTimeSeriesPoints = [string, any];
+export type TTimeSeriesPoints = [number, any];
 
 enum MetricTypeEnum {
   Gauge = 'gauge',
@@ -43,7 +45,7 @@ export class DatadogTransport {
 
   public postMetrics(metrics: {}): Promise<any> {
     const mappedMetrics = this.mapMetrics(metrics);
-    const metricsBody = JSON.stringify({ series: mappedMetrics });
+    const metricsBody = JSON.stringify({ series: mappedMetrics, host: 'bubu' });
     return this.rest.post('/series', metricsBody);
   }
 
@@ -52,16 +54,20 @@ export class DatadogTransport {
 
     switch (metrics.databaseType) {
       case DatabaseType.Redis:
-        metricFieldsMap = redisFields;
+        metricFieldsMap = redisMetrics;
+        break;
+      case DatabaseType.Mongodb:
+        metricFieldsMap = mongoDbMetrics;
         break;
       default:
     }
 
     const metricKeys = Object.keys(metricFieldsMap);
-    const milliseconds = `${new Date().getTime()}`;
+    const timeStamp = new Date().getTime() / 1000;
 
     return metricKeys.map(metricKey => {
-      const points: TTimeSeriesPoints[] = [[milliseconds, metrics[metricFieldsMap[metricKey]]]];
+      const metricValue = getFromObjectPath(metrics.metrics, metricFieldsMap[metricKey]);
+      const points: TTimeSeriesPoints[] = [[timeStamp, metricValue]];
 
       return {
         metric: metricKey,

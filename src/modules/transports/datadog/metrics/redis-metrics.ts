@@ -1,0 +1,38 @@
+export const redisMetrics = {
+  // commands per second
+  'redis.net.commands': 'total_commands_processed',
+
+  // cache hit rate
+  'redis.stats.keyspace_hits': 'keyspace_hits',
+  'redis.stats.keyspace_misses': 'keyspace_misses',
+
+  // slowlog
+  // 'redis.slowlog.micros.95percentile': '',
+
+  // latency
+  // 'redis.info.latency_ms': '',
+
+  // evictions
+  'redis.keys.evicted': 'evicted_keys',
+
+  // fragmentation ration
+  'redis.mem.fragmentation_ratio': 'mem_fragmentation_ratio',
+
+  // blocked clients
+  'redis.clients.blocked': 'blocked_clients',
+
+  // used memory
+  'redis.mem.used': 'used_memory',
+
+  // connected slaves
+  'redis.net.slaves': 'connected_slaves',
+
+  // rejected connections
+  'redis.net.rejected': 'rejected_connections',
+
+  // connected clients
+  'redis.net.clients': 'connected_clients',
+
+  // keys
+  // 'redis.keys': '',
+};

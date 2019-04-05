@@ -56,7 +56,7 @@ export class Rest {
 
     return new Promise<T>((resolve, reject) => {
       request(requestOptions, (error: any, response: request.Response, body: T) => {
-        if (!error && response.statusCode === 200) {
+        if (!error && response.statusCode >= 200 && response.statusCode < 300) {
           resolve(this.parseResponseBody(body));
         } else {
           reject(error);
