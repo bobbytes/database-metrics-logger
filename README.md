@@ -34,6 +34,7 @@ You want to log service metrics from your application on Cloud Foundry? - Yes? -
 - [Quick Start](#-quick-start)
 - [API](#-api)
 - [Cloud Connectors](#-cloud-connectors)
+- [Transports](#-transports)
 - [Development](#-development)
 - [Project Structure](#-project-structure)
 
@@ -82,17 +83,17 @@ import { DatabaseMetricsLogger } from 'database-metrics-logger';
 
 #### Step 2: Create new instance of CfServiceMetricsLogger
 
-Create new instance of `DatabaseMetricsLogger` and provide [options](#-options):
+Create new instance of `DatabaseMetricsLogger` and provide options:
 
 ```javascript
-const credentials = [
+const databaseCredentials = [
   {
     databaseType: 'mongodb',
     host: 'your-mongodb-host',
     username: 'user',
     password: 'this-is-secret',
     port: 27017
-    database: mongodbCredentials.database,
+    database: 'your-database-name',
   },
   {
     databaseType: 'redis',
@@ -102,7 +103,7 @@ const credentials = [
   }
 ];
 
-const databaseMetricsLogger = new DatabaseMetricsLogger(credentials);
+const databaseMetricsLogger = new DatabaseMetricsLogger({databaseCredentials});
 ```
 
 #### Step 3: Subscribe to receive service metrics and general logs
@@ -206,8 +207,8 @@ const options = {
 };
 
 const cloudFoundryConnector = new CloudFoundryConnector(options);
-const credentials = cloudFoundryConnector.getCredentials();
-const databaseMetricsLogger = new DatabaseMetricsLogger(credentials);
+const databaseCredentials = cloudFoundryConnector.getCredentials();
+const databaseMetricsLogger = new DatabaseMetricsLogger({databaseCredentials});
 
 databaseMetricsLogger.subscribe('metrics', data => {
   // do some fancy stuff with your metrics
@@ -221,6 +222,45 @@ setTimeout(() => {
 ```
 
 ![divider](./divider.png)
+
+## ❯ Transports
+
+With transports you can log metrics to metrics services like Datadog. Datadog is currently the one and only implemented transport.
+
+###  Datadog
+
+#### Example
+
+```javascript
+// import using `CommonJS` module loader:
+const { DatabaseMetricsLogger, DatadogTransport } = require('database-metrics-logger');
+
+// or import using `ES6` module loader:
+import { DatabaseMetricsLogger, DatadogTransport } from 'database-metrics-logger';
+
+const datadogTransport = new DatadogTransport({
+  apiKey: 'datadog-api-key',
+  appKey: 'datadog-app-key',
+});
+
+const databaseCredentials = [
+  {
+    databaseType: 'mongodb',
+    host: 'your-mongodb-host',
+    username: 'user',
+    password: 'this-is-secret',
+    port: 27017,
+    database: 'your-database-name',
+  }
+];
+
+const databaseMetricsLogger = new DatabaseMetricsLogger({
+  databaseCredentials,
+  transports: [datadogTransport],
+});
+
+databaseMetricsLogger.start();
+```
 
 ## ❯ Development
 
