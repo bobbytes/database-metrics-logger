@@ -3,6 +3,7 @@ import { mergeDeep } from './helpers/merge-deep';
 import { PubSub } from './helpers/pub-sub';
 import { MongodbMetrics } from './modules/database-metrics/mongodb-metrics';
 import { RedisMetrics } from './modules/database-metrics/redis-metrics';
+import { ITransportInterface } from './modules/transports/transport-interface';
 
 const defaultOptions = {
   interval: 10000,
@@ -30,15 +31,20 @@ export interface IDatabaseCredentials {
   interval?: number;
 }
 
+export interface IDatabaseMetricsLoggerConfig {
+  databaseCredentials: IDatabaseCredentials[];
+  transports?: ITransportInterface[];
+}
+
 export class DatabaseMetricsLogger extends PubSub {
   private databaseCredentials: IDatabaseCredentials[];
   private dbMetricsCollection: (MongodbMetrics | RedisMetrics)[] = [];
+  private transports: ITransportInterface[];
 
-  constructor(
-    databaseCredentials: IDatabaseCredentials[] = []
-  ) {
+  constructor(config: IDatabaseMetricsLoggerConfig) {
     super();
-    this.databaseCredentials = databaseCredentials.map(this.mapDefaultValues);
+    this.databaseCredentials = config.databaseCredentials.map(this.mapDefaultValues);
+    this.transports = config.transports || [];
   }
 
   public start(): void {
@@ -58,8 +64,10 @@ export class DatabaseMetricsLogger extends PubSub {
           break;
       }
 
-      databaseMetrics.getMetrics().subscribe(undefined, metrics =>
-        this.publish(DatabaseMetricsEvent.Metrics, metrics));
+      databaseMetrics.getMetrics().subscribe(undefined, metrics => {
+        this.publish(DatabaseMetricsEvent.Metrics, metrics);
+        this.executeTransports(metrics);
+      });
 
       this.dbMetricsCollection.push(databaseMetrics);
     });
@@ -75,5 +83,11 @@ export class DatabaseMetricsLogger extends PubSub {
   private mapDefaultValues(serviceCredential: IDatabaseCredentials): IDatabaseCredentials {
     serviceCredential.name = serviceCredential.name || serviceCredential.host;
     return mergeDeep({}, defaultOptions, serviceCredential) as IDatabaseCredentials;
+  }
+
+  private executeTransports(metrics: any): void {
+    if (this.transports) {
+      this.transports.forEach(transport => transport.postMetrics(metrics));
+    }
   }
 }

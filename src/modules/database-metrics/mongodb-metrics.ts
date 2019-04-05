@@ -85,10 +85,10 @@ export class MongodbMetrics extends DatabaseMetrics {
     }
   }
 
-  private mapMetrics(metrics: any): {} {
-    const calculatedFields = this.getCalculatedFields(metrics);
-    const { connections, extra_info, globalLock, opcounters, mem, dbStats, replicationSetStatus } = metrics;
-    return { connections, extra_info, globalLock, opcounters, mem, dbStats, replicationSetStatus, calculatedFields };
+  private mapMetrics(unmappedMetrics: any): {} {
+    const calculatedFields = this.getCalculatedFields(unmappedMetrics);
+    const { connections, extra_info, globalLock, opcounters, mem, dbStats, replicationSetStatus, metrics, asserts } = unmappedMetrics;
+    return { connections, extra_info, globalLock, opcounters, mem, dbStats, replicationSetStatus, calculatedFields, metrics, asserts };
   }
 
   private getCalculatedFields(metrics: any): any {
