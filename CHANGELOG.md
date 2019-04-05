@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.9] - 2019-04-05
+
+### Added
+
+- Datadog metrics support.
+
 ## [0.4.8] - 2019-04-01
 
 ### General
