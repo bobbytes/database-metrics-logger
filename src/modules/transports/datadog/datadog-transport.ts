@@ -45,7 +45,7 @@ export class DatadogTransport {
 
   public postMetrics(metrics: {}): Promise<any> {
     const mappedMetrics = this.mapMetrics(metrics);
-    const metricsBody = JSON.stringify({ series: mappedMetrics, host: 'bubu' });
+    const metricsBody = JSON.stringify({ series: mappedMetrics });
     return this.rest.post('/series', metricsBody);
   }
 
@@ -62,7 +62,7 @@ export class DatadogTransport {
       return {
         metric: metricKey,
         points,
-        tags: [`service-name:${metrics.name}`],
+        tags: [`database-type:${metrics.databaseType}`, `service-name:${metrics.name}`],
       };
     });
   }
