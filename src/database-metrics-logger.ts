@@ -74,8 +74,7 @@ export class DatabaseMetricsLogger extends PubSub {
   private getDatabaseMetrics(credentials: IDatabaseCredentials): any {
     switch (credentials.databaseType) {
       case DatabaseType.Mongodb:
-        // return new MongodbMetrics(credentials);
-        return undefined;
+        return new MongodbMetrics(credentials);
       case DatabaseType.Redis:
         return new RedisMetrics(credentials);
       default:

@@ -50,17 +50,7 @@ export class DatadogTransport {
   }
 
   private mapMetrics(metrics: any): IMetric[] {
-    let metricFieldsMap = {};
-
-    switch (metrics.databaseType) {
-      case DatabaseType.Redis:
-        metricFieldsMap = redisMetrics;
-        break;
-      case DatabaseType.Mongodb:
-        metricFieldsMap = mongoDbMetrics;
-        break;
-      default:
-    }
+    const metricFieldsMap = this.getMetricMapping(metrics.databaseType);
 
     const metricKeys = Object.keys(metricFieldsMap);
     const timeStamp = new Date().getTime() / 1000;
@@ -75,5 +65,16 @@ export class DatadogTransport {
         tags: [`service-name:${metrics.name}`],
       };
     });
+  }
+
+  private getMetricMapping(databaseType: DatabaseType): {} {
+    switch (databaseType) {
+      case DatabaseType.Redis:
+        return redisMetrics;
+      case DatabaseType.Mongodb:
+        return mongoDbMetrics;
+      default:
+        return {};
+    }
   }
 }
