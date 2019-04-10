@@ -45,22 +45,12 @@ export class DatadogTransport {
 
   public postMetrics(metrics: {}): Promise<any> {
     const mappedMetrics = this.mapMetrics(metrics);
-    const metricsBody = JSON.stringify({ series: mappedMetrics, host: 'bubu' });
+    const metricsBody = JSON.stringify({ series: mappedMetrics });
     return this.rest.post('/series', metricsBody);
   }
 
   private mapMetrics(metrics: any): IMetric[] {
-    let metricFieldsMap = {};
-
-    switch (metrics.databaseType) {
-      case DatabaseType.Redis:
-        metricFieldsMap = redisMetrics;
-        break;
-      case DatabaseType.Mongodb:
-        metricFieldsMap = mongoDbMetrics;
-        break;
-      default:
-    }
+    const metricFieldsMap = this.getMetricMapping(metrics.databaseType);
 
     const metricKeys = Object.keys(metricFieldsMap);
     const timeStamp = new Date().getTime() / 1000;
@@ -72,8 +62,19 @@ export class DatadogTransport {
       return {
         metric: metricKey,
         points,
-        tags: [`service-name:${metrics.name}`],
+        tags: [`database-type:${metrics.databaseType}`, `service-name:${metrics.name}`],
       };
     });
+  }
+
+  private getMetricMapping(databaseType: DatabaseType): {} {
+    switch (databaseType) {
+      case DatabaseType.Redis:
+        return redisMetrics;
+      case DatabaseType.Mongodb:
+        return mongoDbMetrics;
+      default:
+        return {};
+    }
   }
 }

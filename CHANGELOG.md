@@ -2,6 +2,13 @@
 
 ## [0.5.0] - 2019-04-05
 
+### General
+
+- Code refactoring.
+- Database type added as a tag to Datadog transport.
+
+## [0.5.0] - 2019-04-05
+
 ### Added
 
 - Datadog support.
