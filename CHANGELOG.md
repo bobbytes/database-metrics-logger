@@ -1,6 +1,12 @@
 # Changelog
 
-## [0.5.0] - 2019-04-05
+## [0.5.2] - 2019-04-10
+
+### General
+
+- Upgrade mongodb, mongodb-memory-server, rollup, ts-jest, typescript dependencies.
+
+## [0.5.1] - 2019-04-10
 
 ### General
 
