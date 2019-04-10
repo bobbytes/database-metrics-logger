@@ -51,25 +51,16 @@ export class DatabaseMetricsLogger extends PubSub {
     logger.subscribe(undefined, value => this.publish(DatabaseMetricsEvent.Logs, value));
 
     this.databaseCredentials.forEach(credentials => {
-      let databaseMetrics: any;
+      const databaseMetrics = this.getDatabaseMetrics(credentials);
 
-      switch (credentials.databaseType) {
-        case DatabaseType.Mongodb:
-          databaseMetrics = new MongodbMetrics(credentials);
-          break;
-        case DatabaseType.Redis:
-          databaseMetrics = new RedisMetrics(credentials);
-          break;
-        default:
-          break;
+      if (databaseMetrics) {
+        databaseMetrics.getMetrics().subscribe(undefined, metrics => {
+          this.publish(DatabaseMetricsEvent.Metrics, metrics);
+          this.executeTransports(metrics);
+        });
+
+        this.dbMetricsCollection.push(databaseMetrics);
       }
-
-      databaseMetrics.getMetrics().subscribe(undefined, metrics => {
-        this.publish(DatabaseMetricsEvent.Metrics, metrics);
-        this.executeTransports(metrics);
-      });
-
-      this.dbMetricsCollection.push(databaseMetrics);
     });
   }
 
@@ -78,6 +69,18 @@ export class DatabaseMetricsLogger extends PubSub {
     this.dbMetricsCollection.forEach(dbMetrics => dbMetrics.stop());
     this.dbMetricsCollection = [];
     logger.unsubscribeAll();
+  }
+
+  private getDatabaseMetrics(credentials: IDatabaseCredentials): any {
+    switch (credentials.databaseType) {
+      case DatabaseType.Mongodb:
+        // return new MongodbMetrics(credentials);
+        return undefined;
+      case DatabaseType.Redis:
+        return new RedisMetrics(credentials);
+      default:
+        return undefined;
+    }
   }
 
   private mapDefaultValues(serviceCredential: IDatabaseCredentials): IDatabaseCredentials {
