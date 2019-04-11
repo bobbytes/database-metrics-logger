@@ -77,15 +77,42 @@ export class RedisMetrics extends DatabaseMetrics {
     return !!this.redisClient && !!this.redisClient.connected;
   }
 
-  private onPollMetrics(): void {
+  private async onPollMetrics(): Promise<void> {
     if (this.isConnected()) {
+      const promises = [
+        this.getRedisInfo(),
+        this.getDbSize(),
+      ];
+
+      const [redisInfo, dbSize] = await Promise.all(promises);
+
+      this.publish(undefined, this.credentials, { ...redisInfo, db_size: dbSize });
+      this.pollById(Poller.pollerIds.redis);
+    }
+  }
+
+  private getRedisInfo(): Promise<{}> {
+    return new Promise((resolve, reject) => {
       this.redisClient.info((error, serverInfo) => {
         if (!error) {
-          this.publish(undefined, this.credentials, this.parseServerInfo(serverInfo as unknown as string));
-          this.pollById(Poller.pollerIds.redis);
+          resolve(this.parseServerInfo(serverInfo as unknown as string));
+        } else {
+          reject(error);
         }
       });
-    }
+    });
+  }
+
+  private getDbSize(): Promise<number> {
+    return new Promise((resolve, reject) => {
+      this.redisClient.dbsize((error, dbSize) => {
+        if (!error) {
+          resolve(dbSize);
+        } else {
+          reject(error);
+        }
+      });
+    });
   }
 
   private parseServerInfo(serverInfo: string): {} {

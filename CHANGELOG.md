@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.3] - 2019-04-11
+
+### Added
+
+- Add redis changes since last save metric to Datadog transport
+- Add redis database size to metrics.
+
 ## [0.5.2] - 2019-04-10
 
 ### General

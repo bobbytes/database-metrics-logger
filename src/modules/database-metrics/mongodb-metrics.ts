@@ -1,4 +1,4 @@
-import { Db, MongoClient } from 'mongodb';
+import { MongoClient } from 'mongodb';
 
 import { IDatabaseCredentials } from '../../database-metrics-logger';
 import { toPercentage } from '../../helpers/converters';

@@ -1,4 +1,9 @@
 export const redisMetrics = {
+  // unsaved changes
+  'redis.rdb.changes_since_last': 'rdb_changes_since_last_save',
+
+  // master down
+
   // commands per second
   'redis.net.commands': 'total_commands_processed',
 
@@ -34,5 +39,5 @@ export const redisMetrics = {
   'redis.net.clients': 'connected_clients',
 
   // keys
-  // 'redis.keys': '',
+  'redis.keys': 'db_size',
 };
