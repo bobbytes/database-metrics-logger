@@ -12,10 +12,10 @@ export const redisMetrics = {
   'redis.stats.keyspace_misses': 'keyspace_misses',
 
   // slowlog
-  // 'redis.slowlog.micros.95percentile': '',
+  'redis.slowlog.micros.95percentile': 'slow_log_percentile',
 
   // latency
-  // 'redis.info.latency_ms': '',
+  'redis.info.latency_ms': 'redisInfoLatency',
 
   // evictions
   'redis.keys.evicted': 'evicted_keys',
