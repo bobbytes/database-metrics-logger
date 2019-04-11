@@ -1,8 +1,10 @@
+import { performance } from 'perf_hooks';
 import * as Redis from 'redis';
 
 import { IDatabaseCredentials } from '../../database-metrics-logger';
 import { convertStringToNumber } from '../../helpers/converters';
 import { logger } from '../../helpers/logger';
+import { calculatePercentile } from '../../helpers/percentile';
 import { Poller } from '../../helpers/poller';
 import { DatabaseMetrics } from './database-metrics';
 
@@ -82,20 +84,25 @@ export class RedisMetrics extends DatabaseMetrics {
       const promises = [
         this.getRedisInfo(),
         this.getDbSize(),
+        this.getSlowLogPercentile(95),
       ];
 
-      const [redisInfo, dbSize] = await Promise.all(promises);
+      const [redisInfo, dbSize, slowLogPercentile] = await Promise.all(promises);
 
-      this.publish(undefined, this.credentials, { ...redisInfo, db_size: dbSize });
+      this.publish(undefined, this.credentials, { ...redisInfo, db_size: dbSize, slow_log_percentile: slowLogPercentile });
       this.pollById(Poller.pollerIds.redis);
     }
   }
 
   private getRedisInfo(): Promise<{}> {
     return new Promise((resolve, reject) => {
+      const startGetRedisInfoTimestamp = performance.now();
       this.redisClient.info((error, serverInfo) => {
         if (!error) {
-          resolve(this.parseServerInfo(serverInfo as unknown as string));
+          const receiveRedisInfoTimeStamp = performance.now();
+          const redisInfoLatency = receiveRedisInfoTimeStamp - startGetRedisInfoTimestamp;
+          const parsedServerInfo = this.parseServerInfo(serverInfo as unknown as string);
+          resolve({ ...parsedServerInfo, redis_info_latency: redisInfoLatency });
         } else {
           reject(error);
         }
@@ -108,6 +115,19 @@ export class RedisMetrics extends DatabaseMetrics {
       this.redisClient.dbsize((error, dbSize) => {
         if (!error) {
           resolve(dbSize);
+        } else {
+          reject(error);
+        }
+      });
+    });
+  }
+
+  private getSlowLogPercentile(percentile: number): Promise<number> {
+    return new Promise((resolve, reject) => {
+      this.redisClient.slowlog('get', (error, response) => {
+        if (!error) {
+          const milliseconds = response.map(value => value[2]);
+          resolve(calculatePercentile(percentile, milliseconds));
         } else {
           reject(error);
         }
