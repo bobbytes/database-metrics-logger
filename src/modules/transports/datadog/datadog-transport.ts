@@ -1,8 +1,8 @@
 import { DatabaseType } from '../../../database-metrics-logger';
 import { getFromObjectPath } from '../../../helpers/get-from-object-path';
 import { Rest } from '../../../helpers/rest';
-import { mongoDbMetrics } from './metrics/mongodb-metrics';
-import { redisMetrics } from './metrics/redis-metrics';
+import { mongoDbMetricsMap } from './metrics-map/mongodb-metrics-map';
+import { redisMetricsMap } from './metrics-map/redis-metrics-map';
 
 export type TTimeSeriesPoints = [number, any];
 
@@ -56,7 +56,7 @@ export class DatadogTransport {
     const timeStamp = new Date().getTime() / 1000;
 
     return metricKeys.map(metricKey => {
-      const metricValue = getFromObjectPath(metrics.metrics, metricFieldsMap[metricKey]);
+      const metricValue = getFromObjectPath(metrics.metrics, metricFieldsMap[metricKey]) || 0;
       const points: TTimeSeriesPoints[] = [[timeStamp, metricValue]];
 
       return {
@@ -70,9 +70,9 @@ export class DatadogTransport {
   private getMetricMapping(databaseType: DatabaseType): {} {
     switch (databaseType) {
       case DatabaseType.Redis:
-        return redisMetrics;
+        return redisMetricsMap;
       case DatabaseType.Mongodb:
-        return mongoDbMetrics;
+        return mongoDbMetricsMap;
       default:
         return {};
     }

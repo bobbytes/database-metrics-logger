@@ -1,8 +1,9 @@
-export const redisMetrics = {
+export const redisMetricsMap = {
   // unsaved changes
   'redis.rdb.changes_since_last': 'rdb_changes_since_last_save',
 
   // master down
+  'redis.replication.master_link_down_since_seconds': 'master_link_down_since_seconds',
 
   // commands per second
   'redis.net.commands': 'total_commands_processed',
