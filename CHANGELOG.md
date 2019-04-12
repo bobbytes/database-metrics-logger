@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.5.5] - 2019-04-12
+
+### Added
+
+- Add redis info master link down to metrics
+
+### General
+
+- Small refactoring
+
 ## [0.5.4] - 2019-04-11
 
 ### Added
