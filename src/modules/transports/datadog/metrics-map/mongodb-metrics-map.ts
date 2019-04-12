@@ -1,4 +1,4 @@
-export const mongoDbMetrics = {
+export const mongoDbMetricsMap = {
   // read requests per second
   'mongodb.opcounters.getmoreps': 'opcounters.getmore',
   'mongodb.opcounters.queryps': 'opcounters.query',
