@@ -19,20 +19,20 @@ export const mongoDbDefinitions: IMetricDefinition[] = [
     calculateDifferencePerSecond: true,
   },
   {
-    metric: 'opcounters.update',
+    metric: 'serverStatus.opcounters.update',
     calculateDifferencePerSecond: true,
   },
   {
-    metric: 'globalLock.activeClients.readers',
+    metric: 'serverStatus.globalLock.activeClients.readers',
   },
   {
-    metric: 'globalLock.activeClients.writers',
+    metric: 'serverStatus.globalLock.activeClients.writers',
   },
   {
-    metric: 'globalLock.currentQueue.readers',
+    metric: 'serverStatus.globalLock.currentQueue.readers',
   },
   {
-    metric: 'globalLock.currentQueue.writers',
+    metric: 'serverStatus.globalLock.currentQueue.writers',
   },
   {
     metric: 'serverStatus.connections.current',
@@ -51,30 +51,36 @@ export const mongoDbDefinitions: IMetricDefinition[] = [
   },
   {
     metric: 'serverStatus.extra_info.page_faults',
+    calculateDifferencePerSecond: true,
   },
   {
-    metric: 'serverStatus.metrics.dbStats.dataSize',
+    metric: 'dbStats.dataSize',
   },
   {
     metric: 'serverStatus.metrics.cursor.open.total',
   },
   {
-    metric: 'serverStatus.metrics.cursors.timedOut',
+    metric: 'serverStatus.metrics.cursor.timedOut',
   },
   {
     metric: 'serverStatus.asserts.msg',
+    calculateDifferencePerSecond: true,
   },
   {
     metric: 'serverStatus.asserts.warning',
+    calculateDifferencePerSecond: true,
   },
   {
     metric: 'serverStatus.asserts.regular',
+    calculateDifferencePerSecond: true,
   },
   {
     metric: 'serverStatus.asserts.user',
+    calculateDifferencePerSecond: true,
   },
   {
     metric: 'serverStatus.asserts.rollovers',
+    calculateDifferencePerSecond: true,
   },
   {
     metric: 'custom.freeMemorySize',

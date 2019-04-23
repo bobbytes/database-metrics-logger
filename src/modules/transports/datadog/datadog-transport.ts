@@ -56,7 +56,7 @@ export class DatadogTransport {
     const timeStamp = new Date().getTime() / 1000;
 
     return metricKeys.map(metricKey => {
-      const metricValue = getFromObjectPath(metrics.metrics, metricFieldsMap[metricKey]) || 0;
+      const metricValue = metrics.metrics[metricFieldsMap[metricKey]] || 0;
       const points: TTimeSeriesPoints[] = [[timeStamp, metricValue]];
 
       return {
