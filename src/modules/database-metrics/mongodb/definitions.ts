@@ -78,18 +78,18 @@ export const mongoDbDefinitions: IMetricDefinition[] = [
   },
   {
     metric: 'custom.freeMemorySize',
-    calculate: metrics => metrics.serverStatus.metrics.mem.virtual - metrics.serverStatus.metrics.mem.resident,
+    calculate: metrics => metrics.serverStatus.mem.virtual - metrics.serverStatus.mem.resident,
   },
   {
     metric: 'custom.usedMemoryPercentage',
-    calculate: metrics => toPercentage(metrics.serverStatus.metrics.mem.resident, metrics.serverStatus.metrics.mem.virtual),
+    calculate: metrics => toPercentage(metrics.serverStatus.mem.resident, metrics.serverStatus.mem.virtual),
   },
   {
     metric: 'custom.freeStorageSize',
-    calculate: metrics => metrics.serverStatus.metrics.dbStats.fsTotalSize - metrics.serverStatus.metrics.dbStats.fsUsedSize,
+    calculate: metrics => metrics.dbStats.fsTotalSize - metrics.dbStats.fsUsedSize,
   },
   {
     metric: 'custom.usedStoragePercentage',
-    calculate: metrics => toPercentage(metrics.serverStatus.metrics.dbStats.fsUsedSize, metrics.serverStatus.metrics.dbStats.fsTotalSize),
+    calculate: metrics => toPercentage(metrics.dbStats.fsUsedSize, metrics.dbStats.fsTotalSize),
   },
 ];
