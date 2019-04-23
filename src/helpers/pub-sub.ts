@@ -5,34 +5,25 @@ interface ISubscriber {
 }
 
 export abstract class PubSub {
-  private subscribers: ISubscriber = {};
+  private subscribers = new Map<string, TCallback[]>();
 
   public subscribe(id: string = '', callback: TCallback): void {
-    this.subscribers[id] = this.subscribers[id] || [];
-    this.subscribers[id] = [...this.subscribers[id], callback];
+    const callbacks = this.subscribers.get(id) || [];
+    this.subscribers.set(id, [...callbacks, callback]);
   }
 
   public unsubscribe(id: string = '', callback: TCallback): void {
-    this.subscribers[id] = this.subscribers[id]
-      ? this.subscribers[id].filter(filteredCallback => filteredCallback.toString() !== callback.toString())
-      : undefined;
-
-    this.subscribers[id] = this.subscribers[id] && this.subscribers[id].length
-      ? this.subscribers[id]
-      : undefined;
+    const callbacks = this.subscribers.get(id) || [];
+    const filteredCallbacks = callbacks.filter(filteredCallback => filteredCallback.toString() !== callback.toString());
+    this.subscribers.set(id, filteredCallbacks);
   }
 
   public unsubscribeAll(): void {
-    for (const id in this.subscribers) {
-      if (this.subscribers.hasOwnProperty(id)) {
-        this.subscribers[id] = [];
-      }
-    }
+    this.subscribers.forEach((_callbacks, id) => this.subscribers.set(id, []));
   }
 
   protected publish(id: string = '', value: any): void {
-    if (this.subscribers[id]) {
-      this.subscribers[id].forEach(subscriber => subscriber(value));
-    }
+    const callbacks = this.subscribers.get(id) || [];
+    callbacks.forEach(subscriber => subscriber(value));
   }
 }
