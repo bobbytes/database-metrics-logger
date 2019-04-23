@@ -87,7 +87,7 @@ export abstract class DatabaseMetrics extends PubSub {
     const currentMetric = this.getMetricFromMetricDefinition(metricDefinition, metrics);
     const interval = this.credentials.interval || defaultInterval;
 
-    const metricDifferencePerSecond = (lastMetric - currentMetric) / (interval / 1000);
+    const metricDifferencePerSecond = Math.round((currentMetric - lastMetric) / (interval / 1000));
 
     this.lastMetrics.set(metricDefinition.metric, metricDifferencePerSecond);
 

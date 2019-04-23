@@ -6,6 +6,7 @@ export const redisDefinitions: IMetricDefinition[] = [
   },
   {
     metric: 'master_link_down_since_seconds',
+    calculate: metrics => metrics.master_link_down_since_seconds || 0,
   },
   {
     metric: 'total_commands_processed',
@@ -20,7 +21,7 @@ export const redisDefinitions: IMetricDefinition[] = [
     metric: 'slow_log_percentile',
   },
   {
-    metric: 'redisInfoLatency',
+    metric: 'redis_info_latency',
   },
   {
     metric: 'evicted_keys',

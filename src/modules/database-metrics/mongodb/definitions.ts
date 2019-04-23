@@ -3,19 +3,19 @@ import { IMetricDefinition } from '../interfaces/metric-definition.interface';
 
 export const mongoDbDefinitions: IMetricDefinition[] = [
   {
-    metric: 'opcounters.getmore',
+    metric: 'serverStatus.opcounters.getmore',
     calculateDifferencePerSecond: true,
   },
   {
-    metric: 'opcounters.query',
+    metric: 'serverStatus.opcounters.query',
     calculateDifferencePerSecond: true,
   },
   {
-    metric: 'opcounters.delete',
+    metric: 'serverStatus.opcounters.delete',
     calculateDifferencePerSecond: true,
   },
   {
-    metric: 'opcounters.insert',
+    metric: 'serverStatus.opcounters.insert',
     calculateDifferencePerSecond: true,
   },
   {
