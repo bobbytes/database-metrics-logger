@@ -5,6 +5,8 @@ interface IPollerConfig {
   interval?: number;
 }
 
+export const defaultInterval = 1000;
+
 export class Poller extends EventEmitter {
   public static pollerIds = {
     mongodb: 'mongodb',
@@ -22,7 +24,7 @@ export class Poller extends EventEmitter {
     super();
 
     this.config = config;
-    this.config.interval = this.config.interval || 1000;
+    this.config.interval = this.config.interval || defaultInterval;
   }
 
   public poll(): void {
