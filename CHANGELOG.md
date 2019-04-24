@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.6.2] - 2019-04-24
+
+### Added
+
+- Add Greenkeeper as a dependency update helper.
+
+### Fixed
+
+- Datadog options interface import.
+
 ## [0.6.1] - 2019-04-24
 
 ### Added
