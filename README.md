@@ -24,6 +24,8 @@
 
 ## ❯ Why
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/DaNautilus/database-metrics-logger.svg)](https://greenkeeper.io/)
+
 You want to log service metrics from your application on Cloud Foundry? - Yes? - Here you are 🙌 !!
 
 ![divider](./divider.png)
