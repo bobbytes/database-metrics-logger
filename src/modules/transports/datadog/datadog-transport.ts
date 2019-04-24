@@ -5,6 +5,7 @@ import { mongoDbDefinition } from './database-definitions/mongodb-definition';
 import { redisDefinition } from './database-definitions/redis-definition';
 import { IDatabaseDefinition } from './interfaces/database-definition.interface';
 import { IDatadogMetric } from './interfaces/datadog-metric';
+import { IDatadogOptions } from './interfaces/datadog-options';
 import { TTimeSeriesPoints } from './types/time-series-points.type';
 
 export class DatadogTransport {
