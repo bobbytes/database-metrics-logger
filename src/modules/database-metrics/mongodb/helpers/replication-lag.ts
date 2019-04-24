@@ -14,5 +14,5 @@ export const getReplicationLag = (replicationSetStatus: IReplicationSetStatus): 
     .filter(member => member.state === ReplicationSetMemberState.Secondary)
     .map(secondaryMember => calculateReplicationLag(primaryMember, secondaryMember));
 
-  return Math.max.apply(undefined, replicationLags);
+  return replicationLags.length ? Math.max.apply(undefined, replicationLags) : 0;
 };
