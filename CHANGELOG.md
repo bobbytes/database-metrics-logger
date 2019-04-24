@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.6.1] - 2019-04-24
+
+### Added
+
+- MongoDb Replication set name added as tag to Datadog transport
+
+### General
+
+- General refactoring.
+
 ## [0.6.0] - 2019-04-24
 
 ### Added
