@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.0] - 2019-04-24
+
+### Added
+
+- MongoDb metrics for replication sets.
+- MongoDb operation logs per second.
+
+### General
+
+- Dependency updates.
+- General refactoring.
+
 ## [0.5.5] - 2019-04-12
 
 ### Added

@@ -1,21 +1,21 @@
 import { MongoClient } from 'mongodb';
 
-import { IDatabaseCredentials } from '../../database-metrics-logger';
-import { toPercentage } from '../../helpers/converters';
-import { logger } from '../../helpers/logger';
-import { Poller } from '../../helpers/poller';
-import { DatabaseMetrics } from './database-metrics';
+import { IDatabaseCredentials } from '../../../database-metrics-logger';
+import { logger } from '../../../helpers/logger';
+import { Poller } from '../../../helpers/poller';
+import { DatabaseMetrics } from '../database-metrics';
+import { mongoDbDefinitions } from './definitions';
 
-export class MongodbMetrics extends DatabaseMetrics {
+export class MongoDbAgent extends DatabaseMetrics {
   private mongoClient?: MongoClient;
 
   constructor(
-    private credentials: IDatabaseCredentials
+    credentials: IDatabaseCredentials
   ) {
-    super();
+    super(credentials, mongoDbDefinitions);
   }
 
-  public getMetrics(): MongodbMetrics {
+  public getMetrics(): MongoDbAgent {
     this.connect()
       .then(() => {
         const metricsPoller = new Poller({
@@ -28,6 +28,7 @@ export class MongodbMetrics extends DatabaseMetrics {
         this.pollById(Poller.pollerIds.mongodb);
       })
       .catch(error => logger.error(error));
+
     return this;
   }
 
@@ -60,16 +61,15 @@ export class MongodbMetrics extends DatabaseMetrics {
       const database = this.mongoClient.db(this.credentials.database);
 
       const promises = [
-        database.command({ serverStatus: 1 }),
+        database.command({ serverStatus: 1, repl: 1, metrics: 1, locks: 1 }),
         database.command({ dbStats: 1, scale: 1024 }),
         this.getReplicationSetMetrics(),
       ];
 
       const [serverStatus, dbStats, replicationSetStatus] = await Promise.all(promises);
+      const metrics = { serverStatus, dbStats, replicationSetStatus };
 
-      const metrics = this.mapMetrics({ ...serverStatus, dbStats, replicationSetStatus });
-
-      this.publish(undefined, this.credentials, metrics);
+      this.publishMetrics(metrics);
       this.pollById(Poller.pollerIds.mongodb);
     }
   }
@@ -83,20 +83,5 @@ export class MongodbMetrics extends DatabaseMetrics {
     } catch (error) {
       logger.info(error);
     }
-  }
-
-  private mapMetrics(unmappedMetrics: any): {} {
-    const calculatedFields = this.getCalculatedFields(unmappedMetrics);
-    const { connections, extra_info, globalLock, opcounters, mem, dbStats, replicationSetStatus, metrics, asserts } = unmappedMetrics;
-    return { connections, extra_info, globalLock, opcounters, mem, dbStats, replicationSetStatus, calculatedFields, metrics, asserts };
-  }
-
-  private getCalculatedFields(metrics: any): any {
-    const freeMemorySize = metrics.mem.virtual - metrics.mem.resident;
-    const usedMemoryPercentage = toPercentage(metrics.mem.resident, metrics.mem.virtual);
-    const freeStorageSize = metrics.dbStats.fsTotalSize - metrics.dbStats.fsUsedSize;
-    const usedStoragePercentage = toPercentage(metrics.dbStats.fsUsedSize, metrics.dbStats.fsTotalSize);
-
-    return { freeMemorySize, usedMemoryPercentage, freeStorageSize, usedStoragePercentage };
   }
 }

@@ -1,28 +1,29 @@
 import { performance } from 'perf_hooks';
 import * as Redis from 'redis';
 
-import { IDatabaseCredentials } from '../../database-metrics-logger';
-import { convertStringToNumber } from '../../helpers/converters';
-import { logger } from '../../helpers/logger';
-import { calculatePercentile } from '../../helpers/percentile';
-import { Poller } from '../../helpers/poller';
-import { DatabaseMetrics } from './database-metrics';
+import { IDatabaseCredentials } from '../../../database-metrics-logger';
+import { convertStringToNumber } from '../../../helpers/converters';
+import { logger } from '../../../helpers/logger';
+import { calculatePercentile } from '../../../helpers/percentile';
+import { Poller } from '../../../helpers/poller';
+import { DatabaseMetrics } from '../database-metrics';
+import { redisDefinitions } from './definitions';
 
 enum RedisEvent {
   Connect = 'connect',
   Error = 'error',
 }
 
-export class RedisMetrics extends DatabaseMetrics {
+export class RedisAgent extends DatabaseMetrics {
   private redisClient?: Redis.RedisClient;
 
   constructor(
-    private credentials: IDatabaseCredentials
+    credentials: IDatabaseCredentials
   ) {
-    super();
+    super(credentials, redisDefinitions);
   }
 
-  public getMetrics(): RedisMetrics {
+  public getMetrics(): RedisAgent {
     this.connect()
       .then(() => {
         const metricsPoller = new Poller({
@@ -89,7 +90,7 @@ export class RedisMetrics extends DatabaseMetrics {
 
       const [redisInfo, dbSize, slowLogPercentile] = await Promise.all(promises);
 
-      this.publish(undefined, this.credentials, { ...redisInfo, db_size: dbSize, slow_log_percentile: slowLogPercentile });
+      this.publishMetrics({ ...redisInfo, db_size: dbSize, slow_log_percentile: slowLogPercentile });
       this.pollById(Poller.pollerIds.redis);
     }
   }

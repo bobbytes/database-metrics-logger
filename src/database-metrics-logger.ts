@@ -1,8 +1,8 @@
 import { logger } from './helpers/logger';
 import { mergeDeep } from './helpers/merge-deep';
 import { PubSub } from './helpers/pub-sub';
-import { MongodbMetrics } from './modules/database-metrics/mongodb-metrics';
-import { RedisMetrics } from './modules/database-metrics/redis-metrics';
+import { MongoDbAgent } from './modules/database-metrics/mongodb/agent';
+import { RedisAgent } from './modules/database-metrics/redis/agent';
 import { ITransportInterface } from './modules/transports/transport-interface';
 
 const defaultOptions = {
@@ -38,7 +38,7 @@ export interface IDatabaseMetricsLoggerConfig {
 
 export class DatabaseMetricsLogger extends PubSub {
   private databaseCredentials: IDatabaseCredentials[];
-  private dbMetricsCollection: (MongodbMetrics | RedisMetrics)[] = [];
+  private dbMetricsAgents: (MongoDbAgent | RedisAgent)[] = [];
   private transports: ITransportInterface[];
 
   constructor(config: IDatabaseMetricsLoggerConfig) {
@@ -51,32 +51,32 @@ export class DatabaseMetricsLogger extends PubSub {
     logger.subscribe(undefined, value => this.publish(DatabaseMetricsEvent.Logs, value));
 
     this.databaseCredentials.forEach(credentials => {
-      const databaseMetrics = this.getDatabaseMetrics(credentials);
+      const agent = this.getDatabaseMetricsAgent(credentials);
 
-      if (databaseMetrics) {
-        databaseMetrics.getMetrics().subscribe(undefined, metrics => {
+      if (agent) {
+        agent.getMetrics().subscribe(undefined, metrics => {
           this.publish(DatabaseMetricsEvent.Metrics, metrics);
           this.executeTransports(metrics);
         });
 
-        this.dbMetricsCollection.push(databaseMetrics);
+        this.dbMetricsAgents.push(agent);
       }
     });
   }
 
   public stop(): void {
     this.unsubscribeAll();
-    this.dbMetricsCollection.forEach(dbMetrics => dbMetrics.stop());
-    this.dbMetricsCollection = [];
+    this.dbMetricsAgents.forEach(agent => agent.stop());
+    this.dbMetricsAgents = [];
     logger.unsubscribeAll();
   }
 
-  private getDatabaseMetrics(credentials: IDatabaseCredentials): any {
+  private getDatabaseMetricsAgent(credentials: IDatabaseCredentials): any {
     switch (credentials.databaseType) {
       case DatabaseType.Mongodb:
-        return new MongodbMetrics(credentials);
+        return new MongoDbAgent(credentials);
       case DatabaseType.Redis:
-        return new RedisMetrics(credentials);
+        return new RedisAgent(credentials);
       default:
         return undefined;
     }
