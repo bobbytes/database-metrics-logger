@@ -16,6 +16,9 @@
   <a href="https://sonarcloud.io/dashboard/index/DaNautilus_database-metrics-logger">
     <img src="https://sonarcloud.io/api/project_badges/measure?project=DaNautilus_database-metrics-logger&metric=alert_status" alt="quality gate" />
   </a>
+  <a href="https://greenkeeper.io/">
+    <img src="https://badges.greenkeeper.io/DaNautilus/database-metrics-logger.svg" alt="greenkeeper" />
+  </a>
 </p>
 
 <br />
