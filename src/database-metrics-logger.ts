@@ -43,7 +43,7 @@ export class DatabaseMetricsLogger extends PubSub {
 
   constructor(config: IDatabaseMetricsLoggerConfig) {
     super();
-    this.databaseCredentials = config.databaseCredentials.map(this.mapDefaultValues);
+    this.databaseCredentials = config.databaseCredentials.map(this.mapDefaultValues.bind(this));
     this.transports = config.transports || [];
   }
 

@@ -1,5 +1,4 @@
 import { DatabaseType } from '../../../database-metrics-logger';
-import { getFromObjectPath } from '../../../helpers/get-from-object-path';
 import { Rest } from '../../../helpers/rest';
 import { mongoDbMetricsMap } from './metrics-map/mongodb-metrics-map';
 import { redisMetricsMap } from './metrics-map/redis-metrics-map';
