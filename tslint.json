@@ -92,6 +92,8 @@
     "no-trailing-whitespace": true,
     "no-unused-expression": true,
     "no-var-keyword": true,
+    "no-unused-variable": true,
+    "no-unbound-method": true,
     "one-line": [
       true,
       "check-open-brace",
