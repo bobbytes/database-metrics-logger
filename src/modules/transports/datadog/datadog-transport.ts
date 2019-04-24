@@ -1,7 +1,8 @@
-import { DatabaseType } from '../../../database-metrics-logger';
+import { DatabaseType } from '../../../enums';
 import { Rest } from '../../../helpers/rest';
-import { mongoDbMetricsMap } from './metrics-map/mongodb-metrics-map';
-import { redisMetricsMap } from './metrics-map/redis-metrics-map';
+import { mongoDbDefinition } from './database-definitions/mongodb-definition';
+import { redisDefinition } from './database-definitions/redis-definition';
+import { IDatabaseDefinition } from './interfaces/database-definition.interface';
 
 export type TTimeSeriesPoints = [number, any];
 
@@ -43,37 +44,47 @@ export class DatadogTransport {
   }
 
   public postMetrics(metrics: {}): Promise<any> {
-    const mappedMetrics = this.mapMetrics(metrics);
-    const metricsBody = JSON.stringify({ series: mappedMetrics });
+    const series = this.getMetricsSeries(metrics);
+    const metricsBody = JSON.stringify({ series });
     return this.rest.post('/series', metricsBody);
   }
 
-  private mapMetrics(metrics: any): IMetric[] {
-    const metricFieldsMap = this.getMetricMapping(metrics.databaseType);
+  private getMetricsSeries(metrics: any): IMetric[] {
+    const databaseDefinition = this.getDatabaseDefinition(metrics.databaseType);
 
-    const metricKeys = Object.keys(metricFieldsMap);
+    const metricKeys = Object.keys(databaseDefinition.metricMaps);
     const timeStamp = new Date().getTime() / 1000;
 
-    return metricKeys.map(metricKey => {
-      const metricValue = metrics.metrics[metricFieldsMap[metricKey]] || 0;
-      const points: TTimeSeriesPoints[] = [[timeStamp, metricValue]];
-
-      return {
-        metric: metricKey,
-        points,
-        tags: [`database-type:${metrics.databaseType}`, `service-name:${metrics.name}`],
-      };
-    });
+    return metricKeys.map(metricKey => this.mapMetric(metricKey, metrics, timeStamp));
   }
 
-  private getMetricMapping(databaseType: DatabaseType): {} {
+  private mapMetric(metricKey: string, metrics: any, timeStamp: number): IMetric {
+    const databaseDefinition = this.getDatabaseDefinition(metrics.databaseType);
+    const metricValue = metrics.metrics[databaseDefinition.metricMaps[metricKey]] || 0;
+    const points: TTimeSeriesPoints[] = [[timeStamp, metricValue]];
+
+    return {
+      metric: metricKey,
+      points,
+      tags: [`database-type:${metrics.databaseType}`, `service-name:${metrics.name}`, ...this.mapTags(metrics)],
+    };
+  }
+
+  private mapTags(metrics: any): string[] {
+    const databaseDefinition = this.getDatabaseDefinition(metrics.databaseType);
+    const tagKeys = databaseDefinition.tagMaps ? Object.keys(databaseDefinition.tagMaps) : [];
+
+    return tagKeys.map(tagKey => `${tagKey}:${metrics.metrics[databaseDefinition.tagMaps[tagKey]] || ''}`);
+  }
+
+  private getDatabaseDefinition(databaseType: DatabaseType): IDatabaseDefinition {
     switch (databaseType) {
       case DatabaseType.Redis:
-        return redisMetricsMap;
+        return redisDefinition;
       case DatabaseType.Mongodb:
-        return mongoDbMetricsMap;
+        return mongoDbDefinition;
       default:
-        return {};
+        return;
     }
   }
 }

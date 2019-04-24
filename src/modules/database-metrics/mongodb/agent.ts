@@ -1,8 +1,8 @@
 import { MongoClient } from 'mongodb';
 
-import { IDatabaseCredentials } from '../../../database-metrics-logger';
 import { logger } from '../../../helpers/logger';
 import { Poller } from '../../../helpers/poller';
+import { IDatabaseCredentials } from '../../../interfaces';
 import { DatabaseMetrics } from '../database-metrics';
 import { mongoDbDefinitions } from './definitions';
 

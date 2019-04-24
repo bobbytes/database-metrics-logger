@@ -1,6 +1,12 @@
+import { DatabaseMetricsEvent } from './enums';
+import { DatabaseType } from './enums/database-type.enum';
 import { logger } from './helpers/logger';
 import { mergeDeep } from './helpers/merge-deep';
 import { PubSub } from './helpers/pub-sub';
+import { IDatabaseCredentials } from './interfaces/database-credentials.interface';
+import {
+    IDatabaseMetricsLoggerConfig
+} from './interfaces/database-metrics-logger-config.interface';
 import { MongoDbAgent } from './modules/database-metrics/mongodb/agent';
 import { RedisAgent } from './modules/database-metrics/redis/agent';
 import { ITransportInterface } from './modules/transports/transport-interface';
@@ -8,33 +14,6 @@ import { ITransportInterface } from './modules/transports/transport-interface';
 const defaultOptions = {
   interval: 10000,
 };
-
-export enum DatabaseMetricsEvent {
-  Metrics = 'metrics',
-  Logs = 'logs',
-}
-
-export enum DatabaseType {
-  Mongodb = 'mongodb',
-  Redis = 'redis',
-}
-
-export interface IDatabaseCredentials {
-  databaseType: DatabaseType;
-  name?: string;
-  host?: string;
-  port?: number;
-  uri?: string;
-  username?: string;
-  password?: string;
-  database?: string;
-  interval?: number;
-}
-
-export interface IDatabaseMetricsLoggerConfig {
-  databaseCredentials: IDatabaseCredentials[];
-  transports?: ITransportInterface[];
-}
 
 export class DatabaseMetricsLogger extends PubSub {
   private databaseCredentials: IDatabaseCredentials[];

@@ -100,6 +100,12 @@ export const mongoDbDefinitions: IMetricDefinition[] = [
     calculate: metrics => toPercentage(metrics.dbStats.fsUsedSize, metrics.dbStats.fsTotalSize),
   },
   {
+    metric: 'custom.replicationSetName',
+    calculate: metrics => metrics.replicationSetStatus && metrics.replicationSetStatus.set
+      ? metrics.replicationSetStatus.set
+      : '',
+  },
+  {
     metric: 'custom.replicationLag',
     calculate: metrics => metrics.replicationSetStatus && metrics.replicationSetStatus.members
       ? getReplicationLag(metrics.replicationSetStatus)
