@@ -1,3 +1,5 @@
+import { IMetricsResponse } from '../../interfaces';
+
 export interface ITransportInterface {
-  postMetrics(metrics: {}): Promise<any>;
+  postMetrics(metrics: IMetricsResponse): Promise<any>;
 }

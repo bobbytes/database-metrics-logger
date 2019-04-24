@@ -1,11 +1,11 @@
 import { performance } from 'perf_hooks';
 import * as Redis from 'redis';
 
-import { IDatabaseCredentials } from '../../../database-metrics-logger';
 import { convertStringToNumber } from '../../../helpers/converters';
 import { logger } from '../../../helpers/logger';
 import { calculatePercentile } from '../../../helpers/percentile';
 import { Poller } from '../../../helpers/poller';
+import { IDatabaseCredentials } from '../../../interfaces';
 import { DatabaseMetrics } from '../database-metrics';
 import { redisDefinitions } from './definitions';
 

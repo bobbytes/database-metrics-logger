@@ -1,6 +1,6 @@
 import * as cfenv from 'cfenv';
 
-import { IDatabaseCredentials } from '../../../../database-metrics-logger';
+import { IDatabaseCredentials } from '../../../../interfaces';
 import { CloudFoundryServiceType } from '../enums';
 import { serviceTypeDatabaseTypeMapper } from './service-types.mapper';
 

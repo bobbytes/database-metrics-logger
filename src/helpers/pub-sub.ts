@@ -1,9 +1,5 @@
 type TCallback = (value: any) => void;
 
-interface ISubscriber {
-  [id: string]: TCallback[];
-}
-
 export abstract class PubSub {
   private subscribers = new Map<string, TCallback[]>();
 

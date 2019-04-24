@@ -1,4 +1,4 @@
-import { DatabaseType } from '../../../../database-metrics-logger';
+import { DatabaseType } from '../../../../enums';
 import { CloudFoundryServiceType } from '../enums';
 
 export const serviceTypeDatabaseTypeMapper = new Map<CloudFoundryServiceType, DatabaseType>();

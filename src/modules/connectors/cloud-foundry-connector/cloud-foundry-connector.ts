@@ -1,7 +1,8 @@
 import * as cfenv from 'cfenv';
 
-import { DatabaseType, IDatabaseCredentials } from '../../../database-metrics-logger';
+import { DatabaseType } from '../../../enums';
 import { logger } from '../../../helpers/logger';
+import { IDatabaseCredentials } from '../../../interfaces';
 import { CloudFoundryServiceType } from './enums';
 import { mapMongodbCredentials } from './mappers/mongodb-credentials.mapper';
 import { mapRedisCredentials } from './mappers/redis-credentials.mapper';
