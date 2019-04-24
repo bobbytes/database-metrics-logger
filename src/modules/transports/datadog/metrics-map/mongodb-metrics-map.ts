@@ -37,7 +37,7 @@ export const mongoDbMetricsMap = {
   // 'mongodb.oplog.timediffseconds': '', // TODO: check
 
   // max Replication Lag per replica set
-  // 'mongodb.replset.replicationlag': '', // TODO: needs to be calculated
+  'mongodb.replset.replicationlag': 'custom.replicationLag',
 
   // number of open cursors per replica set
   'mongodb.cursors.totalopen': 'serverStatus.metrics.cursor.open.total',
