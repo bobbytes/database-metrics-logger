@@ -1,31 +1,11 @@
 import { DatabaseType } from '../../../enums';
 import { Rest } from '../../../helpers/rest';
+import { IMetricsResponse } from '../../../interfaces';
 import { mongoDbDefinition } from './database-definitions/mongodb-definition';
 import { redisDefinition } from './database-definitions/redis-definition';
 import { IDatabaseDefinition } from './interfaces/database-definition.interface';
-
-export type TTimeSeriesPoints = [number, any];
-
-enum MetricTypeEnum {
-  Gauge = 'gauge',
-  Rate = 'rate',
-  Count = 'count',
-}
-
-export interface IMetric {
-  metric: string;
-  points: TTimeSeriesPoints[];
-  type?: MetricTypeEnum;
-  interval?: number;
-  host?: string;
-  tags?: string[];
-}
-
-interface IDatadogOptions {
-  apiKey: string;
-  appKey?: string;
-  host?: string;
-}
+import { IDatadogMetric } from './interfaces/datadog-metric';
+import { TTimeSeriesPoints } from './types/time-series-points.type';
 
 export class DatadogTransport {
   private rest: Rest;
@@ -43,13 +23,13 @@ export class DatadogTransport {
     return this.rest.get('/metrics', { from });
   }
 
-  public postMetrics(metrics: {}): Promise<any> {
+  public postMetrics(metrics: IMetricsResponse): Promise<any> {
     const series = this.getMetricsSeries(metrics);
     const metricsBody = JSON.stringify({ series });
     return this.rest.post('/series', metricsBody);
   }
 
-  private getMetricsSeries(metrics: any): IMetric[] {
+  private getMetricsSeries(metrics: IMetricsResponse): IDatadogMetric[] {
     const databaseDefinition = this.getDatabaseDefinition(metrics.databaseType);
 
     const metricKeys = Object.keys(databaseDefinition.metricMaps);
@@ -58,7 +38,7 @@ export class DatadogTransport {
     return metricKeys.map(metricKey => this.mapMetric(metricKey, metrics, timeStamp));
   }
 
-  private mapMetric(metricKey: string, metrics: any, timeStamp: number): IMetric {
+  private mapMetric(metricKey: string, metrics: IMetricsResponse, timeStamp: number): IDatadogMetric {
     const databaseDefinition = this.getDatabaseDefinition(metrics.databaseType);
     const metricValue = metrics.metrics[databaseDefinition.metricMaps[metricKey]] || 0;
     const points: TTimeSeriesPoints[] = [[timeStamp, metricValue]];
@@ -70,7 +50,7 @@ export class DatadogTransport {
     };
   }
 
-  private mapTags(metrics: any): string[] {
+  private mapTags(metrics: IMetricsResponse): string[] {
     const databaseDefinition = this.getDatabaseDefinition(metrics.databaseType);
     const tagKeys = databaseDefinition.tagMaps ? Object.keys(databaseDefinition.tagMaps) : [];
 

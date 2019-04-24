@@ -3,6 +3,7 @@ import { DatabaseType } from './enums/database-type.enum';
 import { logger } from './helpers/logger';
 import { mergeDeep } from './helpers/merge-deep';
 import { PubSub } from './helpers/pub-sub';
+import { IMetricsResponse } from './interfaces';
 import { IDatabaseCredentials } from './interfaces/database-credentials.interface';
 import {
     IDatabaseMetricsLoggerConfig
@@ -33,7 +34,7 @@ export class DatabaseMetricsLogger extends PubSub {
       const agent = this.getDatabaseMetricsAgent(credentials);
 
       if (agent) {
-        agent.getMetrics().subscribe(undefined, metrics => {
+        agent.getMetrics().subscribe(undefined, (metrics: IMetricsResponse) => {
           this.publish(DatabaseMetricsEvent.Metrics, metrics);
           this.executeTransports(metrics);
         });
@@ -66,7 +67,7 @@ export class DatabaseMetricsLogger extends PubSub {
     return mergeDeep({}, defaultOptions, serviceCredential) as IDatabaseCredentials;
   }
 
-  private executeTransports(metrics: any): void {
+  private executeTransports(metrics: IMetricsResponse): void {
     if (this.transports) {
       this.transports.forEach(transport => transport.postMetrics(metrics));
     }

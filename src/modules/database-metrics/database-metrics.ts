@@ -1,7 +1,7 @@
 import { getFromObjectPath } from '../../helpers/get-from-object-path';
 import { defaultInterval, Poller } from '../../helpers/poller';
 import { PubSub } from '../../helpers/pub-sub';
-import { IDatabaseCredentials } from '../../interfaces';
+import { IDatabaseCredentials, IMetricsResponse } from '../../interfaces';
 import { IMetricDefinition } from './interfaces/metric-definition.interface';
 
 export abstract class DatabaseMetrics extends PubSub {
@@ -45,7 +45,7 @@ export abstract class DatabaseMetrics extends PubSub {
   }
 
   protected publishMetrics(metrics: {}): void {
-    const valueToPublish = {
+    const valueToPublish: IMetricsResponse = {
       databaseType: this.credentials.databaseType,
       name: this.credentials.name,
       metrics: this.aggregateMetrics(metrics),
