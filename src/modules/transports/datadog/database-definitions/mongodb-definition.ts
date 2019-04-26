@@ -29,6 +29,8 @@ export const mongoDbDefinition: IDatabaseDefinition = {
     'mongodb.mem.mapped': 'serverStatus.mem.mapped',
     'mongodb.mem.resident': 'serverStatus.mem.resident',
     'mongodb.mem.virtual': 'serverStatus.mem.virtual',
+    'mongodb.mem.usedpercentage': 'custom.usedMemoryPercentage',
+    'mongodb.mem.free': 'custom.freeMemorySize',
 
     // number of page faults per host
     'mongodb.extra_info.page_faultsps': 'serverStatus.extra_info.page_faults',
@@ -45,6 +47,9 @@ export const mongoDbDefinition: IDatabaseDefinition = {
     // number of open cursors per replica set
     'mongodb.cursors.totalopen': 'serverStatus.metrics.cursor.open.total',
 
+    // average duration of background flushes per replica set
+    'mongodb.backgroundflushing.average_ms': '',
+
     // number of timed out cursors per replica set
     'mongodb.cursors.timedout': 'serverStatus.metrics.cursor.timedOut',
 
@@ -54,6 +59,19 @@ export const mongoDbDefinition: IDatabaseDefinition = {
     'mongodb.asserts.regularps': 'serverStatus.asserts.regular',
     'mongodb.asserts.userps': 'serverStatus.asserts.user',
     'mongodb.asserts.rolloversps': 'serverStatus.asserts.rollovers',
+
+    // storage (custom)
+    'mongodb.storage.fsusedsize': 'dbStats.fsUsedSize',
+    'mongodb.storage.fsTotalSize': 'dbStats.fsTotalSize',
+    'mongodb.storage.free': 'custom.freeStorageSize',
+    'mongodb.storage.usedpercentage': 'custom.usedStoragePercentage',
+
+    // replica set (custom)
+    'mongodb.replset.memberscount': 'custom.replicationSetMembersCount',
+    'mongodb.replset.primarymemberscount': 'custom.replicationSetPrimaryMembersCount',
+    'mongodb.replset.secondarymemberscount': 'custom.replicationSetSecondaryMembersCount',
+    'mongodb.replset.activememberscount': 'custom.replicationSetActiveMembersCount',
+    'mongodb.replset.inactivememberscount': 'custom.replicationSetInactiveMembersCount',
   },
   tagMaps: {
     replset_name: 'custom.replicationSetName',
