@@ -1,5 +1,6 @@
 import { toPercentage } from '../../../helpers/converters';
 import { IMetricDefinition } from '../interfaces/metric-definition.interface';
+import { ReplicationSetMemberState } from './enums/replication-set-member-state.enum';
 import { getReplicationLag } from './helpers/replication-lag';
 
 export const mongoDbDefinitions: IMetricDefinition[] = [
@@ -109,6 +110,38 @@ export const mongoDbDefinitions: IMetricDefinition[] = [
     metric: 'custom.replicationLag',
     calculate: metrics => metrics.replicationSetStatus && metrics.replicationSetStatus.members
       ? getReplicationLag(metrics.replicationSetStatus)
+      : 0,
+  },
+  {
+    metric: 'custom.replicationSetMembersCount',
+    calculate: metrics => metrics.replicationSetStatus && metrics.replicationSetStatus.members
+      ? metrics.replicationSetStatus.members.length
+      : 0,
+  },
+  {
+    metric: 'custom.replicationSetPrimaryMembersCount',
+    calculate: metrics => metrics.replicationSetStatus && metrics.replicationSetStatus.members
+      ? metrics.replicationSetStatus.members.filter(member => member.state === ReplicationSetMemberState.Primary).length
+      : 0,
+  },
+  {
+    metric: 'custom.replicationSetSecondaryMembersCount',
+    calculate: metrics => metrics.replicationSetStatus && metrics.replicationSetStatus.members
+      ? metrics.replicationSetStatus.members.filter(member => member.state === ReplicationSetMemberState.Secondary).length
+      : 0,
+  },
+  {
+    metric: 'custom.replicationSetActiveMembersCount',
+    calculate: metrics => metrics.replicationSetStatus && metrics.replicationSetStatus.members
+      ? metrics.replicationSetStatus.members.filter(member =>
+        member.state === ReplicationSetMemberState.Primary || member.state === ReplicationSetMemberState.Secondary).length
+      : 0,
+  },
+  {
+    metric: 'custom.replicationSetInactiveMembersCount',
+    calculate: metrics => metrics.replicationSetStatus && metrics.replicationSetStatus.members
+      ? metrics.replicationSetStatus.members.filter(member =>
+        member.state !== ReplicationSetMemberState.Primary && member.state !== ReplicationSetMemberState.Secondary).length
       : 0,
   },
 ];
