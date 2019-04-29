@@ -244,6 +244,8 @@ import { DatabaseMetricsLogger, DatadogTransport } from 'database-metrics-logger
 const datadogTransport = new DatadogTransport({
   apiKey: 'datadog-api-key',
   appKey: 'datadog-app-key',
+  host: 'app.datadoghq.com',
+  tags: ['env:development']
 });
 
 const databaseCredentials = [
