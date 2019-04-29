@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.4] - 2019-04-29
+
+### Added
+
+- Add tags to Datadog transport options
+
 ## [0.6.3] - 2019-04-26
 
 ### Added
