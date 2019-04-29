@@ -11,7 +11,7 @@ import { TTimeSeriesPoints } from './types/time-series-points.type';
 export class DatadogTransport {
   private rest: Rest;
 
-  constructor(config: IDatadogOptions) {
+  constructor(private config: IDatadogOptions) {
     const host = config.host || 'app.datadoghq.com';
 
     this.rest = new Rest({
@@ -47,7 +47,12 @@ export class DatadogTransport {
     return {
       metric: metricKey,
       points,
-      tags: [`database-type:${metrics.databaseType}`, `service-name:${metrics.name}`, ...this.mapTags(metrics)],
+      tags: [
+        `database-type:${metrics.databaseType}`,
+        `service-name:${metrics.name}`,
+        ...this.config.tags || [],
+        ...this.mapTags(metrics),
+      ],
     };
   }
 
