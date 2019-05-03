@@ -8,7 +8,7 @@
     <img src="https://travis-ci.org/DaNautilus/database-metrics-logger.svg?branch=master" alt="travis" />
   </a>
   <a href="https://ci.appveyor.com/project/DaNautilus/database-metrics-logger/branch/master">
-    <img src="https://ci.appveyor.com/api/projects/status/qdxspgrhf3an4sdl?svg=true&passingText=windows%20passing&pendingText=windows%20pending&failingText=windows%20failing" alt="appveyor" />
+    <img src="https://ci.appveyor.com/api/projects/status/dt0uy3lkpt22u4pu?svg=true&passingText=windows%20passing&pendingText=windows%20pending&failingText=windows%20failing" alt="appveyor" />
   </a>
   <a href="https://sonarcloud.io/dashboard?id=DaNautilus_database-metrics-logger">
     <img src="https://sonarcloud.io/api/project_badges/measure?project=DaNautilus_database-metrics-logger&metric=coverage" alt="coverage" />
