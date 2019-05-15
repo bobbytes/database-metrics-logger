@@ -2,6 +2,9 @@ import { IMetricDefinition } from '../interfaces/metric-definition.interface';
 
 export const redisDefinitions: IMetricDefinition[] = [
   {
+    metric: 'redis_version',
+  },
+  {
     metric: 'rdb_changes_since_last_save',
   },
   {

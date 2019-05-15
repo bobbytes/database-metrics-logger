@@ -72,8 +72,12 @@ export const mongoDbDefinition: IDatabaseDefinition = {
     'mongodb.replset.secondarymemberscount': 'custom.replicationSetSecondaryMembersCount',
     'mongodb.replset.activememberscount': 'custom.replicationSetActiveMembersCount',
     'mongodb.replset.inactivememberscount': 'custom.replicationSetInactiveMembersCount',
+
+    // version (custom)
+    'mongodb.version': 'serverStatus.version',
   },
   tagMaps: {
-    replset_name: 'custom.replicationSetName',
+    'replset_name': 'custom.replicationSetName',
+    'mongodb-version': 'serverStatus.version',
   },
 };
