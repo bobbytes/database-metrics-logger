@@ -44,5 +44,11 @@ export const redisDefinition: IDatabaseDefinition = {
 
     // keys
     'redis.keys': 'db_size',
+
+    // version (custom)
+    'redis.version': 'redis_version',
+  },
+  tagMaps: {
+    'redis-version': 'redis_version',
   },
 };

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.5] - 2019-05-15
+
+- Add version metrics for MongoDB and Redis.
+- Add version tag to each MongoDB and Redis metric.
+
+### Added
+
 ## [0.6.4] - 2019-04-29
 
 ### Added

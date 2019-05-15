@@ -5,6 +5,9 @@ import { getReplicationLag } from './helpers/replication-lag';
 
 export const mongoDbDefinitions: IMetricDefinition[] = [
   {
+    metric: 'serverStatus.version',
+  },
+  {
     metric: 'serverStatus.opcounters.getmore',
     calculateDifferencePerSecond: true,
   },
