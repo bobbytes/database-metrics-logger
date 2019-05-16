@@ -69,7 +69,7 @@ export class DatabaseMetricsLogger extends PubSub {
 
   private executeTransports(metrics: IMetricsResponse): void {
     if (this.transports) {
-      this.transports.forEach(transport => transport.postMetrics(metrics));
+      this.transports.forEach(transport => transport.post(metrics));
     }
   }
 }
