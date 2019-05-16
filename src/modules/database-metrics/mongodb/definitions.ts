@@ -1,4 +1,4 @@
-import { toPercentage } from '../../../helpers/converters';
+import { calculatePercentage } from '../../../helpers/converters';
 import { IMetricDefinition } from '../interfaces/metric-definition.interface';
 import { ReplicationSetMemberState } from './enums/replication-set-member-state.enum';
 import { getReplicationLag } from './helpers/replication-lag';
@@ -93,7 +93,7 @@ export const mongoDbDefinitions: IMetricDefinition[] = [
   },
   {
     metric: 'custom.usedMemoryPercentage',
-    calculate: metrics => toPercentage(metrics.serverStatus.mem.resident, metrics.serverStatus.mem.virtual),
+    calculate: metrics => calculatePercentage(metrics.serverStatus.mem.resident, metrics.serverStatus.mem.virtual),
   },
   {
     metric: 'custom.freeStorageSize',
@@ -101,7 +101,7 @@ export const mongoDbDefinitions: IMetricDefinition[] = [
   },
   {
     metric: 'custom.usedStoragePercentage',
-    calculate: metrics => toPercentage(metrics.dbStats.fsUsedSize, metrics.dbStats.fsTotalSize),
+    calculate: metrics => calculatePercentage(metrics.dbStats.fsUsedSize, metrics.dbStats.fsTotalSize),
   },
   {
     metric: 'custom.replicationSetName',
