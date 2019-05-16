@@ -1,3 +1,5 @@
+import { AlertType, EventPriority } from '../enums';
+import { SourceTypeName } from '../enums/source-type-name.enum';
 import { IDatabaseDefinition } from '../interfaces/database-definition.interface';
 
 export const mongoDbDefinition: IDatabaseDefinition = {
@@ -72,10 +74,14 @@ export const mongoDbDefinition: IDatabaseDefinition = {
     'mongodb.replset.secondarymemberscount': 'custom.replicationSetSecondaryMembersCount',
     'mongodb.replset.activememberscount': 'custom.replicationSetActiveMembersCount',
     'mongodb.replset.inactivememberscount': 'custom.replicationSetInactiveMembersCount',
-
-    // version (custom)
-    'mongodb.version': 'serverStatus.version',
   },
+  eventMaps: [{
+    title: 'MongoDB Version',
+    text: 'serverStatus.version',
+    alert_type: AlertType.Info,
+    priority: EventPriority.Low,
+    source_type_name: SourceTypeName.MONGODB,
+  }],
   tagMaps: {
     'replset_name': 'custom.replicationSetName',
     'mongodb-version': 'serverStatus.version',

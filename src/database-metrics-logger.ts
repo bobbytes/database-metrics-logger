@@ -10,7 +10,7 @@ import {
 } from './interfaces/database-metrics-logger-config.interface';
 import { MongoDbAgent } from './modules/database-metrics/mongodb/agent';
 import { RedisAgent } from './modules/database-metrics/redis/agent';
-import { ITransportInterface } from './modules/transports/transport-interface';
+import { ITransportInterface } from './modules/transports/interfaces/transport-interface';
 
 const defaultOptions = {
   interval: 10000,

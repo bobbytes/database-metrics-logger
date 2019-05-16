@@ -1,3 +1,5 @@
+import { AlertType, EventPriority } from '../enums';
+import { SourceTypeName } from '../enums/source-type-name.enum';
 import { IDatabaseDefinition } from '../interfaces/database-definition.interface';
 
 export const redisDefinition: IDatabaseDefinition = {
@@ -48,6 +50,13 @@ export const redisDefinition: IDatabaseDefinition = {
     // version (custom)
     'redis.version': 'redis_version',
   },
+  eventMaps: [{
+    title: 'Redis Version',
+    text: 'redis_version',
+    alert_type: AlertType.Info,
+    priority: EventPriority.Low,
+    source_type_name: SourceTypeName.REDIS,
+  }],
   tagMaps: {
     'redis-version': 'redis_version',
   },

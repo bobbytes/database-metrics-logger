@@ -1,4 +1,4 @@
-import { ITransportInterface } from '../modules/transports/transport-interface';
+import { ITransportInterface } from '../modules/transports/interfaces/transport-interface';
 import { IDatabaseCredentials } from './database-credentials.interface';
 
 export interface IDatabaseMetricsLoggerConfig {
