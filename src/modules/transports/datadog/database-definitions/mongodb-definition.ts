@@ -1,12 +1,11 @@
-import { AlertType, EventPriority } from '../enums';
-import { SourceTypeName } from '../enums/source-type-name.enum';
+import { LogStatus } from '../enums';
 import { IDatabaseDefinition } from '../interfaces/database-definition.interface';
 
 export const mongoDbDefinition: IDatabaseDefinition = {
   metricMaps: {
     // read requests per second
-    'mongodb.opcounters.getmoreps': 'serverStatus.opcounters.getmore',
-    'mongodb.opcounters.queryps': 'serverStatus.opcounters.query',
+    'mongodb.opcounters.getmoreps': 'metrics.serverStatus.opcounters.getmore',
+    'mongodb.opcounters.queryps': 'metrics.serverStatus.opcounters.query',
 
     // write requests per second
     'mongodb.opcounters.deleteps': 'serverStatus.opcounters.delete',
@@ -75,12 +74,13 @@ export const mongoDbDefinition: IDatabaseDefinition = {
     'mongodb.replset.activememberscount': 'custom.replicationSetActiveMembersCount',
     'mongodb.replset.inactivememberscount': 'custom.replicationSetInactiveMembersCount',
   },
-  eventMaps: [{
-    title: 'MongoDB Version',
-    text: 'serverStatus.version',
-    alert_type: AlertType.Info,
-    priority: EventPriority.Low,
-    source_type_name: SourceTypeName.MONGODB,
+  logs: [{
+    message: 'MongoDB Version',
+    status: LogStatus.Info,
+    ddsource: 'mongodb',
+    attributesMap: {
+      version: 'serverStatus.version',
+    },
   }],
   tagMaps: {
     'replset_name': 'custom.replicationSetName',
