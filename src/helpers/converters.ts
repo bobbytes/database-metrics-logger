@@ -4,7 +4,7 @@ export const convertStringToNumber = (values: [] | {}): [] | {} => {
     typeof value === 'string' && !isNaN(Number(value)) ? Number(value) : value);
 };
 
-export const toPercentage = (value: number, maxValue: number): number => {
+export const calculatePercentage = (value: number, maxValue: number): number => {
   const percentage = (value * 100) / maxValue;
   return parseFloat((percentage).toFixed(2));
 };

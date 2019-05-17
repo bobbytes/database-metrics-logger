@@ -1,11 +1,18 @@
 # Changelog
 
+## [0.6.6] - 2019-05-17
+
+### Added
+
+- Push MongoDB and Redis metrics as logs instead of metrics to Datadog.
+- Add OSX to travis build system.
+
 ## [0.6.5] - 2019-05-15
+
+### Added
 
 - Add version metrics for MongoDB and Redis.
 - Add version tag to each MongoDB and Redis metric.
-
-### Added
 
 ## [0.6.4] - 2019-04-29
 

@@ -1,3 +1,4 @@
+import { LogStatus } from '../enums';
 import { IDatabaseDefinition } from '../interfaces/database-definition.interface';
 
 export const redisDefinition: IDatabaseDefinition = {
@@ -44,10 +45,15 @@ export const redisDefinition: IDatabaseDefinition = {
 
     // keys
     'redis.keys': 'db_size',
-
-    // version (custom)
-    'redis.version': 'redis_version',
   },
+  logs: [{
+    message: 'Redis Version',
+    status: LogStatus.Info,
+    ddsource: 'redis',
+    attributesMap: {
+      version: 'redis_version',
+    },
+  }],
   tagMaps: {
     'redis-version': 'redis_version',
   },
