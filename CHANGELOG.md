@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.8] - 2019-05-27
+
+### General
+
+- Dependencies updated.
+
 ## [0.6.7] - 2019-05-27
 
 ### Fixed
