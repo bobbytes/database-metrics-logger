@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.7] - 2019-05-27
+
+### Fixed
+
+-  Default host for datadog metrics.
+
 ## [0.6.6] - 2019-05-17
 
 ### Added
