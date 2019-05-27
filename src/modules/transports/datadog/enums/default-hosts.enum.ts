@@ -1,4 +1,4 @@
 export enum DefaultHost {
-  Host = 'http-intake.logs.datadoghq.com',
+  Host = 'api.datadoghq.com',
   LogHost = 'http-intake.logs.datadoghq.com',
 }
