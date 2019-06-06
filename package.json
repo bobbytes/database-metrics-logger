@@ -1,6 +1,6 @@
 {
   "name": "database-metrics-logger",
-  "version": "0.6.8",
+  "version": "0.6.9",
   "description": "log database metrics",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
