@@ -1,5 +1,4 @@
 import { DatabaseType } from '../../../enums';
-import { flatArray } from '../../../helpers/flat-array';
 import { Rest } from '../../../helpers/rest';
 import { IMetricsResponse } from '../../../interfaces';
 import { IMetricValue } from '../../database-metrics/interfaces/metric-value.interface';
@@ -45,13 +44,14 @@ export abstract class DatadogTransportAbstract {
   private mapTags(metrics: IMetricsResponse): string[] {
     const databaseDefinition = this.getDatabaseDefinition(metrics.databaseType);
     const tagKeys = databaseDefinition.tagMaps ? Object.keys(databaseDefinition.tagMaps) : [];
+    let tags = [];
 
-    const tags = tagKeys.map(tagKey => {
+    tagKeys.forEach(tagKey => {
       const metricValues = metrics.metrics[databaseDefinition.tagMaps[tagKey]];
-      return this.getTagsFromMetricValues(tagKey, metricValues);
+      tags = [...tags, ...this.getTagsFromMetricValues(tagKey, metricValues)];
     });
 
-    return flatArray(tags);
+    return tags;
   }
 
   private getTagsFromMetricValues(tagKey: string, metricValues: IMetricValue[]): string[] {

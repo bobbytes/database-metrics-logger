@@ -89,6 +89,14 @@ export const mongoDbDefinitions: IMetricDefinition[] = [
     getValues: ({ dbStats }) => [{ value: dbStats.dataSize }],
   },
   {
+    metric: 'dbStats.fsUsedSize',
+    getValues: ({ dbStats }) => [{ value: dbStats.fsUsedSize }],
+  },
+  {
+    metric: 'dbStats.fsTotalSize',
+    getValues: ({ dbStats }) => [{ value: dbStats.fsTotalSize }],
+  },
+  {
     metric: 'serverStatus.metrics.cursor.open.total',
     getValues: ({ serverStatus }) => [{ value: serverStatus.metrics.cursor.open.total }],
   },

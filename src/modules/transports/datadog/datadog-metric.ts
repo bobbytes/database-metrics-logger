@@ -24,7 +24,7 @@ export class DatadogMetric extends DatadogTransportAbstract {
 
     let metricsSeries = [];
 
-    metricKeys.forEach(metricKey => metricsSeries = [...metricsSeries, this.mapMetricValues(metricKey, metrics, timeStamp)]);
+    metricKeys.forEach(metricKey => metricsSeries = [...metricsSeries, ...this.mapMetricValues(metricKey, metrics, timeStamp)]);
 
     return metricsSeries;
   }
