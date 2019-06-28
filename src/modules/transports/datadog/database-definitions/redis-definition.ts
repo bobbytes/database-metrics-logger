@@ -20,7 +20,7 @@ export const redisDefinition: IDatabaseDefinition = {
     'redis.slowlog.micros.95percentile': 'slow_log_percentile',
 
     // latency
-    'redis.info.latency_ms': 'redisInfoLatency',
+    'redis.info.latency_ms': 'redis_info_latency',
 
     // evictions
     'redis.keys.evicted': 'evicted_keys',

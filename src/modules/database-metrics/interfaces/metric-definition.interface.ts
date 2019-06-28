@@ -1,5 +1,7 @@
+import { IMetricValue } from './metric-value.interface';
+
 export interface IMetricDefinition {
   metric: string;
-  calculate?: (metrics: any) => any;
+  getValues: (metrics: any) => IMetricValue[];
   calculateDifferencePerSecond?: boolean;
 }

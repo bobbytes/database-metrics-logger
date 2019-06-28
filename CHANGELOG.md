@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.7.0] - 2019-06-28
+
+### General
+
+- Dependencies updated.
+
+### Added
+
+- Get replication lags from all MongoDB replication set members.
+
+
 ## [0.6.9] - 2019-06-06
 
 ### General

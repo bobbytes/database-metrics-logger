@@ -1,12 +1,12 @@
-import { getFromObjectPath } from '../../helpers/get-from-object-path';
 import { defaultInterval, Poller } from '../../helpers/poller';
 import { PubSub } from '../../helpers/pub-sub';
 import { IDatabaseCredentials, IMetricsResponse } from '../../interfaces';
 import { IMetricDefinition } from './interfaces/metric-definition.interface';
+import { IMetricValue } from './interfaces/metric-value.interface';
 
 export abstract class DatabaseMetrics extends PubSub {
   private pollers: Poller[] = [];
-  private lastMetrics = new Map<string, any>();
+  private lastMetrics = new Map<string, IMetricValue[]>();
 
   constructor(
     public credentials: IDatabaseCredentials,
@@ -68,7 +68,7 @@ export abstract class DatabaseMetrics extends PubSub {
     this.metricDefinitions.forEach(metricDefinition => {
       const metric = metricDefinition.calculateDifferencePerSecond
         ? this.getDifferencePerSecond(metricDefinition, metrics)
-        : this.getMetricFromMetricDefinition(metricDefinition, metrics);
+        : metricDefinition.getValues(metrics);
 
       aggregatedMetrics[metricDefinition.metric] = metric;
     });
@@ -76,21 +76,18 @@ export abstract class DatabaseMetrics extends PubSub {
     return aggregatedMetrics;
   }
 
-  private getMetricFromMetricDefinition(metricDefinition: IMetricDefinition, metrics: {}): any {
-    return metricDefinition.calculate
-      ? metricDefinition.calculate(metrics)
-      : getFromObjectPath(metrics, metricDefinition.metric);
-  }
-
-  private getDifferencePerSecond(metricDefinition: IMetricDefinition, metrics: {}): any {
-    const lastMetric = this.lastMetrics.get(metricDefinition.metric) || 0;
-    const currentMetric = this.getMetricFromMetricDefinition(metricDefinition, metrics);
+  private getDifferencePerSecond(metricDefinition: IMetricDefinition, metrics: {}): any[] {
+    const lastMetric = this.lastMetrics.get(metricDefinition.metric) || [];
+    const currentMetrics = metricDefinition.getValues(metrics);
     const interval = this.credentials.interval || defaultInterval;
 
-    const metricDifferencePerSecond = Math.round((currentMetric - lastMetric) / (interval / 1000));
+    const metricsDifferencePerSecond = currentMetrics.map((currentMetric, index) => ({
+      ...currentMetric,
+      value: Math.round((currentMetric.value - (lastMetric[index] && lastMetric[index].value || 0)) / (interval / 1000)),
+    }));
 
-    this.lastMetrics.set(metricDefinition.metric, metricDifferencePerSecond);
+    this.lastMetrics.set(metricDefinition.metric, currentMetrics);
 
-    return metricDifferencePerSecond;
+    return metricsDifferencePerSecond;
   }
 }
