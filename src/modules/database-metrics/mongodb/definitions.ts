@@ -1,6 +1,16 @@
 import { calculatePercentage } from '../../../helpers/converters';
 import { IMetricDefinition } from '../interfaces/metric-definition.interface';
 import { ReplicationSetMemberState } from './enums/replication-set-member-state.enum';
+import {
+    getActiveReplicationSetMembersCount
+} from './helpers/get-active-replication-set-members-count';
+import {
+    getInactiveReplicationSetMembersCount
+} from './helpers/get-inactive-replication-set-members-count';
+import { getReplicationSetMembersCount } from './helpers/get-replication-set-members-count';
+import {
+    getReplicationSetMembersCountByState
+} from './helpers/get-replication-set-members-count-by-state';
 import { getReplicationLag } from './helpers/replication-lag';
 
 export const mongoDbDefinitions: IMetricDefinition[] = [
@@ -137,38 +147,30 @@ export const mongoDbDefinitions: IMetricDefinition[] = [
   },
   {
     metric: 'custom.replicationSetMembersCount',
-    getValues: ({ replicationSetStatus }) => [{ value: replicationSetStatus && replicationSetStatus.members && replicationSetStatus.members.length || 0 }],
+    getValues: ({ replicationSetStatus }) => [{ value: getReplicationSetMembersCount(replicationSetStatus) }],
   },
   {
     metric: 'custom.replicationSetPrimaryMembersCount',
     getValues: ({ replicationSetStatus }) => [{
-      value: replicationSetStatus && replicationSetStatus.members
-        ? replicationSetStatus.members.filter(member => member.state === ReplicationSetMemberState.Primary).length : 0,
+      value: getReplicationSetMembersCountByState(replicationSetStatus, ReplicationSetMemberState.Primary),
     }],
   },
   {
     metric: 'custom.replicationSetSecondaryMembersCount',
     getValues: ({ replicationSetStatus }) => [{
-      value: replicationSetStatus && replicationSetStatus.members
-        ? replicationSetStatus.members.filter(member => member.state === ReplicationSetMemberState.Secondary).length : 0,
+      value: getReplicationSetMembersCountByState(replicationSetStatus, ReplicationSetMemberState.Secondary),
     }],
   },
   {
     metric: 'custom.replicationSetActiveMembersCount',
     getValues: ({ replicationSetStatus }) => [{
-      value: replicationSetStatus && replicationSetStatus.members
-        ? replicationSetStatus.members.filter(member =>
-          member.state === ReplicationSetMemberState.Primary || member.state === ReplicationSetMemberState.Secondary).length
-        : 0,
+      value: getActiveReplicationSetMembersCount(replicationSetStatus),
     }],
   },
   {
     metric: 'custom.replicationSetInactiveMembersCount',
     getValues: ({ replicationSetStatus }) => [{
-      value: replicationSetStatus && replicationSetStatus.members
-        ? replicationSetStatus.members.filter(member =>
-          member.state !== ReplicationSetMemberState.Primary && member.state !== ReplicationSetMemberState.Secondary).length
-        : 0,
+      value: getInactiveReplicationSetMembersCount(replicationSetStatus),
     }],
   },
 ];
