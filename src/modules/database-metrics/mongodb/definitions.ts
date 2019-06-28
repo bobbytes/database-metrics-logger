@@ -7,11 +7,11 @@ import {
 import {
     getInactiveReplicationSetMembersCount
 } from './helpers/get-inactive-replication-set-members-count';
+import { getReplicationLag } from './helpers/get-replication-lag';
 import { getReplicationSetMembersCount } from './helpers/get-replication-set-members-count';
 import {
     getReplicationSetMembersCountByState
 } from './helpers/get-replication-set-members-count-by-state';
-import { getReplicationLag } from './helpers/replication-lag';
 
 export const mongoDbDefinitions: IMetricDefinition[] = [
   {
@@ -143,7 +143,7 @@ export const mongoDbDefinitions: IMetricDefinition[] = [
   },
   {
     metric: 'custom.replicationLag',
-    getValues: ({ replicationSetStatus }) => [{ value: replicationSetStatus && replicationSetStatus.members ? getReplicationLag(replicationSetStatus) : 0 }],
+    getValues: ({ replicationSetStatus }) => getReplicationLag(replicationSetStatus),
   },
   {
     metric: 'custom.replicationSetMembersCount',
