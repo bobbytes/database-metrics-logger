@@ -10,6 +10,8 @@ export class DatadogMetric extends DatadogTransportAbstract {
   }
 
   public post(metrics: IMetricsResponse): Promise<any> {
+    // tslint:disable-next-line: no-debugger
+    debugger;
     const series = this.getMetricsSeries(metrics);
 
     return this.rest.post('/series', JSON.stringify({ series }));
@@ -20,18 +22,25 @@ export class DatadogMetric extends DatadogTransportAbstract {
     const metricKeys = Object.keys(databaseDefinition.metricMaps);
     const timeStamp = new Date().getTime() / 1000;
 
-    return metricKeys.map(metricKey => this.mapMetric(metricKey, metrics, timeStamp));
+    let metricsSeries = [];
+
+    metricKeys.forEach(metricKey => metricsSeries = [...metricsSeries, this.mapMetricValues(metricKey, metrics, timeStamp)]);
+
+    return metricsSeries;
   }
 
-  private mapMetric(metricKey: string, metrics: IMetricsResponse, timeStamp: number): IDatadogMetric {
+  private mapMetricValues(metricKey: string, metrics: IMetricsResponse, timeStamp: number): IDatadogMetric[] {
     const databaseDefinition = this.getDatabaseDefinition(metrics.databaseType);
-    const metricValue = metrics.metrics[databaseDefinition.metricMaps[metricKey]] || 0;
-    const points: TTimeSeriesPoints[] = [[timeStamp, metricValue]];
+    const metricValues = metrics.metrics[databaseDefinition.metricMaps[metricKey]] || [];
 
-    return {
-      metric: metricKey,
-      points,
-      tags: this.getTags(metrics),
-    };
+    return metricValues.map(metricValue => {
+      const points: TTimeSeriesPoints[] = [[timeStamp, metricValue.value]];
+
+      return {
+        metric: metricKey,
+        points,
+        tags: this.getTags(metrics, metricValue),
+      };
+    });
   }
 }

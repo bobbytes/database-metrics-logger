@@ -4,8 +4,8 @@ import { IDatabaseDefinition } from '../interfaces/database-definition.interface
 export const mongoDbDefinition: IDatabaseDefinition = {
   metricMaps: {
     // read requests per second
-    'mongodb.opcounters.getmoreps': 'metrics.serverStatus.opcounters.getmore',
-    'mongodb.opcounters.queryps': 'metrics.serverStatus.opcounters.query',
+    'mongodb.opcounters.getmoreps': 'serverStatus.opcounters.getmore',
+    'mongodb.opcounters.queryps': 'serverStatus.opcounters.query',
 
     // write requests per second
     'mongodb.opcounters.deleteps': 'serverStatus.opcounters.delete',

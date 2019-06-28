@@ -1,6 +1,8 @@
 import { DatabaseType } from '../../../enums';
+import { flatArray } from '../../../helpers/flat-array';
 import { Rest } from '../../../helpers/rest';
 import { IMetricsResponse } from '../../../interfaces';
+import { IMetricValue } from '../../database-metrics/interfaces/metric-value.interface';
 import { mongoDbDefinition } from './database-definitions/mongodb-definition';
 import { redisDefinition } from './database-definitions/redis-definition';
 import { DefaultHost } from './enums/default-hosts.enum';
@@ -30,9 +32,10 @@ export abstract class DatadogTransportAbstract {
     }
   }
 
-  public getTags(metrics: IMetricsResponse): string[] {
+  public getTags(metrics: IMetricsResponse, metricValue?: IMetricValue): string[] {
     return [
       ...this.mapTags(metrics),
+      ...(metricValue && metricValue.tags || []),
       `database-type:${metrics.databaseType}`,
       `service-name:${metrics.name}`,
       ...this.config.tags || [],
@@ -43,6 +46,15 @@ export abstract class DatadogTransportAbstract {
     const databaseDefinition = this.getDatabaseDefinition(metrics.databaseType);
     const tagKeys = databaseDefinition.tagMaps ? Object.keys(databaseDefinition.tagMaps) : [];
 
-    return tagKeys.map(tagKey => `${tagKey}:${metrics.metrics[databaseDefinition.tagMaps[tagKey]] || ''}`);
+    const tags = tagKeys.map(tagKey => {
+      const metricValues = metrics.metrics[databaseDefinition.tagMaps[tagKey]];
+      return this.getTagsFromMetricValues(tagKey, metricValues);
+    });
+
+    return flatArray(tags);
+  }
+
+  private getTagsFromMetricValues(tagKey: string, metricValues: IMetricValue[]): string[] {
+    return metricValues.map(metricValue => `${tagKey}:${metricValue.value || ''}`);
   }
 }
