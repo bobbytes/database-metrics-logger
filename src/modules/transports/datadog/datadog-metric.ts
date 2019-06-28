@@ -10,8 +10,6 @@ export class DatadogMetric extends DatadogTransportAbstract {
   }
 
   public post(metrics: IMetricsResponse): Promise<any> {
-    // tslint:disable-next-line: no-debugger
-    debugger;
     const series = this.getMetricsSeries(metrics);
 
     return this.rest.post('/series', JSON.stringify({ series }));
