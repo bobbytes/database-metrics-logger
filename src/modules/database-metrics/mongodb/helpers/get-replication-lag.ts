@@ -7,16 +7,15 @@ const calculateReplicationLag = (primaryMember: IReplicationSetMember, secondary
   ? (primaryMember.optimeDate.getTime() - secondaryMember.optimeDate.getTime()) / 1000
   : 0;
 
-const getTags = (replicationSetStatus, secondaryMember) => ([`replset-member-id:${secondaryMember._id}`]);
-
 const getMetricValues = (replicationSetStatus) => {
   const primaryMember = replicationSetStatus.members.find(member => member.state === ReplicationSetMemberState.Primary);
 
   return replicationSetStatus.members
     .filter(member => member.state === ReplicationSetMemberState.Secondary)
+    .filter(member => !!member._id && !isNaN(member._id))
     .map(secondaryMember => ({
       value: calculateReplicationLag(primaryMember, secondaryMember),
-      tags: getTags(replicationSetStatus, secondaryMember),
+      tags: [`replset-member-id:${secondaryMember._id}, replset-member-name:${secondaryMember.name}`],
     }));
 };
 
