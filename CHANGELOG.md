@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1] - 2019-07-01
+
+### General
+
+- Add name of MongoDB replication set member to metrics.
+- Upgrade rollup dependency.
+
 ## [0.7.0] - 2019-06-28
 
 ### General
