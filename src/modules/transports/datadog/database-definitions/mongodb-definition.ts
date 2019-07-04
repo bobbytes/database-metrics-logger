@@ -40,7 +40,15 @@ export const mongoDbDefinition: IDatabaseDefinition = {
     'mongodb.stats.datasize': 'dbStats.dataSize',
 
     // oplog window per replica set
-    // 'mongodb.oplog.timediffseconds': '', // TODO: check
+    'mongodb.oplog.logSizeMB': 'replicationInfo.logSizeMB',
+    'mongodb.oplog.usedMB': 'replicationInfo.usedMB',
+    'mongodb.oplog.oplogMainRowCount': 'replicationInfo.oplogMainRowCount',
+    'mongodb.oplog.timediffseconds': 'replicationInfo.timeDiff',
+    'mongodb.oplog.timeDiffHours': 'replicationInfo.timeDiffHours',
+    'mongodb.oplog.tFirst': 'replicationInfo.tFirst',
+    'mongodb.oplog.tLast': 'replicationInfo.tLast',
+    'mongodb.oplog.now': 'replicationInfo.now',
+    'mongodb.oplog.freeSize': 'custom.oplogFreeSize',
 
     // max Replication Lag per replica set
     'mongodb.replset.replicationlag': 'custom.replicationLag',
