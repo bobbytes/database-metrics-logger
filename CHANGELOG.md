@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.8.0] - 2019-07-05
+
+### General
+- Add MongoDB oplog metrics.
+- Upgrade rollup dependency.
+
 ## [0.7.1] - 2019-07-01
 
 ### General

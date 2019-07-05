@@ -5,6 +5,7 @@ import { Poller } from '../../../helpers/poller';
 import { IDatabaseCredentials } from '../../../interfaces';
 import { DatabaseMetrics } from '../database-metrics';
 import { mongoDbDefinitions } from './definitions';
+import { getReplicationInfo } from './helpers/get-replication-info';
 
 export class MongoDbAgent extends DatabaseMetrics {
   private mongoClient?: MongoClient;
@@ -64,10 +65,11 @@ export class MongoDbAgent extends DatabaseMetrics {
         database.command({ serverStatus: 1, repl: 1, metrics: 1, locks: 1 }),
         database.command({ dbStats: 1, scale: 1024 }),
         this.getReplicationSetMetrics(),
+        getReplicationInfo(this.mongoClient),
       ];
 
-      const [serverStatus, dbStats, replicationSetStatus] = await Promise.all(promises);
-      const metrics = { serverStatus, dbStats, replicationSetStatus };
+      const [serverStatus, dbStats, replicationSetStatus, replicationInfo] = await Promise.all(promises);
+      const metrics = { serverStatus, dbStats, replicationSetStatus, replicationInfo };
 
       this.publishMetrics(metrics);
       this.pollById(Poller.pollerIds.mongodb);

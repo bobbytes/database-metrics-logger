@@ -7,6 +7,7 @@ import {
 import {
     getInactiveReplicationSetMembersCount
 } from './helpers/get-inactive-replication-set-members-count';
+import { getReplicationInfoFreeSize } from './helpers/get-replication-info-free-size';
 import { getReplicationLag } from './helpers/get-replication-lag';
 import { getReplicationSetMembersCount } from './helpers/get-replication-set-members-count';
 import {
@@ -130,6 +131,42 @@ export const mongoDbDefinitions: IMetricDefinition[] = [
     getValues: ({ serverStatus }) => [{ value: serverStatus.asserts.rollovers }],
   },
   {
+    metric: 'replicationInfo.logSizeMB',
+    getValues: ({ replicationInfo }) => [{ value: replicationInfo.logSizeMB }],
+  },
+  {
+    metric: 'replicationInfo.usedMB',
+    getValues: ({ replicationInfo }) => [{ value: replicationInfo.usedMB }],
+  },
+  {
+    metric: 'replicationInfo.errmsg',
+    getValues: ({ replicationInfo }) => [{ value: replicationInfo.errmsg }],
+  },
+  {
+    metric: 'replicationInfo.oplogMainRowCount',
+    getValues: ({ replicationInfo }) => [{ value: replicationInfo.oplogMainRowCount }],
+  },
+  {
+    metric: 'replicationInfo.timeDiff',
+    getValues: ({ replicationInfo }) => [{ value: replicationInfo.timeDiff }],
+  },
+  {
+    metric: 'replicationInfo.timeDiffHours',
+    getValues: ({ replicationInfo }) => [{ value: replicationInfo.timeDiffHours }],
+  },
+  {
+    metric: 'replicationInfo.tFirst',
+    getValues: ({ replicationInfo }) => [{ value: replicationInfo.tFirst }],
+  },
+  {
+    metric: 'replicationInfo.tLast',
+    getValues: ({ replicationInfo }) => [{ value: replicationInfo.tLast }],
+  },
+  {
+    metric: 'replicationInfo.now',
+    getValues: ({ replicationInfo }) => [{ value: replicationInfo.now }],
+  },
+  {
     metric: 'custom.freeMemorySize',
     getValues: ({ serverStatus }) => [{ value: serverStatus.mem.virtual - serverStatus.mem.resident }],
   },
@@ -180,5 +217,9 @@ export const mongoDbDefinitions: IMetricDefinition[] = [
     getValues: ({ replicationSetStatus }) => [{
       value: getInactiveReplicationSetMembersCount(replicationSetStatus),
     }],
+  },
+  {
+    metric: 'custom.oplogFreeSize',
+    getValues: ({ replicationInfo }) => getReplicationInfoFreeSize(replicationInfo),
   },
 ];
