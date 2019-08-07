@@ -1,8 +1,19 @@
 # Changelog
 
+## [0.8.1] - 2019-08-07
+
+### General
+
+- Dependencies updated.
+
+### Fixed
+
+- Get MongoDB storage size in bytes
+
 ## [0.8.0] - 2019-07-05
 
 ### General
+
 - Add MongoDB oplog metrics.
 - Upgrade rollup dependency.
 
