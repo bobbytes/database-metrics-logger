@@ -63,7 +63,7 @@ export class MongoDbAgent extends DatabaseMetrics {
 
       const promises = [
         database.command({ serverStatus: 1, repl: 1, metrics: 1, locks: 1 }),
-        database.command({ dbStats: 1, scale: 1024 }),
+        database.command({ dbStats: 1 }),
         this.getReplicationSetMetrics(),
         getReplicationInfo(this.mongoClient),
       ];
