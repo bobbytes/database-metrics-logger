@@ -1,6 +1,14 @@
+<h1 align="center" style="color: orange">DEPRECATED</h1>
+
+This project is no longer supported, please consider using [node-sevice-metrics-logger](https://github.com/DaNautilus/node-sevice-metrics-logger) instead.  
+The project [node-sevice-metrics-logger](https://github.com/DaNautilus/node-sevice-metrics-logger) does also support other services like `RabbitMQ`.
+
+![divider](./divider.png)
+
 <h1 align="center">Database Metrics Logger</h1>
 
 <p align="center">
+  <img src="https://img.shields.io/maintenance/no/2019" alt="unmaintained" />
   <a href="https://david-dm.org/DaNautilus/database-metrics-logger">
     <img src="https://david-dm.org/DaNautilus/database-metrics-logger/status.svg?style=flat" alt="dependency" />
   </a>
