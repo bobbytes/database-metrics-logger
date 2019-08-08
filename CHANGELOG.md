@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.8.3] - 2019-08-08
+
+### General
+
+- This project is no longer supported, please consider using [node-sevice-metrics-logger](https://github.com/DaNautilus/node-sevice-metrics-logger) instead. 
+
 ## [0.8.2] - 2019-08-08
 
 ### General
