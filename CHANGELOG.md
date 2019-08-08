@@ -4,7 +4,7 @@
 
 ### General
 
-- This project is no longer supported, please consider using [node-sevice-metrics-logger](https://github.com/DaNautilus/node-sevice-metrics-logger) instead. 
+- This project is no longer supported, please consider using [node-service-metrics-logger](https://github.com/DaNautilus/node-service-metrics-logger) instead. 
 
 ## [0.8.2] - 2019-08-08
 

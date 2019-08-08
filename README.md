@@ -1,7 +1,7 @@
 <h1 align="center" style="color: orange">DEPRECATED</h1>
 
-This project is no longer supported, please consider using [node-sevice-metrics-logger](https://github.com/DaNautilus/node-sevice-metrics-logger) instead.  
-The project [node-sevice-metrics-logger](https://github.com/DaNautilus/node-sevice-metrics-logger) does also support other services like `RabbitMQ`.
+This project is no longer supported, please consider using [node-service-metrics-logger](https://github.com/DaNautilus/node-service-metrics-logger) instead.  
+The project [node-service-metrics-logger](https://github.com/DaNautilus/node-service-metrics-logger) does also support other services like `RabbitMQ`.
 
 ![divider](./divider.png)
 
