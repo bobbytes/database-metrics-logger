@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.8.4] - 2019-08-08
+
+### Fixed
+
+- Fix deprecated message typos.
+
 ## [0.8.3] - 2019-08-08
 
 ### General
