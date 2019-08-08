@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.8.2] - 2019-08-08
+
+### General
+
+- Remove OSX from travis ci due to build performance issues.
+
+### Fixed
+
+- Fix lodash and handlebars security issue.
+
 ## [0.8.1] - 2019-08-07
 
 ### General
